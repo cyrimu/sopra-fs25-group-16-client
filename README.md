@@ -1,6 +1,6 @@
 # Getting Started
 
-### MacOS, Linux and WSL
+### MaOS, Linux and WSL
 
 If you are using MacOS, Linux or WSL(Windows-Subsystem-Linux), you can skip
 directly to the
