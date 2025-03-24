@@ -11,10 +11,9 @@ export default function Home() {
         <div className={styles.centered}>
             <div className={styles.redBlueOverlay}></div>
             <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center"}}>
-                <LargeButton onClick={() => console.log("Left clicked")}>Create</LargeButton>
+                <LargeButton onClick={() => router.push("/join/page")}>Create</LargeButton>
                 <LargeButton onClick={() => console.log("Right clicked")}>Join</LargeButton>
             </div>
-
         </div>
     );
 }
