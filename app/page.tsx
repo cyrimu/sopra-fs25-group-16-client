@@ -1,12 +1,20 @@
-"use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
+"use client";
 import "@ant-design/v5-patch-for-react-19";
-import StoreProvider from "./providers/StoreProvider";
-import Home from "./pages/Home";
+import { useRouter } from "next/navigation";
+import styles from "@/styles/page.module.css";
+import LargeButton from "@/components/largeButton";
 
-export default function page() {
-  return (
-    <StoreProvider>
-      <Home />
-    </StoreProvider>
-  );
+export default function Home() {
+    const router = useRouter();
+
+    return (
+        <div className={styles.centered}>
+            <div className={styles.redBlueOverlay}></div>
+            <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center"}}>
+                <LargeButton onClick={() => console.log("Left clicked")}>Create</LargeButton>
+                <LargeButton onClick={() => console.log("Right clicked")}>Join</LargeButton>
+            </div>
+
+        </div>
+    );
 }
