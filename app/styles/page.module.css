@@ -12,7 +12,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, rgba(5, 130, 202, 0.2) 50%, rgba(219, 22, 47, 0.2) 50%);
+    background: linear-gradient(to right, rgba(219, 22, 47, 0.2) 50%, rgba(5, 130, 202, 0.2) 50%);
     pointer-events: none;
     z-index: -1;
 }
@@ -66,7 +66,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    max-width: 600px; /* Adjust as needed */
+    max-width: 600px;
 }
 
 .messageBox {
@@ -82,6 +82,8 @@
 
 .inputContainer {
     display: flex;
+    gap: 10px;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 10px;
@@ -94,18 +96,16 @@
     color: black;
     font-size: 24px;
     padding: 10px;
-    margin-right: 20px;
     border-radius: 10px;
     border: 2px solid white;
     width: 100%;
+    margin-bottom: 10px;
 }
-
 
 .inputForm::placeholder {
     font-family: "Special Elite";
     color: black;
     font-size: 24px;
-
 }
 
 .nextButton {

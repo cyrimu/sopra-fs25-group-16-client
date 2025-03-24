@@ -5,11 +5,13 @@ import styles from "@/styles/page.module.css";
 import {RightOutlined} from "@ant-design/icons";
 
 
-export default function Join() {
+export default function Create() {
     const router = useRouter();
+
+
     return (
         <div className={styles.centered}>
-            <div className={styles.blueOverlay}></div>
+            <div className={styles.redOverlay}></div>
             <div className={styles.messageContainer}>
                 <div className={styles.messageBox}>
                     Choose a codename & we’ll create a game lobby for you. <br/>
@@ -22,10 +24,6 @@ export default function Join() {
                     <input
                         className={styles.inputForm}
                         placeholder="Choose your codename ... "
-                    />
-                    <input
-                        className={styles.inputForm}
-                        placeholder="Enter Lobby ID ... "
                     />
                     <button className={styles.nextButton}>
                         <RightOutlined/>
