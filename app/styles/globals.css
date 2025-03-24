@@ -1,13 +1,7 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: rgba(217, 217, 217, 0.5);
 }
 
 html,
@@ -36,26 +30,12 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
-
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgb(41, 44, 59);
-}
-
-.login-button {
-  width: 100%;
-}
-
-.rules-button {
-
+  background-color: rgba(217, 217, 217, 0.5);
 }
 
 .card-container {
@@ -63,5 +43,5 @@ a {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgb(41, 44, 59);
+  background-color: rgba(217, 217, 217, 0.5);
 }

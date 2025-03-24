@@ -2,16 +2,19 @@
 import "@ant-design/v5-patch-for-react-19";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
+import LargeButton from "@/components/largeButton";
 
 export default function Home() {
     const router = useRouter();
 
     return (
-        <div className={styles.page}>
-            <div className={styles.redblueoverlay}></div>
-            <main className={styles.main}>
-                {}
-            </main>
+        <div className={styles.centered}>
+            <div className={styles.redBlueOverlay}></div>
+            <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center"}}>
+                <LargeButton onClick={() => console.log("Left clicked")}>Create</LargeButton>
+                <LargeButton onClick={() => console.log("Right clicked")}>Join</LargeButton>
+            </div>
+
         </div>
     );
 }
