@@ -27,6 +27,16 @@
   }
 }
 
+.redblueoverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(5, 130, 202, 0.2) 50%, rgba(219, 22, 47, 0.2) 50%);
+  pointer-events: none;
+}
+
 .main {
   display: flex;
   flex-direction: column;
