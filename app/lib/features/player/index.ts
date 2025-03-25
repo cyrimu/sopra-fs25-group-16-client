@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Player, PLAYER_ROLES } from "./player.types";
-import { TEAM_COLOR } from "../lobby/lobby.types";
+import { TEAM_COLOR } from "../lobby/team.types";
 
 const initialState = {
   playerName: undefined,
