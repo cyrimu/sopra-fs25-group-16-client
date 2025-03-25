@@ -32,7 +32,7 @@ const gameSlice = createSlice({
   initialState,
   reducers: {
     // Update the state with the new game ID
-    setGameId(state, action: PayloadAction<number>) {
+    setGameId(state, action: PayloadAction<string>) {
       state.gameId = action.payload;
     },
     // Update the state with the new host
