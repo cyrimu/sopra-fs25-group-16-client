@@ -8,7 +8,7 @@ import { LANGUAGES } from "./languages.types";
 import { Team } from "./team.types";
 
 const initialState = {
-  lobbyId: crypto.randomUUID().replaceAll("-", ""),
+  lobbyId: undefined,
   host: undefined,
   players: [],
   game: undefined,
