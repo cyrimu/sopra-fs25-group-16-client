@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
 import {
   selectGameType,
+  selectHost,
   selectLanguage,
-  selectLobbyId,
 } from "@/lib/features/lobby";
 import { LANGUAGES } from "@/lib/features/lobby/languages.types";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
@@ -13,25 +13,17 @@ import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 import styles from "@/styles/page.module.css";
 import { RightOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 export default function Lobby() {
-  // const lobbyId = useSelector(selectLobbyId);
-  // const playerName = useSelector(selectPlayerName);
-  // const language = useSelector(selectLanguage);
-  // const type = useSelector(selectGameType);
-  // return (
-  //   <div style={{ color: "white" }}>
-  //     <div>lobbyId: {lobbyId}</div>
-  //     <div>playerName: {playerName}</div>
-  //     <div>language: {LANGUAGES[language]}</div>
-  //     <div>type: {GAME_TYPE[type]}</div>
-  //   </div>
-  // );
+  const playerName = useSelector(selectPlayerName);
+  const hostName = useSelector(selectHost);
+  const isHost = playerName === hostName;
+
+  const [language, setLanguage] = useState(useSelector(selectLanguage));
+  const [type, setType] = useState(useSelector(selectGameType));
 
   // Setup mockup data
-  const type = GAME_TYPE.text;
-  const language = LANGUAGES.english;
-
   const players: Player[] = [
     { playerName: "Sergi", team: TEAM_COLOR.red, role: PLAYER_ROLES.operative },
     { playerName: "Pio", team: TEAM_COLOR.red, role: PLAYER_ROLES.spymaster },
