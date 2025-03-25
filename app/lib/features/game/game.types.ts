@@ -4,7 +4,7 @@ import { Player } from "../player/player.types";
 import { Board } from "./board.types";
 
 export interface Game {
-  gameId: number | undefined;
+  gameId: string | undefined;
   host: string | undefined;
   players: Player[];
   blueTeam: Team | undefined;
@@ -27,6 +27,6 @@ export enum TURN_ORDER {
 }
 
 export enum GAME_TYPE {
-  text,
-  image,
+  text = "text",
+  image = "image",
 }

@@ -1,5 +1,4 @@
 import { getApiDomain } from "@/utils/domain";
-import { ApplicationError } from "@/types/error";
 
 export class ApiService {
   private baseURL: string;
@@ -24,7 +23,7 @@ export class ApiService {
    */
   private async processResponse<T>(
     res: Response,
-    errorMessage: string,
+    errorMessage: string
   ): Promise<T> {
     if (!res.ok) {
       let errorDetail = res.statusText;
@@ -39,19 +38,11 @@ export class ApiService {
         // If parsing fails, keep using res.statusText
       }
       const detailedMessage = `${errorMessage} (${res.status}: ${errorDetail})`;
-      const error: ApplicationError = new Error(
-        detailedMessage,
-      ) as ApplicationError;
-      error.info = JSON.stringify(
-        { status: res.status, statusText: res.statusText },
-        null,
-        2,
-      );
-      error.status = res.status;
+      const error = new Error(detailedMessage);
       throw error;
     }
     return res.headers.get("Content-Type")?.includes("application/json")
-      ? res.json() as Promise<T>
+      ? (res.json() as Promise<T>)
       : Promise.resolve(res as T);
   }
 
@@ -68,7 +59,7 @@ export class ApiService {
     });
     return this.processResponse<T>(
       res,
-      "An error occurred while fetching the data.\n",
+      "An error occurred while fetching the data.\n"
     );
   }
 
@@ -87,7 +78,7 @@ export class ApiService {
     });
     return this.processResponse<T>(
       res,
-      "An error occurred while posting the data.\n",
+      "An error occurred while posting the data.\n"
     );
   }
 
@@ -106,7 +97,7 @@ export class ApiService {
     });
     return this.processResponse<T>(
       res,
-      "An error occurred while updating the data.\n",
+      "An error occurred while updating the data.\n"
     );
   }
 
@@ -123,7 +114,7 @@ export class ApiService {
     });
     return this.processResponse<T>(
       res,
-      "An error occurred while deleting the data.\n",
+      "An error occurred while deleting the data.\n"
     );
   }
 }
