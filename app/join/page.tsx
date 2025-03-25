@@ -11,7 +11,7 @@ export default function Join() {
         <div className={styles.centered}>
             <div className={styles.blueOverlay}></div>
             <div className={styles.messageContainer}>
-                <div className={styles.messageBox}>
+                <div className={styles.messageField}>
                     Choose a codename & we’ll create a game lobby for you. <br/>
                     <br/>
                     Await further instructions.<br/>

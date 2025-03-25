@@ -7,13 +7,11 @@ import {RightOutlined} from "@ant-design/icons";
 
 export default function Create() {
     const router = useRouter();
-
-
     return (
         <div className={styles.centered}>
             <div className={styles.redOverlay}></div>
             <div className={styles.messageContainer}>
-                <div className={styles.messageBox}>
+                <div className={styles.messageField}>
                     Choose a codename & we’ll create a game lobby for you. <br/>
                     <br/>
                     Await further instructions.<br/>
