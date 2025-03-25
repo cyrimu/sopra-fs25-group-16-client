@@ -46,7 +46,7 @@
     flex: 1;
     height: 200px;
     background: rgba(217, 217, 217, 0.5);
-    font-family: "Special Elite";
+    font-family: "Special Elite", serif;
     color: white;
     font-size: 150px;
     border: none;
@@ -74,7 +74,7 @@
     background-color: #2F2F2F;
     outline: 1px dashed white;
     outline-offset: -10px;
-    font-family: "Special Elite";
+    font-family: "Special Elite", serif;
     color: white;
     font-size: 35px;
     padding: 50px;
@@ -91,7 +91,7 @@
 }
 
 .inputField {
-    font-family: "Special Elite";
+    font-family: "Special Elite", serif;
     background-color: white;
     color: black;
     font-size: 24px;
@@ -104,13 +104,13 @@
 }
 
 .inputField::placeholder {
-    font-family: "Special Elite";
+    font-family: "Special Elite", serif;
     color: black;
     font-size: 24px;
 }
 
 .regularButton {
-    font-family: "Gabarito";
+    font-family: "Gabarito", serif;
     background-color: white;
     color: black;
     font-size: 24px;
