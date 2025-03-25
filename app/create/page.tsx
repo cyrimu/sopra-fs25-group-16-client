@@ -15,7 +15,7 @@ export default function Create() {
 
   const [username, setUsername] = useState("");
 
-  function handleJoinButton(e: any) {
+  function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
     dispatch(setPlayerName(username));

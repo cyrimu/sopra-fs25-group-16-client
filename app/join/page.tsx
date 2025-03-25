@@ -15,7 +15,7 @@ export default function Join() {
   const [username, setUsername] = useState("");
   const [id, setId] = useState("");
 
-  function handleJoinButton(e: any) {
+  function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
     // TODO: Check if lobbyId exists

@@ -6,7 +6,6 @@ import { Player } from "../player/player.types";
 import { Game, GAME_TYPE } from "../game/game.types";
 import { LANGUAGES } from "./languages.types";
 import { Team } from "./team.types";
-import { connect } from "http2";
 
 const initialState = {
   lobbyId: crypto.randomUUID().replaceAll("-", ""),
