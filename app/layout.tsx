@@ -4,6 +4,7 @@ import { ConfigProvider, theme } from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "@/styles/globals.css";
 import RulesButton from "@/components/rulesButton";
+import StoreProvider from "./providers/StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,8 +63,8 @@ export default function RootLayout({
           }}
         >
           <AntdRegistry>
-            {children}
-            <RulesButton type="primary" iconType="question"/>
+            <StoreProvider>{children}</StoreProvider>
+            <RulesButton type="primary" iconType="question" />
           </AntdRegistry>
         </ConfigProvider>
       </body>
