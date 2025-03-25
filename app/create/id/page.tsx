@@ -18,12 +18,14 @@ export default function Create() {
                     <br/>
                     - CN
                     <br/>
+                    {/*ensure the right link is copied when ready*/}
                     <button className={styles.regularButton} style={{width: '100%', marginBottom: '10px'}} onClick={() => navigator.clipboard.writeText('insert copyable text when ready')}>
                         <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
                             <span>some.link/uzh-123</span>
                             <CopyOutlined/>
                         </div>
                     </button>
+                    {/*ensure the right text is copied when ready*/}
                     <button className={styles.regularButton} style={{width: '100%'}} onClick={() => navigator.clipboard.writeText('insert copyable text when ready')}>
                         <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
                             <span>uzh-123</span>
@@ -32,11 +34,13 @@ export default function Create() {
                     </button>
                 </div>
                 <div className={styles.regularButtonContainer}>
-                    <button className={styles.regularButton} onClick={() => navigator.clipboard.writeText('insert copyable text when ready')}>
-                        Open Lobby
-                    </button>
-                    <button className={styles.regularButton} onClick={() => router.push("create/id")}>
+                    {/*change routing to next screen when ready*/}
+                    <button className={styles.regularButton} onClick={() => router.push("/")}>
                         Delete Lobby
+                    </button>
+                    {/*implement actual deletion of lobby*/}
+                    <button className={styles.regularButton} onClick={() => router.push("create/id")}>
+                        Open Lobby
                     </button>
                 </div>
             </div>
