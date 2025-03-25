@@ -11,7 +11,6 @@ import { selectLobbyId, setHost, setLobbyId } from "@/lib/features/lobby";
 export default function Create() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const lobbyId = useSelector(selectLobbyId);
 
   const [username, setUsername] = useState("");
 
@@ -23,7 +22,7 @@ export default function Create() {
     dispatch(setPlayerName(username));
     dispatch(setHost(username));
 
-    router.push(`/create/${lobbyId}`);
+    router.push(`/create/${uuid}`);
   }
 
   return (
