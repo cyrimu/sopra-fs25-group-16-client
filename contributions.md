@@ -1,3 +1,4 @@
+
 # Contributions
 
 Every member has to complete at least 2 meaningful tasks per week, where a
@@ -30,12 +31,12 @@ reason).
 
 ---
 
-## Contributions Week 1 - [Begin Date] to [End Date]
+## Contributions Week 1 - [24.03.2025] to [30.03.2025]
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@cyrimu]**      | [24.03.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-server/pull/65/commits/370ec9c9c6f75041c9c736fad3b8e8b981fbc2fd)| [Implementation of Game Class and associated classes] | [All following Tasks will have add features to class] |
+|                    | [25.03.2025]   | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-server/pull/65/commits/79b1b2204f5abc917cdf944685604afc5d0f951b)| [Fixing Compilation errors in Game Logic (No Test coverage)] | [Otherwise the project will not compile] |
 | **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
