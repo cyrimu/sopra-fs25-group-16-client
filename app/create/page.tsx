@@ -22,11 +22,11 @@ export default function Create() {
                 </div>
                 <div className={styles.inputContainer}>
                     <input
-                        className={styles.inputForm}
+                        className={styles.inputField}
                         placeholder="Choose your codename ... "
                     />
-                    <button className={styles.nextButton}>
-                        <RightOutlined/>
+                    <button className={styles.regularButton} onClick={() => router.push("create/id")}>
+                        Next <RightOutlined/>
                     </button>
                 </div>
             </div>

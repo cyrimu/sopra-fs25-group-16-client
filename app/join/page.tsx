@@ -20,15 +20,15 @@ export default function Join() {
                 </div>
                 <div className={styles.inputContainer}>
                     <input
-                        className={styles.inputForm}
+                        className={styles.inputField}
                         placeholder="Choose your codename ... "
                     />
                     <input
-                        className={styles.inputForm}
+                        className={styles.inputField}
                         placeholder="Enter Lobby ID ... "
                     />
-                    <button className={styles.nextButton}>
-                        <RightOutlined/>
+                    <button className={styles.regularButton}>
+                       Join <RightOutlined/>
                     </button>
                 </div>
             </div>

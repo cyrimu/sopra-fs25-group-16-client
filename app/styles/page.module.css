@@ -90,38 +90,41 @@
     width: 100%;
 }
 
-.inputForm {
+.inputField {
     font-family: "Special Elite";
     background-color: white;
     color: black;
     font-size: 24px;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
     border: 2px solid white;
     width: 100%;
     margin-bottom: 10px;
+    padding-top: 15px;
 }
 
-.inputForm::placeholder {
+.inputField::placeholder {
     font-family: "Special Elite";
     color: black;
     font-size: 24px;
 }
 
-.nextButton {
+.regularButton {
+    font-family: "Gabarito";
     background-color: white;
     color: black;
     font-size: 24px;
-    border-radius: 10px;
+    border-radius: 20px;
     cursor: pointer;
     padding: 10px;
     border: none;
     transition: background 0.3s;
 }
 
-.nextButton:hover {
+.regularButton:hover {
     background: rgba(217, 217, 217, 0.8);
 }
+
 
 
 
