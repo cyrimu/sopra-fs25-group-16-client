@@ -6,22 +6,42 @@ import {
   selectGameType,
   selectHost,
   selectLanguage,
+  selectLobbyId,
 } from "@/lib/features/lobby";
 import { LANGUAGES } from "@/lib/features/lobby/languages.types";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
 import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 import styles from "@/styles/page.module.css";
-import { RightOutlined } from "@ant-design/icons";
+import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Dropdown, MenuProps } from "antd";
 
 export default function Lobby() {
+  const router = useRouter();
+
+  const id = useSelector(selectLobbyId);
+
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
 
   const [language, setLanguage] = useState(useSelector(selectLanguage));
   const [type, setType] = useState(useSelector(selectGameType));
+  const [isEdit, setIsEdit] = useState(false);
+
+  function handleDeleteLobby() {
+    router.replace("/create");
+  }
+
+  function handleChangeSetup() {
+    setIsEdit(!isEdit);
+  }
+
+  function handleStartGame() {
+    router.push(`/game/${id}`);
+  }
 
   // Setup mockup data
   const players: Player[] = [
@@ -49,14 +69,68 @@ export default function Lobby() {
   const lang = LANGUAGES[language];
   const languageStr = lang.charAt(0).toUpperCase() + lang.slice(1);
 
+  const handleGameType: MenuProps["onClick"] = (e) => {
+    const newGameType = GAME_TYPE[e.key as keyof typeof GAME_TYPE];
+    setType(newGameType);
+  };
+
+  const handleLanguage: MenuProps["onClick"] = (e) => {
+    const newLanguage = LANGUAGES[e.key as keyof typeof LANGUAGES];
+    setLanguage(newLanguage);
+  };
+
+  const gameTypeElements: MenuProps = {
+    items: Object.values(GAME_TYPE).map((type) => ({
+      key: type,
+      label: (
+        <div className={styles.lobbyDropdown}>
+          {type.charAt(0).toUpperCase() + type.slice(1)}
+        </div>
+      ),
+      onClick: handleGameType,
+    })),
+  };
+
+  const languageElements: MenuProps = {
+    items: Object.values(LANGUAGES).map((language) => ({
+      key: language,
+      label: (
+        <div className={styles.lobbyDropdown}>
+          {language.charAt(0).toUpperCase() + language.slice(1)}
+        </div>
+      ),
+      onClick: handleLanguage,
+    })),
+  };
+
   return (
     <div className={styles.centered}>
       <div className={styles.redBlueOverlay}></div>
       <div className={styles.lobbyTitle}>Game Lobby</div>
       <div className={styles.messageContainer}>
         <div style={{ display: "flex", gap: "40px" }}>
-          <div className={styles.lobbyConfig}>Mode: {gameTypeStr}</div>
-          <div className={styles.lobbyConfig}>Language: {languageStr}</div>
+          <div className={styles.lobbyConfig}>
+            {isEdit && isHost ? (
+              <Dropdown menu={gameTypeElements}>
+                <div style={{ display: "flex" }}>
+                  {`Mode: ${gameTypeStr}`} <DownOutlined />
+                </div>
+              </Dropdown>
+            ) : (
+              `Mode: ${gameTypeStr}`
+            )}
+          </div>
+          <div className={styles.lobbyConfig}>
+            {isEdit && isHost ? (
+              <Dropdown menu={languageElements}>
+                <div style={{ display: "flex" }}>
+                  {`Language: ${languageStr}`} <DownOutlined />
+                </div>
+              </Dropdown>
+            ) : (
+              `Language: ${languageStr}`
+            )}
+          </div>
         </div>
         <br />
         <table className={styles.tableField}>
@@ -88,23 +162,31 @@ export default function Lobby() {
           </tbody>
         </table>
         <br />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <button className={styles.regularButton}>
-            Change Setup <RightOutlined />
-          </button>
-          <button className={styles.regularButton}>
-            Start Game <RightOutlined />
-          </button>
-          <button className={styles.regularButton}>
-            Delete Lobby <RightOutlined />
-          </button>
-        </div>
+        {isHost && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <button
+              className={styles.regularButton}
+              onClick={handleChangeSetup}
+            >
+              {isEdit ? "Save Setup" : "Change Setup"} <RightOutlined />
+            </button>
+            <button className={styles.regularButton} onClick={handleStartGame}>
+              Start Game <RightOutlined />
+            </button>
+            <button
+              className={styles.regularButton}
+              onClick={handleDeleteLobby}
+            >
+              Delete Lobby <RightOutlined />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
