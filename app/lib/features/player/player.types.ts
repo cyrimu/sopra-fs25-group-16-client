@@ -7,6 +7,6 @@ export interface Player {
 }
 
 export enum PLAYER_ROLES {
-  spymaster,
-  operative,
+  spymaster = "spymaster",
+  operative = "operative",
 }

@@ -27,6 +27,6 @@ export enum TURN_ORDER {
 }
 
 export enum GAME_TYPE {
-  text,
-  image,
+  text = "text",
+  image = "image",
 }
