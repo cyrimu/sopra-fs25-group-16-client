@@ -8,7 +8,7 @@ type LargeButtonProps = {
 
 const LargeButton: React.FC<LargeButtonProps> = ({ onClick, children }) => {
     return (
-        <button onClick={onClick} className={styles.landingbutton}>
+        <button onClick={onClick} className={styles.landingButton}>
             {children}
         </button>
     );
