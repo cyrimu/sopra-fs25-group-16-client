@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counter from "./features/counterSlice";
+import player from "./features/player/index";
+import lobby from "./features/lobby/index";
+import game from "./features/game/index";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      counter,
+      player,
+      lobby,
+      game,
     },
   });
 };

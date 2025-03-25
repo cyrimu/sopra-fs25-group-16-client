@@ -8,7 +8,7 @@ import { LANGUAGES } from "./languages.types";
 import { Team } from "./team.types";
 
 const initialState = {
-  lobbyId: undefined,
+  lobbyId: crypto.randomUUID().replaceAll("-", ""),
   host: undefined,
   players: [],
   game: undefined,
@@ -23,7 +23,8 @@ const lobbySlice = createSlice({
   name: "lobby",
   initialState,
   reducers: {
-    setLobbyId(state, action: PayloadAction<number>) {
+    // Update the state with the new lobby ID
+    setLobbyId(state, action: PayloadAction<string>) {
       state.lobbyId = action.payload;
     },
     // Update the state with the new host

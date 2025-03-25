@@ -4,7 +4,7 @@ import { LANGUAGES } from "./languages.types";
 import { Team } from "./team.types";
 
 export interface Lobby {
-  lobbyId: number | undefined;
+  lobbyId: string | undefined;
   host: string | undefined;
   players: Player[];
   game: Game | undefined;
