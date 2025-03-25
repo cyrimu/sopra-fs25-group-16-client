@@ -3,10 +3,10 @@ import "@ant-design/v5-patch-for-react-19";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { RightOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { setPlayerName } from "@/lib/features/player";
-import { selectLobbyId, setHost, setLobbyId } from "@/lib/features/lobby";
+import { setHost, setLobbyId } from "@/lib/features/lobby";
 
 export default function Create() {
   const router = useRouter();
