@@ -2,7 +2,7 @@
 import "@ant-design/v5-patch-for-react-19";
 import { useRouter, useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
-import { RightOutlined } from "@ant-design/icons";
+import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 import { setPlayerName } from "@/lib/features/player";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -31,12 +31,20 @@ export default function JoinWithID() {
         router.push(`/lobby/${id}`);
     }
 
+    function handleBackButton(e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+        dispatch(setLobbyId(""));
+        router.push(`/join`);
+    }
+
     return (
         <div className={styles.centered}>
             <div className={styles.blueOverlay}></div>
             <div className={styles.messageContainer}>
                 <div className={styles.messageField}>
-                    Choose a codename & we’ll create a game lobby for you. <br/>
+                    Choose a codename to enter the lobby
+                    <br/>
+                    {id} <br/>
                     <br/>
                     Await further instructions.
                     <br/>
@@ -48,14 +56,14 @@ export default function JoinWithID() {
                         placeholder="Choose your codename ... "
                         onChange={(e) => setUsername(e.target.value)}
                     />
-                    <input
-                        className={styles.inputField}
-                        value={id}
-                        disabled={true}
-                    />
-                    <button className={styles.regularButton} onClick={handleJoinButton}>
-                        Join <RightOutlined/>
-                    </button>
+                    <div className={styles.regularButtonContainer}>
+                        <button className={styles.regularButton} onClick={handleBackButton}>
+                            <LeftOutlined/> Join different lobby
+                        </button>
+                        <button className={styles.regularButton} onClick={handleJoinButton}>
+                            Join <RightOutlined/>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
