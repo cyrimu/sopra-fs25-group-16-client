@@ -7,7 +7,9 @@ import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
-import { Button, Popconfirm } from "antd";
+import {Modal, Popconfirm} from "antd";
+import ConfigurationPanel from "@/components/configurationPanel";
+import {useState} from "react";
 
 export default function Lobby() {
     const router = useRouter();
@@ -16,6 +18,22 @@ export default function Lobby() {
     const playerName = useSelector(selectPlayerName);
     const hostName = useSelector(selectHost);
     const isHost = playerName === hostName;
+
+    const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
+
+
+    const showConfigurationPanelOpen = () => {
+        setConfigurationPanelOpen(true);
+    };
+
+    const handleOk = () => {
+        setConfigurationPanelOpen(false);
+    };
+
+    const handleCancel = () => {
+        setConfigurationPanelOpen(false);
+    };
+
 
     function handleStartGame() {
         router.push(`/game/${id}`);
@@ -43,6 +61,9 @@ export default function Lobby() {
             <div className={styles.redBlueOverlay}></div>
             <div className={styles.lobbyTitle}>Game Lobby</div>
             <div className={styles.messageContainer}>
+                <div className={styles.messageField} style={{ width: "100%", padding: "30px", height: "auto", fontSize: "20px"}}>
+                    Mode:
+                </div>
                 <br />
                 <table className={styles.tableField}>
                     <thead>
@@ -74,16 +95,30 @@ export default function Lobby() {
                 </table>
                 <br />
                 {isHost && (
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            width: "100%",
-                        }}
-                    >
-                        <button className={styles.regularButton} onClick={handleStartGame}>
+                    <div className={styles.regularButtonContainer}>
+                        <button className={styles.regularButton} onClick={showConfigurationPanelOpen}>
                             Change Setup
                         </button>
+                        <Modal
+                            styles={{
+                                content: {backgroundColor:"#2f2f2f", padding: "20px", fontFamily:"Special Elite"},
+                                body: { backgroundColor:"#2f2f2f", outline: "1px dashed white",
+                                    outlineOffset: "-10px", fontFamily:"Special Elite", color: "white", borderRadius: "20px", padding: "20px"},
+                                header: { backgroundColor:"#2f2f2f", outline: "1px dashed white",
+                                    outlineOffset: "-10px", fontFamily:"Special Elite", color: "white", borderRadius: "20px", padding: "20px"},
+                                footer: {textAlign: "center"}
+                        }}
+                            title="Configuration Panel"
+                            open={isConfigurationPanelOpen}
+                            onOk={handleOk}
+                            okButtonProps={{ style: { fontFamily: "Gabarito", fontSize: "20px" } }}
+                            okText="Save"
+                            onCancel={handleCancel}
+                            cancelButtonProps={{ style: { fontFamily: "Gabarito", fontSize: "20px" } }}
+                            cancelText="Cancel"
+                        >
+                            <ConfigurationPanel/>
+                        </Modal>
                         <button className={styles.regularButton} onClick={handleStartGame}>
                             Start Game
                         </button>
