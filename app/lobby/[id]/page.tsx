@@ -2,7 +2,7 @@
 import "@ant-design/v5-patch-for-react-19";
 import { useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
-import { selectGameType, selectHost, selectLobbyId, selectLanguage } from "@/lib/features/lobby";
+import {selectHost, selectLobbyId } from "@/lib/features/lobby";
 import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 import styles from "@/styles/page.module.css";
