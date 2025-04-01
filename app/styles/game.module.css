@@ -1,0 +1,91 @@
+.centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.gameWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.gameContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 12px;
+  border-radius: 40px;
+  background-color: #2f2f2f;
+  font-family: "Special Elite", serif;
+  color: white;
+  font-size: 26px;
+  outline: 1px dashed white;
+  outline-offset: -10px;
+  padding: 25px;
+}
+
+.gameCardTextWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 2.15;
+  width: 160px;
+  background: #ffebd3;
+  border: solid 5px #a79c8b4d;
+}
+
+.gameRedCardTextWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 2.15;
+  width: 160px;
+  background: url("/red_card.png") center;
+  background-size: cover;
+}
+
+.gameBlueCardTextWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 2.15;
+  width: 160px;
+  background: url("/blue_card.png") center;
+  background-size: cover;
+}
+
+.gameBlackCardTextWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 2.15;
+  width: 160px;
+  background: url("/black_card.png") center;
+  background-size: cover;
+}
+
+.gameGreyCardTextWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 2.15;
+  width: 160px;
+  background: url("/neutral_card.png") center;
+  background-size: cover;
+}
+
+.gameCardTextContainer {
+  border: solid 2px #0000001a;
+  background-color: #fff;
+  padding: 0 8px;
+}
+
+.gameCardText {
+  font-family: "Gabarito";
+  font-weight: 700;
+  color: #000;
+  font-size: 16px;
+}
