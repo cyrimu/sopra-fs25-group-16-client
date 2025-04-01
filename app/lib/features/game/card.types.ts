@@ -7,8 +7,9 @@ export interface Card {
   color: CARD_COLOR;
 }
 
-enum CARD_COLOR {
+export enum CARD_COLOR {
   blue,
   red,
+  grey,
   black,
 }
