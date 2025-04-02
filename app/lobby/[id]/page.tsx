@@ -1,16 +1,17 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
 import { useSelector } from "react-redux";
-import { selectPlayerName } from "@/lib/features/player";
+import { selectPlayer } from "@/lib/features/player";
 import {
   selectGameType,
   selectHost,
   selectLanguage,
   selectLobbyId,
+  selectPlayers,
 } from "@/lib/features/lobby";
 import { LANGUAGES } from "@/lib/features/lobby/languages.types";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
-import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
+import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 import styles from "@/styles/page.module.css";
 import { DownOutlined, RightOutlined } from "@ant-design/icons";
@@ -23,13 +24,15 @@ export default function Lobby() {
 
   const id = useSelector(selectLobbyId);
 
-  const playerName = useSelector(selectPlayerName);
+  const { playerName } = useSelector(selectPlayer);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
 
   const [language, setLanguage] = useState(useSelector(selectLanguage));
   const [type, setType] = useState(useSelector(selectGameType));
   const [isEdit, setIsEdit] = useState(false);
+
+  const players = useSelector(selectPlayers);
 
   function handleDeleteLobby() {
     router.replace("/create");
@@ -42,27 +45,6 @@ export default function Lobby() {
   function handleStartGame() {
     router.push(`/game/${id}`);
   }
-
-  // Setup mockup data
-  const players: Player[] = [
-    { playerName: "Sergi", team: TEAM_COLOR.red, role: PLAYER_ROLES.operative },
-    { playerName: "Pio", team: TEAM_COLOR.red, role: PLAYER_ROLES.spymaster },
-    {
-      playerName: "Rashmi",
-      team: TEAM_COLOR.blue,
-      role: PLAYER_ROLES.spymaster,
-    },
-    {
-      playerName: "Calvin",
-      team: TEAM_COLOR.blue,
-      role: PLAYER_ROLES.operative,
-    },
-    {
-      playerName: "Cyril",
-      team: TEAM_COLOR.blue,
-      role: PLAYER_ROLES.operative,
-    },
-  ];
 
   const gameType = GAME_TYPE[type];
   const gameTypeStr = gameType.charAt(0).toUpperCase() + gameType.slice(1);

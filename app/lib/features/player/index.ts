@@ -24,16 +24,13 @@ const playerSlice = createSlice({
     },
   },
   selectors: {
-    selectPlayerName: (state) => state.playerName,
-    selectPlayerRole: (state) => state.role,
-    selectPlayerTeam: (state) => state.team,
+    selectPlayer: (state) => state,
   },
 });
 
 export const { setPlayerName, setPlayerRole, setPlayerTeam } =
   playerSlice.actions;
 
-export const { selectPlayerName, selectPlayerRole, selectPlayerTeam } =
-  playerSlice.selectors;
+export const { selectPlayer } = playerSlice.selectors;
 
 export default playerSlice.reducer;

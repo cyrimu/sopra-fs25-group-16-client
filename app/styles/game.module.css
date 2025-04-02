@@ -1,0 +1,111 @@
+.centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.gameWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.gameContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 12px;
+  border-radius: 40px;
+  background-color: #2f2f2f;
+  font-family: "Special Elite", serif;
+  color: white;
+  font-size: 26px;
+  outline: 1px dashed white;
+  outline-offset: -10px;
+  padding: 25px;
+}
+
+.gameCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 2.15;
+  width: 160px;
+}
+
+.gameCardTextContainer {
+  border: solid 2px #0000001a;
+  background-color: #fff;
+  padding: 0 8px;
+}
+
+.gameCardTextContainer > span {
+  font-family: "Gabarito";
+  font-weight: 700;
+  color: #000;
+  font-size: 16px;
+}
+
+.scoreboardWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.scoreboardContainer {
+  flex: 1;
+  flex-basis: 50%;
+  max-width: 50%;
+  padding: 8px 20px;
+}
+
+.scoreboardContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.scoreboardTeamContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.scoreboardTeamContainer,
+.span {
+  color: #fff;
+  font-family: "Gabarito";
+  font-size: 16px;
+}
+
+.scoreboardPlayersContainer {
+  display: flex;
+  gap: 7px;
+}
+
+.scoreboardPlayer {
+  padding: 7px 10px;
+  background-color: #fff;
+  border-radius: 20px;
+  color: #000;
+}
+
+.scoreboardScore {
+  color: #fff;
+  font-family: "Gabarito";
+  font-weight: 400;
+  font-size: 100px;
+}
+
+.joinTeamContainer {
+  padding: 7px 10px;
+  background-color: #ffe400;
+  color: #000;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.joinTeamContainer:hover {
+  background-color: "#ffd300";
+}

@@ -1,8 +1,8 @@
 import { Player } from "../player/player.types";
 
 export interface Team {
-  spymaster: Player;
-  operative: Player;
+  spymaster: Player | undefined;
+  operative: Player | undefined;
 }
 
 export enum TEAM_COLOR {

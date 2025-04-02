@@ -1,5 +1,6 @@
 import { BOARD_SIZE, BLUE_CARDS, RED_CARDS, BLACK_CARDS } from "@/constants";
 import { Card } from "./card.types";
+import { shuffledCards } from "@/seed";
 
 export type Board = {
   boardSize: number;
@@ -14,5 +15,5 @@ export const boardInitialState = {
   blueCards: BLUE_CARDS,
   redCards: RED_CARDS,
   blackCards: BLACK_CARDS,
-  cards: [],
+  cards: shuffledCards,
 } satisfies Board as Board;

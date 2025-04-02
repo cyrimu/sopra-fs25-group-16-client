@@ -6,11 +6,12 @@ import { Player } from "../player/player.types";
 import { Game, GAME_TYPE } from "../game/game.types";
 import { LANGUAGES } from "./languages.types";
 import { Team } from "./team.types";
+import { players } from "@/seed";
 
 const initialState = {
   lobbyId: undefined,
   host: undefined,
-  players: [],
+  players: players,
   game: undefined,
   type: DEFAULT_GAME_TYPE,
   language: DEFAULT_LANGUAGE,

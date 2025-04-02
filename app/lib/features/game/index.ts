@@ -8,7 +8,7 @@ import {
   DEFAULT_LANGUAGE,
   DEFAULT_STARTING_TURN,
 } from "@/constants";
-import { Player } from "../player/player.types";
+import { Player, PLAYER_ROLES } from "../player/player.types";
 import { TEAM_COLOR } from "../lobby/team.types";
 
 const initialState = {
@@ -41,13 +41,33 @@ const gameSlice = createSlice({
     },
     // Insert a new player into the state
     insertPlayer(state, action: PayloadAction<Player>) {
-      state.players = [...state.players, action.payload];
+      const player = action.payload;
+      state.players = [...state.players, player];
     },
     // Remove an existing player from the state
     removePlayer(state, action: PayloadAction<Player>) {
-      state.players = state.players.filter(
-        (player) => player !== action.payload
-      );
+      const player = action.payload;
+      state.players = state.players.filter((p) => p !== player);
+    },
+    // Insert a new user to the red team
+    setRedTeam(state, action: PayloadAction<Player>) {
+      const player = action.payload;
+      const { role } = player;
+      state.redTeam = {
+        operative: role === PLAYER_ROLES.operative ? player : undefined,
+        spymaster: role === PLAYER_ROLES.spymaster ? player : undefined,
+      };
+      state.blueTeam = undefined;
+    },
+    // Insert a new user to the blue team
+    setBlueTeam(state, action: PayloadAction<Player>) {
+      const player = action.payload;
+      const { role } = player;
+      state.blueTeam = {
+        operative: role === PLAYER_ROLES.operative ? player : undefined,
+        spymaster: role === PLAYER_ROLES.spymaster ? player : undefined,
+      };
+      state.redTeam = undefined;
     },
     // Set the turn order
     setTurn(state, action: PayloadAction<TURN_ORDER>) {
@@ -97,8 +117,16 @@ const gameSlice = createSlice({
   },
 });
 
-export const { insertCard, updateCard } = gameSlice.actions;
+export const {
+  insertPlayer,
+  removePlayer,
+  insertCard,
+  updateCard,
+  setRedTeam,
+  setBlueTeam,
+} = gameSlice.actions;
 
-export const { selectCards } = gameSlice.selectors;
+export const { selectBlueTeam, selectRedTeam, selectCards } =
+  gameSlice.selectors;
 
 export default gameSlice.reducer;
