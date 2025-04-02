@@ -3,7 +3,7 @@ import { GAME_TYPE } from "./lib/features/game/game.types";
 import { TEAM_COLOR } from "./lib/features/lobby/team.types";
 import { Player, PLAYER_ROLES } from "./lib/features/player/player.types";
 
-const colorCards = Array.from({ length: 16 }).map((e, i) => {
+const colorCards = Array.from({ length: 16 }).map((_, i) => {
   return {
     type: GAME_TYPE.text,
     content: i % 2 === 0 ? "BLUE" : "RED",
@@ -12,7 +12,7 @@ const colorCards = Array.from({ length: 16 }).map((e, i) => {
   };
 });
 
-const greyCards = Array.from({ length: 8 }).map((e, i) => {
+const greyCards = Array.from({ length: 8 }).map(() => {
   return {
     type: GAME_TYPE.text,
     content: `GREY`,
