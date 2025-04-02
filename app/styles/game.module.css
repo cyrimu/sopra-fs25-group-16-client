@@ -58,7 +58,7 @@
   flex: 1;
   flex-basis: 50%;
   max-width: 50%;
-  padding: 20px;
+  padding: 8px 20px;
 }
 
 .scoreboardContent {
@@ -96,4 +96,16 @@
   font-family: "Gabarito";
   font-weight: 400;
   font-size: 100px;
+}
+
+.joinTeamContainer {
+  padding: 7px 10px;
+  background-color: #ffe400;
+  color: #000;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.joinTeamContainer:hover {
+  background-color: "#ffd300";
 }

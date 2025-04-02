@@ -5,14 +5,52 @@ import LogButton from "@/components/logButton";
 import GameCard from "@/components/gameCard";
 import { useState } from "react";
 import LogDialog from "@/components/logDialog";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCards } from "@/lib/features/game";
 import SubmitButton from "@/components/submitButton";
+import {
+  setRedTeam,
+  setBlueTeam,
+  selectBlueTeam,
+  selectRedTeam,
+} from "@/lib/features/game";
+import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
+import {
+  selectPlayer,
+  setPlayerRole,
+  setPlayerTeam,
+} from "@/lib/features/player";
+import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 
 export default function Game() {
   const [isLog, setIsLog] = useState(false);
 
   const cards = useSelector(selectCards);
+  const blueTeam = useSelector(selectBlueTeam);
+  const redTeam = useSelector(selectRedTeam);
+
+  const player = useSelector(selectPlayer);
+
+  const dispatch = useDispatch();
+
+  function handleJoinTeamAndRole(team: TEAM_COLOR, role: PLAYER_ROLES) {
+    // Update the player itself
+    dispatch(setPlayerRole(role));
+    dispatch(setPlayerTeam(team));
+
+    // Update the game with the new player
+    const newPlayer: Player = {
+      playerName: player.playerName,
+      role: role,
+      team: team,
+    };
+
+    if (team == TEAM_COLOR.red) {
+      dispatch(setRedTeam(newPlayer));
+    } else {
+      dispatch(setBlueTeam(newPlayer));
+    }
+  }
 
   return (
     <div className={styles.centered}>
@@ -22,9 +60,10 @@ export default function Game() {
         <div
           style={{
             display: "flex",
+            alignItems: "center",
+            height: "100%",
             justifyContent: "space-between",
             flexDirection: "column",
-            alignItems: "center",
           }}
         >
           <div className={styles.gameWrapper}>
@@ -50,23 +89,47 @@ export default function Game() {
             >
               <div className={styles.scoreboardContent}>
                 <div className={styles.scoreboardTeamContainer}>
-                  <span>Operatives</span>
+                  <span>Operative</span>
                   <div className={styles.scoreboardPlayersContainer}>
-                    {Array.from({ length: 2 }).map((_, i) => (
-                      <div className={styles.scoreboardPlayer} key={i}>
-                        <span>Player {i + 1}</span>
-                        <span>0</span>
+                    {redTeam?.operative ? (
+                      <div className={styles.scoreboardPlayer}>
+                        {redTeam.operative.playerName}
                       </div>
-                    ))}
+                    ) : (
+                      <div
+                        style={{ marginLeft: redTeam?.operative ? "20px" : 0 }}
+                        className={styles.joinTeamContainer}
+                        onClick={() =>
+                          handleJoinTeamAndRole(
+                            TEAM_COLOR.red,
+                            PLAYER_ROLES.operative
+                          )
+                        }
+                      >
+                        <span>+ Join Operative</span>
+                      </div>
+                    )}
                   </div>
                   <span>Spymaster</span>
                   <div className={styles.scoreboardPlayersContainer}>
-                    {Array.from({ length: 2 }).map((_, i) => (
-                      <div className={styles.scoreboardPlayer} key={i}>
-                        <span>Player {i + 1}</span>
-                        <span>0</span>
+                    {redTeam?.spymaster ? (
+                      <div className={styles.scoreboardPlayer}>
+                        {redTeam.spymaster.playerName}
                       </div>
-                    ))}
+                    ) : (
+                      <div
+                        className={styles.joinTeamContainer}
+                        onClick={() =>
+                          handleJoinTeamAndRole(
+                            TEAM_COLOR.red,
+                            PLAYER_ROLES.spymaster
+                          )
+                        }
+                        style={{ marginLeft: redTeam?.spymaster ? "20px" : 0 }}
+                      >
+                        <span>+ Join Spymaster</span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <span className={styles.scoreboardScore}>8</span>
@@ -82,14 +145,47 @@ export default function Game() {
               <div className={styles.scoreboardContent}>
                 <span className={styles.scoreboardScore}>8</span>
                 <div className={styles.scoreboardTeamContainer}>
-                  <span>Operatives</span>
+                  <span>Operative</span>
                   <div className={styles.scoreboardPlayersContainer}>
-                    {Array.from({ length: 2 }).map((_, i) => (
-                      <div className={styles.scoreboardPlayer} key={i}>
-                        <span>Player {i + 1}</span>
-                        <span>0</span>
+                    {blueTeam?.operative ? (
+                      <div className={styles.scoreboardPlayer}>
+                        {blueTeam.operative.playerName}
                       </div>
-                    ))}
+                    ) : (
+                      <div
+                        className={styles.joinTeamContainer}
+                        onClick={() =>
+                          handleJoinTeamAndRole(
+                            TEAM_COLOR.blue,
+                            PLAYER_ROLES.operative
+                          )
+                        }
+                        style={{ marginLeft: blueTeam?.operative ? "20px" : 0 }}
+                      >
+                        <span>+ Join Operative</span>
+                      </div>
+                    )}
+                  </div>
+                  <span>Spymaster</span>
+                  <div className={styles.scoreboardPlayersContainer}>
+                    {blueTeam?.spymaster ? (
+                      <div className={styles.scoreboardPlayer}>
+                        {blueTeam.spymaster.playerName}
+                      </div>
+                    ) : (
+                      <div
+                        className={styles.joinTeamContainer}
+                        onClick={() =>
+                          handleJoinTeamAndRole(
+                            TEAM_COLOR.blue,
+                            PLAYER_ROLES.spymaster
+                          )
+                        }
+                        style={{ marginLeft: blueTeam?.spymaster ? "20px" : 0 }}
+                      >
+                        <span>+ Join Spymaster</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
