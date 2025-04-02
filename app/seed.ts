@@ -1,5 +1,7 @@
 import { CARD_COLOR } from "./lib/features/game/card.types";
 import { GAME_TYPE } from "./lib/features/game/game.types";
+import { TEAM_COLOR } from "./lib/features/lobby/team.types";
+import { Player, PLAYER_ROLES } from "./lib/features/player/player.types";
 
 const colorCards = Array.from({ length: 16 }).map((e, i) => {
   return {
@@ -27,4 +29,25 @@ const blackCard = {
 };
 
 const cards = [...colorCards, ...greyCards, blackCard];
+
 export const shuffledCards = cards.sort(() => Math.random() - 0.5);
+
+export const players: Player[] = [
+  { playerName: "Sergi", team: TEAM_COLOR.red, role: PLAYER_ROLES.operative },
+  { playerName: "Pio", team: TEAM_COLOR.red, role: PLAYER_ROLES.spymaster },
+  {
+    playerName: "Rashmi",
+    team: TEAM_COLOR.blue,
+    role: PLAYER_ROLES.spymaster,
+  },
+  {
+    playerName: "Calvin",
+    team: TEAM_COLOR.blue,
+    role: PLAYER_ROLES.operative,
+  },
+  {
+    playerName: "Cyril",
+    team: TEAM_COLOR.blue,
+    role: PLAYER_ROLES.operative,
+  },
+];
