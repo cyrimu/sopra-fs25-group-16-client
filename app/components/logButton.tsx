@@ -2,9 +2,20 @@ import BookOutlined from "@ant-design/icons/lib/icons/BookOutlined";
 import { Button as AntButton } from "antd";
 import React from "react";
 
-const logButton: React.FC = () => {
+interface LogButtonProps {
+  callback: () => void;
+}
+
+const logButton: React.FC<LogButtonProps> = ({ callback }) => {
+  function handleClick() {
+    callback();
+  }
+
   return (
-    <div style={{ position: "absolute", top: 0, left: 0, margin: "10px" }}>
+    <div
+      onClick={handleClick}
+      style={{ position: "absolute", top: 0, left: 0, margin: "10px" }}
+    >
       <AntButton
         type="primary"
         icon={<BookOutlined style={{ fontSize: "30px" }} />}

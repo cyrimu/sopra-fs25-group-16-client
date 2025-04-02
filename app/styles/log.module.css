@@ -1,0 +1,26 @@
+.logWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: calc(100% / 3);
+  height: 100%;
+  background-color: #000000;
+  opacity: 80%;
+  padding: 16px;
+}
+
+.logClose {
+  position: absolute;
+  top: 14;
+  right: 14;
+  color: #fff;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.logContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0;
+}
