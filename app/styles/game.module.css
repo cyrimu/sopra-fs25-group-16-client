@@ -27,54 +27,12 @@
   padding: 25px;
 }
 
-.gameCardTextWrapper {
+.gameCard {
   display: flex;
   align-items: center;
   justify-content: center;
   aspect-ratio: 2.15;
   width: 160px;
-  background: #ffebd3;
-  border: solid 5px #a79c8b4d;
-}
-
-.gameRedCardTextWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 2.15;
-  width: 160px;
-  background: url("/red_card.png") center;
-  background-size: cover;
-}
-
-.gameBlueCardTextWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 2.15;
-  width: 160px;
-  background: url("/blue_card.png") center;
-  background-size: cover;
-}
-
-.gameBlackCardTextWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 2.15;
-  width: 160px;
-  background: url("/black_card.png") center;
-  background-size: cover;
-}
-
-.gameGreyCardTextWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 2.15;
-  width: 160px;
-  background: url("/neutral_card.png") center;
-  background-size: cover;
 }
 
 .gameCardTextContainer {
@@ -83,9 +41,59 @@
   padding: 0 8px;
 }
 
-.gameCardText {
+.gameCardTextContainer > span {
   font-family: "Gabarito";
   font-weight: 700;
   color: #000;
   font-size: 16px;
+}
+
+.scoreboardWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.scoreboardContainer {
+  flex: 1;
+  flex-basis: 50%;
+  max-width: 50%;
+  padding: 20px;
+}
+
+.scoreboardContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.scoreboardTeamContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.scoreboardTeamContainer,
+.span {
+  color: #fff;
+  font-family: "Gabarito";
+  font-size: 16px;
+}
+
+.scoreboardPlayersContainer {
+  display: flex;
+  gap: 7px;
+}
+
+.scoreboardPlayer {
+  padding: 7px 10px;
+  background-color: #fff;
+  border-radius: 20px;
+  color: #000;
+}
+
+.scoreboardScore {
+  color: #fff;
+  font-family: "Gabarito";
+  font-weight: 400;
+  font-size: 100px;
 }
