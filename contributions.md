@@ -50,7 +50,7 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@cyrimu]**      | [24.03.2025] | [Link to Pull Request](https://github.com/cyrimu/sopra-fs25-group-16-server/pull/68)   | [Testing/Refactoring of Game Class (and auxillary classes). Also created an more useable interface for remaining code] | [Needed that GameService   functionality can be implemented] |
+| **[@cyrimu]**      | [02.04.2025] | [Link to Pull Request](https://github.com/cyrimu/sopra-fs25-group-16-server/pull/68)   | [Testing/Refactoring of Game Class (and auxillary classes). Also created an more useable interface for remaining code] | [Needed that GameService   functionality can be implemented] |
 | **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
