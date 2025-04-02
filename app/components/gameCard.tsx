@@ -8,9 +8,7 @@ const gameCard: React.FC<Card> = ({ type, color, content }) => {
       <div
         className={styles.gameCard}
         style={{
-          background: `url("/${
-            CARD_COLOR[color]?.toString() || "default"
-          }_card.png") center no-repeat`,
+          background: `url("/${CARD_COLOR[color]}_card.png") center no-repeat`,
           backgroundSize: "cover",
         }}
       >
