@@ -33,6 +33,10 @@
   justify-content: center;
   aspect-ratio: 2.15;
   width: 160px;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .gameCardTextContainer {

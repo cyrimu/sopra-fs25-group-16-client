@@ -7,10 +7,11 @@ const gameCard: React.FC<Card> = ({ type, color, content }) => {
     return (
       <div
         className={styles.gameCard}
-        style={{
-          background: `url("/${CARD_COLOR[color]}_card.png") center no-repeat`,
-          backgroundSize: "cover",
-        }}
+        style={
+          {
+            "--bg-image": `url("/${CARD_COLOR[color]}_card.png")`,
+          } as React.CSSProperties
+        }
       >
         <div className={styles.gameCardTextContainer}>
           <span>{content.toUpperCase()}</span>
