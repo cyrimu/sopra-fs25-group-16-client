@@ -6,8 +6,7 @@ import GameCard from "@/components/gameCard";
 import { useState } from "react";
 import LogDialog from "@/components/logDialog";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCards } from "@/lib/features/game";
-import SubmitButton from "@/components/submitButton";
+import { selectCards, updateCard } from "@/lib/features/game";
 import {
   setRedTeam,
   setBlueTeam,
@@ -21,6 +20,7 @@ import {
   setPlayerTeam,
 } from "@/lib/features/player";
 import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
+import { Card } from "@/lib/features/game/card.types";
 
 export default function Game() {
   const [isLog, setIsLog] = useState(false);
@@ -30,6 +30,18 @@ export default function Game() {
   const redTeam = useSelector(selectRedTeam);
 
   const player = useSelector(selectPlayer);
+
+  const [selectedCards, setSelectedCards] = useState<Card[]>([]);
+
+  function handleSelectedCard(card: Card) {
+    const isSelected = selectedCards.some((c) => c === card);
+
+    if (isSelected) {
+      setSelectedCards(selectedCards.filter((c) => c !== card));
+    } else {
+      setSelectedCards([card, ...selectedCards]);
+    }
+  }
 
   const dispatch = useDispatch();
 
@@ -49,6 +61,13 @@ export default function Game() {
       dispatch(setRedTeam(newPlayer));
     } else {
       dispatch(setBlueTeam(newPlayer));
+    }
+  }
+
+  function submitSelectionHandle() {
+    for (let i = 0; i < selectedCards.length; i++) {
+      const card = selectedCards[i];
+      dispatch(updateCard(card));
     }
   }
 
@@ -72,16 +91,21 @@ export default function Game() {
                 return (
                   <GameCard
                     key={i}
-                    type={e.type}
-                    content={e.content}
-                    isRevealed={e.isRevealed}
-                    color={e.color}
+                    card={e}
+                    selected={selectedCards.includes(e)}
+                    selectedCallback={() => handleSelectedCard(e)}
                   />
                 );
               })}
             </div>
           </div>
-          <SubmitButton />
+          <button
+            className={styles.submitSelectionButton}
+            disabled={selectedCards.length === 0}
+            onClick={submitSelectionHandle}
+          >
+            Submit Selection
+          </button>
           <div className={styles.scoreboardWrapper}>
             <div
               className={styles.scoreboardContainer}
