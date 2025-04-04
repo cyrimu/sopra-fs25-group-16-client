@@ -179,3 +179,13 @@
 .joinTeamContainer:hover {
   background-color: "#ffd300";
 }
+
+.submitSelectionButton {
+  padding: 12px 18px;
+  color: #000;
+  font-weight: 700;
+  border-radius: 50px;
+  font-family: "Gabarito";
+  background-color: #fff;
+  cursor: pointer;
+}
