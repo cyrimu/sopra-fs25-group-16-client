@@ -4,16 +4,31 @@ import { selectPlayer } from "@/lib/features/player";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import styles from "@/styles/game.module.css";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
-const gameCard: React.FC<Card> = ({ type, color, content, isRevealed }) => {
+interface GameCardProps {
+  card: Card;
+  selected: boolean;
+  selectedCallback: (selected: boolean) => void;
+}
+
+const gameCard: React.FC<GameCardProps> = ({
+  card,
+  selected,
+  selectedCallback,
+}) => {
+  const { color, type, content, isRevealed } = card;
   const { role } = useSelector(selectPlayer);
-  const [revealed, setRevealed] = useState(isRevealed);
-  const [selected, setSelected] = useState(false);
+  const setSelected = () => selectedCallback(!selected);
+
+  const animation = useMemo(
+    () => ({ rotateY: isRevealed ? 180 : 0 }),
+    [isRevealed]
+  );
 
   function determineBackgroundImage(): CARD_COLOR {
-    if (role === PLAYER_ROLES.operative && !revealed) {
+    if (role === PLAYER_ROLES.operative && !isRevealed) {
       // The only case where the card will be forced to grey
       return CARD_COLOR.grey;
     }
@@ -31,11 +46,11 @@ const gameCard: React.FC<Card> = ({ type, color, content, isRevealed }) => {
             "--bg-image": `url("/${CARD_COLOR[cardColor]}_card.png")`,
           } as React.CSSProperties
         }
-        animate={{ rotateY: revealed ? 180 : 0 }}
+        animate={animation}
         transition={{ duration: 0.6, ease: "easeInOut" }}
-        onClick={() => setSelected(!selected)}
+        onClick={setSelected}
       >
-        {!revealed && (
+        {!isRevealed && (
           <div className={styles.gameCardTextContainer}>
             <span>{content.toUpperCase()}</span>
           </div>
@@ -46,9 +61,8 @@ const gameCard: React.FC<Card> = ({ type, color, content, isRevealed }) => {
     return (
       <motion.div
         className={styles.gameCard}
-        animate={{ rotateY: revealed ? 180 : 0 }}
+        animate={{ rotateY: isRevealed ? 180 : 0 }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
-        onClick={() => setRevealed(!revealed)}
       >
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zebra_%2824694097565%29.jpg/1200px-Zebra_%2824694097565%29.jpg" />
       </motion.div>
