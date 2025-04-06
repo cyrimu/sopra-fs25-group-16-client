@@ -7,7 +7,9 @@ interface PlayerData {
     points: number;
 }
 
-const ResultsTable: React.FC = () => {
+const ResultsTable: React.FC = () => { //temp data until web socket connection
+    const isHost = true;
+
     const players: PlayerData[] = [
         { codename: 'double0seven', team: 'blue', points: 0 },
         { codename: 'totallyspy', team: 'blue', points: 5 },
@@ -18,14 +20,15 @@ const ResultsTable: React.FC = () => {
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%', marginBottom: '30px' }}>
-                <div className={styles.messageField} style={{ width: '100%', padding: '30px', height: 'auto', fontSize: '26px', textAlign: 'center'}}>
+                <div className={styles.messageField} style={{ width: '100%', padding: '30px', height: 'auto', fontSize: '26px', textAlign: 'center', marginRight: '30px' }}>
                     Winner: Red
                 </div>
-                <div className={styles.messageField} style={{ width: '100%', padding: '30px', height: 'auto', fontSize: '26px', textAlign: 'center'}}>
+                <div className={styles.messageField} style={{ width: '100%', padding: '30px', height: 'auto', fontSize: '26px', textAlign: 'center' }}>
                     Loser: Blue
                 </div>
             </div>
-            <table className={styles.tableField}>
+
+            <table className={styles.tableField} style={{ minWidth: '600px' }}>
                 <thead>
                     <tr>
                         <th>codename</th>
@@ -43,16 +46,27 @@ const ResultsTable: React.FC = () => {
                     ))}
                 </tbody>
             </table>
+
             <div className={styles.regularButtonContainer}>
-                <button className={styles.regularButton}>
-                    Play Again
-                </button>
-                <button className={styles.regularButton}>
-                    Return to Lobby
-                </button>
-                <button className={styles.regularButton}>
-                    Delete Lobby
-                </button>
+                {isHost ? (
+                    <>
+                        <button className={styles.regularButton}>
+                            Play Again
+                        </button>
+                        <button className={styles.regularButton}>
+                            Return to Lobby
+                        </button>
+                        <button className={styles.regularButton}>
+                            Delete Lobby
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button className={styles.regularButton}>
+                            Exit Lobby
+                        </button>
+                    </>
+                )}
             </div>
         </>
     );
