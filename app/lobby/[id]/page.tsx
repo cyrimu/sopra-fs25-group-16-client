@@ -1,175 +1,149 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
 import { useSelector } from "react-redux";
-import { selectPlayer } from "@/lib/features/player";
-import {
-  selectGameType,
-  selectHost,
-  selectLanguage,
-  selectLobbyId,
-  selectPlayers,
-} from "@/lib/features/lobby";
-import { LANGUAGES } from "@/lib/features/lobby/languages.types";
-import { GAME_TYPE } from "@/lib/features/game/game.types";
-import { PLAYER_ROLES } from "@/lib/features/player/player.types";
+import { setPlayerName } from "@/lib/features/player";
+import { selectHost, selectLobbyId } from "@/lib/features/lobby";
+import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 import styles from "@/styles/page.module.css";
-import { DownOutlined, RightOutlined } from "@ant-design/icons";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Dropdown, MenuProps } from "antd";
+import { Modal, Popconfirm } from "antd";
+import ConfigurationPanel from "@/components/configurationPanel";
+import { useState } from "react";
+import GetReadyScreen from "@/components/getReady";
+import PlayerTable from "@/components/playerTable";
+import { GAME_TYPE } from "@/lib/features/game/game.types";
 
 export default function Lobby() {
-  const router = useRouter();
+    const router = useRouter();
 
-  const id = useSelector(selectLobbyId);
+    const id = useSelector(selectLobbyId);
+    const playerName = useSelector(setPlayerName);
+    const hostName = useSelector(selectHost);
+    const isHost = playerName.payload === hostName;
 
-  const { playerName } = useSelector(selectPlayer);
-  const hostName = useSelector(selectHost);
-  const isHost = playerName === hostName;
+    const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
+    const [gameType, setGameType] = useState(GAME_TYPE.text);
+    const [isGameStarting, setGameStarting] = useState(false);
+    const [selectedPlayers, setSelectedPlayers] = useState<string[]>(Array(4).fill(undefined));
 
-  const [language, setLanguage] = useState(useSelector(selectLanguage));
-  const [type, setType] = useState(useSelector(selectGameType));
-  const [isEdit, setIsEdit] = useState(false);
+    const showConfigurationPanelOpen = () => {
+        setConfigurationPanelOpen(true);
+    };
 
-  const players = useSelector(selectPlayers);
+    const handleOk = () => {
+        setConfigurationPanelOpen(false);
+    };
 
-  function handleDeleteLobby() {
-    router.replace("/create");
-  }
+    const handleCancel = () => {
+        setConfigurationPanelOpen(false);
+    };
 
-  function handleChangeSetup() {
-    setIsEdit(!isEdit);
-  }
+    const handleStartGame = () => {
+        setGameStarting(true);
+        setTimeout(() => {
+            router.push(`/game/${id}`);
+        }, 3000);
+    };
 
-  function handleStartGame() {
-    router.push(`/game/${id}`);
-  }
+    const confirmDeleteLobby = () => {
+        router.replace('/create');
+    };
 
-  const gameType = GAME_TYPE[type];
-  const gameTypeStr = gameType.charAt(0).toUpperCase() + gameType.slice(1);
-  const lang = LANGUAGES[language];
-  const languageStr = lang.charAt(0).toUpperCase() + lang.slice(1);
+    const cancelDeleteLobby = () => {
+        // Do nothing
+    };
 
-  const handleGameType: MenuProps["onClick"] = (e) => {
-    const newGameType = GAME_TYPE[e.key as keyof typeof GAME_TYPE];
-    setType(newGameType);
-  };
+    const players: Player[] = [
+        { playerName: 'Red1', team: TEAM_COLOR.red, role: PLAYER_ROLES.operative },
+        { playerName: 'Red2', team: TEAM_COLOR.red, role: PLAYER_ROLES.spymaster },
+        { playerName: 'Blue1', team: TEAM_COLOR.blue, role: PLAYER_ROLES.spymaster },
+        { playerName: 'Blue2', team: TEAM_COLOR.blue, role: PLAYER_ROLES.operative },
+    ];
 
-  const handleLanguage: MenuProps["onClick"] = (e) => {
-    const newLanguage = LANGUAGES[e.key as keyof typeof LANGUAGES];
-    setLanguage(newLanguage);
-  };
+    if (isGameStarting) {
+        return <GetReadyScreen />;
+    }
 
-  const gameTypeElements: MenuProps = {
-    items: Object.values(GAME_TYPE).map((type) => ({
-      key: type,
-      label: (
-        <div className={styles.lobbyDropdown}>
-          {type.charAt(0).toUpperCase() + type.slice(1)}
+    return (
+        <div className={styles.centered}>
+            <div className={styles.redBlueOverlay}></div>
+            <div className={styles.messageContainer}>
+                {!isConfigurationPanelOpen && (
+                    <>
+                        <div className={styles.lobbyTitle}>Game Lobby</div>
+                        <PlayerTable players={selectedPlayers.map(playerName => players.find(player => player.playerName === playerName)).filter((player): player is Player => player !== undefined)} gameType={gameType} />                    </>
+                )}
+                {/*to be changed*/}
+                {!isHost && (
+                    <div className={styles.regularButtonContainer}>
+                        <button className={styles.regularButton} onClick={showConfigurationPanelOpen}>
+                            Change Setup
+                        </button>
+                        <Modal
+                            styles={{
+                                content: {
+                                    display: 'contents',
+                                    backgroundColor: '#2f2f2f',
+                                    fontFamily: 'Special Elite',
+                                },
+                                body: {
+                                    backgroundColor: '#2f2f2f',
+                                    outline: '1px dashed white',
+                                    outlineOffset: '-10px',
+                                    fontFamily: 'Special Elite',
+                                    color: 'white',
+                                    borderRadius: '20px',
+                                    padding: '20px',
+                                },
+                                header: {
+                                    backgroundColor: '#2f2f2f',
+                                    outline: '1px dashed white',
+                                    outlineOffset: '-10px',
+                                    fontFamily: 'Special Elite',
+                                    borderRadius: '20px',
+                                    padding: '20px',
+                                },
+                                footer: {
+                                    textAlign: 'center',
+                                    backgroundColor: '#2f2f2f',
+                                    outline: '1px dashed white',
+                                    outlineOffset: '-10px',
+                                    fontFamily: 'Special Elite',
+                                    color: 'white',
+                                    borderRadius: '20px',
+                                    padding: '20px',
+                                },
+                            }}
+                            title={<span style={{color: "white"}}>Configuration Panel</span>}
+                            open={isConfigurationPanelOpen}
+                            onOk={handleOk}
+                            okButtonProps={{ style: { fontFamily: 'Gabarito', fontSize: '20px' } }}
+                            okText="Save"
+                            onCancel={handleCancel}
+                            cancelButtonProps={{ style: { fontFamily: 'Gabarito', fontSize: '20px' } }}
+                            cancelText="Cancel"
+                        >
+                            <ConfigurationPanel setGameType={setGameType} players={players} selectedPlayers={selectedPlayers} setSelectedPlayers={setSelectedPlayers} />
+                        </Modal>
+                        <button className={styles.regularButton} onClick={handleStartGame}>
+                            Start Game
+                        </button>
+                        <Popconfirm
+                            title={<span style={{ color: 'black' }}>Are you sure if you want to delete the lobby?</span>}
+                            onConfirm={confirmDeleteLobby}
+                            onCancel={cancelDeleteLobby}
+                            okText="Yes"
+                            cancelText="No"
+                            icon={false}
+                        >
+                            <button className={styles.regularButton}>
+                                Delete Lobby
+                            </button>
+                        </Popconfirm>
+                    </div>
+                )}
+            </div>
         </div>
-      ),
-      onClick: handleGameType,
-    })),
-  };
-
-  const languageElements: MenuProps = {
-    items: Object.values(LANGUAGES).map((language) => ({
-      key: language,
-      label: (
-        <div className={styles.lobbyDropdown}>
-          {language.charAt(0).toUpperCase() + language.slice(1)}
-        </div>
-      ),
-      onClick: handleLanguage,
-    })),
-  };
-
-  return (
-    <div className={styles.centered}>
-      <div className={styles.redBlueOverlay}></div>
-      <div className={styles.lobbyTitle}>Game Lobby</div>
-      <div className={styles.messageContainer}>
-        <div style={{ display: "flex", gap: "40px" }}>
-          <div className={styles.lobbyConfig}>
-            {isEdit && isHost ? (
-              <Dropdown menu={gameTypeElements}>
-                <div style={{ display: "flex" }}>
-                  {`Mode: ${gameTypeStr}`} <DownOutlined />
-                </div>
-              </Dropdown>
-            ) : (
-              `Mode: ${gameTypeStr}`
-            )}
-          </div>
-          <div className={styles.lobbyConfig}>
-            {isEdit && isHost ? (
-              <Dropdown menu={languageElements}>
-                <div style={{ display: "flex" }}>
-                  {`Language: ${languageStr}`} <DownOutlined />
-                </div>
-              </Dropdown>
-            ) : (
-              `Language: ${languageStr}`
-            )}
-          </div>
-        </div>
-        <br />
-        <table className={styles.tableField}>
-          <thead>
-            <tr>
-              <th>codename</th>
-              <th>team</th>
-              <th>role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {players.map(({ playerName, team, role }, index) => (
-              <tr key={index}>
-                <td>{playerName}</td>
-                <td>
-                  {team
-                    ? TEAM_COLOR[team].charAt(0).toUpperCase() +
-                      TEAM_COLOR[team].slice(1)
-                    : "N/A"}
-                </td>
-                <td>
-                  {role
-                    ? PLAYER_ROLES[role].charAt(0).toUpperCase() +
-                      PLAYER_ROLES[role].slice(1)
-                    : "N/A"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <br />
-        {isHost && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
-            <button
-              className={styles.regularButton}
-              onClick={handleChangeSetup}
-            >
-              {isEdit ? "Save Setup" : "Change Setup"} <RightOutlined />
-            </button>
-            <button className={styles.regularButton} onClick={handleStartGame}>
-              Start Game <RightOutlined />
-            </button>
-            <button
-              className={styles.regularButton}
-              onClick={handleDeleteLobby}
-            >
-              Delete Lobby <RightOutlined />
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    );
 }
