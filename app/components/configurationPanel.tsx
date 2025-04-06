@@ -7,12 +7,13 @@ import { Player } from '@/lib/features/player/player.types';
 interface ConfigurationPanelProps {
     setGameType: (gameType: GAME_TYPE) => void;
     players: Player[];
+    selectedPlayers: string[];
+    setSelectedPlayers: (players: string[]) => void;
 }
 
-const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ setGameType, players }) => {
+const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ setGameType, players, selectedPlayers, setSelectedPlayers }) => {
     const [gameType, setGameTypeState] = React.useState(GAME_TYPE.text);
     const [language, setLanguage] = React.useState(LANGUAGES.english);
-    const [selectedPlayers, setSelectedPlayers] = React.useState<string[]>(Array(4).fill(undefined));
 
     const handleGameTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newGameType = e.target.value as GAME_TYPE;
