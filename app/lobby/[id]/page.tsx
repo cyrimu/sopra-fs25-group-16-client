@@ -25,6 +25,7 @@ export default function Lobby() {
     const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
     const [gameType, setGameType] = useState(GAME_TYPE.text);
     const [isGameStarting, setGameStarting] = useState(false);
+    const [selectedPlayers, setSelectedPlayers] = useState<string[]>(Array(4).fill(undefined));
 
     const showConfigurationPanelOpen = () => {
         setConfigurationPanelOpen(true);
@@ -71,8 +72,7 @@ export default function Lobby() {
                 {!isConfigurationPanelOpen && (
                     <>
                         <div className={styles.lobbyTitle}>Game Lobby</div>
-                        <PlayerTable players={players} gameType={gameType} />
-                    </>
+                        <PlayerTable players={selectedPlayers.map(playerName => players.find(player => player.playerName === playerName)).filter((player): player is Player => player !== undefined)} gameType={gameType} />                    </>
                 )}
                 {isHost && (
                     <div className={styles.regularButtonContainer}>
@@ -123,7 +123,7 @@ export default function Lobby() {
                             cancelButtonProps={{ style: { fontFamily: 'Gabarito', fontSize: '20px' } }}
                             cancelText="Cancel"
                         >
-                            <ConfigurationPanel setGameType={setGameType} players={players} />
+                            <ConfigurationPanel setGameType={setGameType} players={players} selectedPlayers={selectedPlayers} setSelectedPlayers={setSelectedPlayers} />
                         </Modal>
                         <button className={styles.regularButton} onClick={handleStartGame}>
                             Start Game
