@@ -1,18 +1,18 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
-import {useSelector} from "react-redux";
-import {selectPlayerName} from "@/lib/features/player";
-import {selectHost, selectLobbyId} from "@/lib/features/lobby";
-import {Player, PLAYER_ROLES} from "@/lib/features/player/player.types";
-import {TEAM_COLOR} from "@/lib/features/lobby/team.types";
+import { useSelector } from "react-redux";
+import { selectPlayerName } from "@/lib/features/player";
+import { selectHost, selectLobbyId } from "@/lib/features/lobby";
+import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
+import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 import styles from "@/styles/page.module.css";
-import {useRouter} from "next/navigation";
-import {Modal, Popconfirm} from "antd";
+import { useRouter } from "next/navigation";
+import { Modal, Popconfirm } from "antd";
 import ConfigurationPanel from "@/components/configurationPanel";
-import {useState} from "react";
+import { useState } from "react";
 import GetReadyScreen from "@/components/getReady";
 import PlayerTable from "@/components/playerTable";
-import {GAME_TYPE} from "@/lib/features/game/game.types";
+import { GAME_TYPE } from "@/lib/features/game/game.types";
 
 export default function Lobby() {
     const router = useRouter();
@@ -42,7 +42,7 @@ export default function Lobby() {
         setGameStarting(true);
         setTimeout(() => {
             router.push(`/game/${id}`);
-        }, 3000); // Redirect to the game after 3 seconds
+        }, 3000);
     };
 
     const confirmDeleteLobby = () => {
@@ -100,7 +100,6 @@ export default function Lobby() {
                                     outline: '1px dashed white',
                                     outlineOffset: '-10px',
                                     fontFamily: 'Special Elite',
-                                    color: 'white',
                                     borderRadius: '20px',
                                     padding: '20px',
                                 },
@@ -115,7 +114,7 @@ export default function Lobby() {
                                     padding: '20px',
                                 },
                             }}
-                            title="Configuration Panel"
+                            title={<span style={{color: "white"}}>Configuration Panel</span>}
                             open={isConfigurationPanelOpen}
                             onOk={handleOk}
                             okButtonProps={{ style: { fontFamily: 'Gabarito', fontSize: '20px' } }}
@@ -124,7 +123,7 @@ export default function Lobby() {
                             cancelButtonProps={{ style: { fontFamily: 'Gabarito', fontSize: '20px' } }}
                             cancelText="Cancel"
                         >
-                            <ConfigurationPanel setGameType={setGameType} />
+                            <ConfigurationPanel setGameType={setGameType} players={players} />
                         </Modal>
                         <button className={styles.regularButton} onClick={handleStartGame}>
                             Start Game
