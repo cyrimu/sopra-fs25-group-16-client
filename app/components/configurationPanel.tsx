@@ -27,7 +27,45 @@ const ConfigurationPanel: React.FC = () => {
                         <Radio.Button value={GAME_TYPE.image}>Image</Radio.Button>
                     </Radio.Group>
                 </Form.Item>
-                <Form.Item label="Language">
+                {gameType === GAME_TYPE.text && (
+                    <Form.Item label="Language">
+                        <Select value={language} onChange={handleLanguageChange}>
+                            {Object.values(LANGUAGES).map((lang) => (
+                                <Select.Option key={lang} value={lang}>
+                                    {lang}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                )}
+                <Form.Item label="Blue Spy Master">
+                    <Select value={language} onChange={handleLanguageChange}>
+                        {Object.values(LANGUAGES).map((lang) => (
+                            <Select.Option key={lang} value={lang}>
+                                {lang}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Blue Operative">
+                    <Select value={language} onChange={handleLanguageChange}>
+                        {Object.values(LANGUAGES).map((lang) => (
+                            <Select.Option key={lang} value={lang}>
+                                {lang}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Red Spy Master">
+                    <Select value={language} onChange={handleLanguageChange}>
+                        {Object.values(LANGUAGES).map((lang) => (
+                            <Select.Option key={lang} value={lang}>
+                                {lang}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Red Operative">
                     <Select value={language} onChange={handleLanguageChange}>
                         {Object.values(LANGUAGES).map((lang) => (
                             <Select.Option key={lang} value={lang}>
