@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from '@/styles/page.module.css';
+import { useRouter } from 'next/navigation';
 
 interface PlayerData {
     codename: string;
@@ -8,7 +9,11 @@ interface PlayerData {
 }
 
 const ResultsTable: React.FC = () => { //temp data until web socket connection
+    
+    const router = useRouter();
     const isHost = true;
+    const gameId = "abc123";
+    const lobbyId = "abc123";
 
     const players: PlayerData[] = [
         { codename: 'double0seven', team: 'blue', points: 0 },
@@ -50,19 +55,19 @@ const ResultsTable: React.FC = () => { //temp data until web socket connection
             <div className={styles.regularButtonContainer}>
                 {isHost ? (
                     <>
-                        <button className={styles.regularButton}>
+                        <button className={styles.regularButton} onClick={() => router.push(`/lobby/${lobbyId}`)}>
                             Play Again
                         </button>
-                        <button className={styles.regularButton}>
+                        <button className={styles.regularButton} onClick={() => router.push(`/lobby/${lobbyId}`)}>
                             Return to Lobby
                         </button>
-                        <button className={styles.regularButton}>
+                        <button className={styles.regularButton} onClick={() => router.push(`/lobby/${lobbyId}`)}>
                             Delete Lobby
                         </button>
                     </>
                 ) : (
                     <>
-                        <button className={styles.regularButton}>
+                        <button className={styles.regularButton} onClick={() => router.push(`/lobby/${lobbyId}`)}>
                             Exit Lobby
                         </button>
                     </>
