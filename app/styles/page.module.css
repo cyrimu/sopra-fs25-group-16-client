@@ -183,3 +183,16 @@
 .tableField > thead > tr > th {
   padding: 10px 10px;
 }
+
+.formRow {
+  max-width: 100%;
+  margin: 10px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+}
+.formRow > div {
+  flex: 1;
+  margin: 0 10px;
+}
