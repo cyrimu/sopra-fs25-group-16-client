@@ -17,25 +17,30 @@ export default function Lobby() {
                     Congrats no one can outspy you!
                 </div>
 
-                <div className={styles.regularButtonContainer}>
-                    {isHost ? (
+                {isHost ? (
                         <>
-                            <button className={styles.regularButton}>
-                                Play Again
-                            </button>
-                            <button className={styles.regularButton}>
-                                Return to Lobby
-                            </button>
-                            <button className={styles.regularButton}>
-                                Delete Lobby
-                            </button>
+                          <div className={styles.regularButtonContainer}>
+                              <button className={styles.regularButton}>
+                                  Play Again
+                              </button>
+                              <button className={styles.regularButton}>
+                                  Return to Lobby
+                              </button>
+                              <button className={styles.regularButton}>
+                                  Delete Lobby
+                              </button>
+                            </div>
                         </>
                     ) : (
-                        <button className={styles.regularButton}>
+                      <>
+                        <div className={styles.lobbyTitle} style={{ fontSize: '30px', textAlign: 'center'}}>Wait for the host to restart the game...<br />or</div>
+                        <div className={styles.regularButtonContainer}>
+                          <button className={styles.regularButton}>
                             Exit Lobby
                         </button>
+                        </div>
+                      </>
                     )}
-                </div>
             </div>
         </div>
     );
