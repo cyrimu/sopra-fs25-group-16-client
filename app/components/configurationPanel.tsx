@@ -1,17 +1,21 @@
 import React from 'react';
-import {Form, Radio, Select} from 'antd';
-import {GAME_TYPE} from "@/lib/features/game/game.types";
-import {LANGUAGES} from "@/lib/features/lobby/languages.types";
-import styles from "@/styles/page.module.css";
+import { Form, Radio, Select } from 'antd';
+import { GAME_TYPE } from '@/lib/features/game/game.types';
+import { LANGUAGES } from '@/lib/features/lobby/languages.types';
+import styles from '@/styles/page.module.css';
 
-const ConfigurationPanel: React.FC = () => {
+interface ConfigurationPanelProps {
+    setGameType: (gameType: GAME_TYPE) => void;
+}
 
-    // Radio with GAME_TYPE enum
-    const [gameType, setGameType] = React.useState(GAME_TYPE.text);
+const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ setGameType }) => {
+    const [gameType, setGameTypeState] = React.useState(GAME_TYPE.text);
     const [language, setLanguage] = React.useState(LANGUAGES.english);
 
     const handleGameTypeChange = (e: any) => {
-        setGameType(e.target.value);
+        const newGameType = e.target.value;
+        setGameTypeState(newGameType);
+        setGameType(newGameType);
     };
 
     const handleLanguageChange = (e: any) => {
@@ -22,11 +26,11 @@ const ConfigurationPanel: React.FC = () => {
         <div>
             <Form layout="vertical">
                 <Form.Item label="Game Type">
-                    <div style={{textAlign: 'center'}}>
-                       <Radio.Group value={gameType} onChange={handleGameTypeChange} style={{width: '100%'}}>
-                           <Radio.Button value={GAME_TYPE.text} style={{width: '50%', color: gameType === GAME_TYPE.text ? 'black' : 'white', backgroundColor: gameType === GAME_TYPE.text ? 'white' : 'black'}}>Word</Radio.Button>
-                           <Radio.Button value={GAME_TYPE.image} style={{width: '50%', color: gameType === GAME_TYPE.image ? 'black' : 'white', backgroundColor: gameType === GAME_TYPE.image ? 'white' : 'black'}}>Picture</Radio.Button>
-                       </Radio.Group>
+                    <div style={{ textAlign: 'center' }}>
+                        <Radio.Group value={gameType} onChange={handleGameTypeChange} style={{ width: '100%' }}>
+                            <Radio.Button value={GAME_TYPE.text} style={{ width: '50%', color: gameType === GAME_TYPE.text ? 'black' : 'white', backgroundColor: gameType === GAME_TYPE.text ? 'white' : 'black' }}>Word</Radio.Button>
+                            <Radio.Button value={GAME_TYPE.image} style={{ width: '50%', color: gameType === GAME_TYPE.image ? 'black' : 'white', backgroundColor: gameType === GAME_TYPE.image ? 'white' : 'black' }}>Picture</Radio.Button>
+                        </Radio.Group>
                     </div>
                 </Form.Item>
                 {gameType === GAME_TYPE.text && (
