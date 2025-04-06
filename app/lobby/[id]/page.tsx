@@ -12,6 +12,7 @@ import ConfigurationPanel from "@/components/configurationPanel";
 import {useState} from "react";
 import GetReadyScreen from "@/components/getReady";
 import PlayerTable from "@/components/playerTable";
+import {GAME_TYPE} from "@/lib/features/game/game.types";
 
 export default function Lobby() {
     const router = useRouter();
@@ -22,8 +23,8 @@ export default function Lobby() {
     const isHost = playerName === hostName;
 
     const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
+    const [gameType, setGameType] = useState(GAME_TYPE.text);
     const [isGameStarting, setGameStarting] = useState(false);
-
 
     const showConfigurationPanelOpen = () => {
         setConfigurationPanelOpen(true);
@@ -44,19 +45,19 @@ export default function Lobby() {
         }, 3000); // Redirect to the game after 3 seconds
     };
 
-    function confirmDeleteLobby() {
-        router.replace("/create");
-    }
+    const confirmDeleteLobby = () => {
+        router.replace('/create');
+    };
 
-    function cancelDeleteLobby() {
-    }
+    const cancelDeleteLobby = () => {
+        // Do nothing
+    };
 
     const players: Player[] = [
-        { playerName: "Sergi", team: TEAM_COLOR.red, role: PLAYER_ROLES.operative },
-        { playerName: "Pio", team: TEAM_COLOR.red, role: PLAYER_ROLES.spymaster },
-        { playerName: "Rashmi", team: TEAM_COLOR.blue, role: PLAYER_ROLES.spymaster },
-        { playerName: "Calvin", team: TEAM_COLOR.blue, role: PLAYER_ROLES.operative },
-        { playerName: "Cyril", team: TEAM_COLOR.blue, role: PLAYER_ROLES.operative },
+        { playerName: 'Red1', team: TEAM_COLOR.red, role: PLAYER_ROLES.operative },
+        { playerName: 'Red2', team: TEAM_COLOR.red, role: PLAYER_ROLES.spymaster },
+        { playerName: 'Blue1', team: TEAM_COLOR.blue, role: PLAYER_ROLES.spymaster },
+        { playerName: 'Blue2', team: TEAM_COLOR.blue, role: PLAYER_ROLES.operative },
     ];
 
     if (isGameStarting) {
@@ -70,7 +71,7 @@ export default function Lobby() {
                 {!isConfigurationPanelOpen && (
                     <>
                         <div className={styles.lobbyTitle}>Game Lobby</div>
-                        <PlayerTable players={players} />
+                        <PlayerTable players={players} gameType={gameType} />
                     </>
                 )}
                 {isHost && (
@@ -81,55 +82,55 @@ export default function Lobby() {
                         <Modal
                             styles={{
                                 content: {
-                                    display: "contents",
-                                    backgroundColor: "#2f2f2f",
-                                    fontFamily: "Special Elite",
+                                    display: 'contents',
+                                    backgroundColor: '#2f2f2f',
+                                    fontFamily: 'Special Elite',
                                 },
                                 body: {
-                                    backgroundColor: "#2f2f2f",
-                                    outline: "1px dashed white",
-                                    outlineOffset: "-10px",
-                                    fontFamily: "Special Elite",
-                                    color: "white",
-                                    borderRadius: "20px",
-                                    padding: "20px",
+                                    backgroundColor: '#2f2f2f',
+                                    outline: '1px dashed white',
+                                    outlineOffset: '-10px',
+                                    fontFamily: 'Special Elite',
+                                    color: 'white',
+                                    borderRadius: '20px',
+                                    padding: '20px',
                                 },
                                 header: {
-                                    backgroundColor: "#2f2f2f",
-                                    outline: "1px dashed white",
-                                    outlineOffset: "-10px",
-                                    fontFamily: "Special Elite",
-                                    color: "white",
-                                    borderRadius: "20px",
-                                    padding: "20px",
+                                    backgroundColor: '#2f2f2f',
+                                    outline: '1px dashed white',
+                                    outlineOffset: '-10px',
+                                    fontFamily: 'Special Elite',
+                                    color: 'white',
+                                    borderRadius: '20px',
+                                    padding: '20px',
                                 },
                                 footer: {
-                                    textAlign: "center",
-                                    backgroundColor: "#2f2f2f",
-                                    outline: "1px dashed white",
-                                    outlineOffset: "-10px",
-                                    fontFamily: "Special Elite",
-                                    color: "white",
-                                    borderRadius: "20px",
-                                    padding: "20px",
+                                    textAlign: 'center',
+                                    backgroundColor: '#2f2f2f',
+                                    outline: '1px dashed white',
+                                    outlineOffset: '-10px',
+                                    fontFamily: 'Special Elite',
+                                    color: 'white',
+                                    borderRadius: '20px',
+                                    padding: '20px',
                                 },
                             }}
-                        title="Configuration Panel"
+                            title="Configuration Panel"
                             open={isConfigurationPanelOpen}
                             onOk={handleOk}
-                            okButtonProps={{ style: { fontFamily: "Gabarito", fontSize: "20px" } }}
+                            okButtonProps={{ style: { fontFamily: 'Gabarito', fontSize: '20px' } }}
                             okText="Save"
                             onCancel={handleCancel}
-                            cancelButtonProps={{ style: { fontFamily: "Gabarito", fontSize: "20px" } }}
+                            cancelButtonProps={{ style: { fontFamily: 'Gabarito', fontSize: '20px' } }}
                             cancelText="Cancel"
                         >
-                            <ConfigurationPanel/>
+                            <ConfigurationPanel setGameType={setGameType} />
                         </Modal>
                         <button className={styles.regularButton} onClick={handleStartGame}>
                             Start Game
                         </button>
                         <Popconfirm
-                            title={<span style={{ color: "black" }}>Are you sure if you want to delete the lobby?</span>}
+                            title={<span style={{ color: 'black' }}>Are you sure if you want to delete the lobby?</span>}
                             onConfirm={confirmDeleteLobby}
                             onCancel={cancelDeleteLobby}
                             okText="Yes"

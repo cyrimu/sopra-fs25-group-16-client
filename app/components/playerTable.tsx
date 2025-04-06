@@ -5,13 +5,14 @@ import styles from '@/styles/page.module.css';
 
 interface PlayerTableProps {
     players: Player[];
+    gameType: string;
 }
 
-const PlayerTable: React.FC<PlayerTableProps> = ({ players }) => {
+const PlayerTable: React.FC<PlayerTableProps> = ({ players, gameType }) => {
     return (
         <>
-            <div className={styles.messageField} style={{ width: "100%", padding: "30px", height: "auto", fontSize: "20px"}}>
-                Mode:
+            <div className={styles.messageField} style={{ width: '100%', padding: '30px', height: 'auto', fontSize: '20px' }}>
+                Mode: {gameType}
             </div>
             <br />
             <table className={styles.tableField}>
@@ -27,16 +28,10 @@ const PlayerTable: React.FC<PlayerTableProps> = ({ players }) => {
                     <tr key={index}>
                         <td>{playerName}</td>
                         <td>
-                            {team
-                                ? TEAM_COLOR[team].charAt(0).toUpperCase() +
-                                TEAM_COLOR[team].slice(1)
-                                : "N/A"}
+                            {team ? TEAM_COLOR[team].charAt(0).toUpperCase() + TEAM_COLOR[team].slice(1) : 'N/A'}
                         </td>
                         <td>
-                            {role
-                                ? PLAYER_ROLES[role].charAt(0).toUpperCase() +
-                                PLAYER_ROLES[role].slice(1)
-                                : "N/A"}
+                            {role ? PLAYER_ROLES[role].charAt(0).toUpperCase() + PLAYER_ROLES[role].slice(1) : 'N/A'}
                         </td>
                     </tr>
                 ))}
