@@ -175,3 +175,13 @@
   flex: 1;
   margin: 0 10px;
 }
+
+.resultsMessage {
+  font-family: "Special Elite", serif;
+  color: white;
+  font-size: 60px;
+  padding: 40px;
+  margin: 40px 0;
+  text-align: center;
+  background-color: transparent;
+}
