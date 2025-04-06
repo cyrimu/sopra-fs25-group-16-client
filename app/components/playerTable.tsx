@@ -20,18 +20,18 @@ const PlayerTable: React.FC<PlayerTableProps> = ({ players, gameType }) => {
                 <tr>
                     <th>codename</th>
                     <th>team</th>
-                    <th>role</th>
+                    <th>points</th>
                 </tr>
                 </thead>
                 <tbody>
-                {players.map(({ playerName, team, role }, index) => (
+                {players.map(({ playerName, team }, index) => (
                     <tr key={index}>
                         <td>{playerName}</td>
                         <td>
                             {team ? TEAM_COLOR[team].charAt(0).toUpperCase() + TEAM_COLOR[team].slice(1) : 'N/A'}
                         </td>
                         <td>
-                            {role ? PLAYER_ROLES[role].charAt(0).toUpperCase() + PLAYER_ROLES[role].slice(1) : 'N/A'}
+                            points
                         </td>
                     </tr>
                 ))}
