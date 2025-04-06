@@ -12,7 +12,7 @@ const PlayerTable: React.FC<PlayerTableProps> = ({ players, gameType }) => {
     return (
         <>
             <div className={styles.messageField} style={{ width: '100%', padding: '30px', height: 'auto', fontSize: '20px' }}>
-                Mode: {gameType}
+                Mode: {gameType === 'text' ? 'Word' : 'Picture'}
             </div>
             <br />
             <table className={styles.tableField}>
