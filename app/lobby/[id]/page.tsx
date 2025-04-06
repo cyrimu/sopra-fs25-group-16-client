@@ -1,7 +1,7 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
 import { useSelector } from "react-redux";
-import { selectPlayerName } from "@/lib/features/player";
+import { setPlayerName } from "@/lib/features/player";
 import { selectHost, selectLobbyId } from "@/lib/features/lobby";
 import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
@@ -18,9 +18,9 @@ export default function Lobby() {
     const router = useRouter();
 
     const id = useSelector(selectLobbyId);
-    const playerName = useSelector(selectPlayerName);
+    const playerName = useSelector(setPlayerName);
     const hostName = useSelector(selectHost);
-    const isHost = playerName === hostName;
+    const isHost = playerName.payload === hostName;
 
     const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
     const [gameType, setGameType] = useState(GAME_TYPE.text);
@@ -74,7 +74,8 @@ export default function Lobby() {
                         <div className={styles.lobbyTitle}>Game Lobby</div>
                         <PlayerTable players={selectedPlayers.map(playerName => players.find(player => player.playerName === playerName)).filter((player): player is Player => player !== undefined)} gameType={gameType} />                    </>
                 )}
-                {isHost && (
+                {/*to be changed*/}
+                {!isHost && (
                     <div className={styles.regularButtonContainer}>
                         <button className={styles.regularButton} onClick={showConfigurationPanelOpen}>
                             Change Setup
