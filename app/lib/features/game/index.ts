@@ -91,11 +91,10 @@ const gameSlice = createSlice({
     },
     // Update an existing card in the state
     updateCard(state, action: PayloadAction<Card>) {
-      const card = action.payload;
+      const { id } = action.payload;
+
       state.board.cards = state.board.cards.map((e) =>
-        e.content === card.content && e.color === card.color
-          ? { ...e, isRevealed: true }
-          : e
+        e.id === id ? { ...e, isRevealed: true } : e
       );
     },
     // Insert a new log entry
