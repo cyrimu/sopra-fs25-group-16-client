@@ -4,7 +4,7 @@ import { selectPlayer } from "@/lib/features/player";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import styles from "@/styles/game.module.css";
 import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
 
 interface GameCardProps {
