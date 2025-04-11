@@ -5,26 +5,32 @@ import { Player, PLAYER_ROLES } from "./lib/features/player/player.types";
 
 const colorCards = Array.from({ length: 16 }).map((_, i) => {
   return {
+    id: crypto.randomUUID(),
     type: GAME_TYPE.text,
     content: i % 2 === 0 ? "BLUE" : "RED",
     isRevealed: false,
+    isSelected: false,
     color: i % 2 === 0 ? CARD_COLOR.blue : CARD_COLOR.red,
   };
 });
 
 const greyCards = Array.from({ length: 8 }).map(() => {
   return {
+    id: crypto.randomUUID(),
     type: GAME_TYPE.text,
     content: `GREY`,
     isRevealed: false,
+    isSelected: false,
     color: CARD_COLOR.grey,
   };
 });
 
 const blackCard = {
+  id: crypto.randomUUID(),
   type: GAME_TYPE.text,
   content: "BLACK",
   isRevealed: false,
+  isSelected: false,
   color: CARD_COLOR.black,
 };
 

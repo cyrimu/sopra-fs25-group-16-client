@@ -1,21 +1,19 @@
 import BookOutlined from "@ant-design/icons/lib/icons/BookOutlined";
 import { Button as AntButton } from "antd";
+import styles from "./LogButton.module.css";
 import React from "react";
 
 interface LogButtonProps {
   callback: () => void;
 }
 
-const logButton: React.FC<LogButtonProps> = ({ callback }) => {
+const LogButton: React.FC<LogButtonProps> = ({ callback }) => {
   function handleClick() {
     callback();
   }
 
   return (
-    <div
-      onClick={handleClick}
-      style={{ position: "absolute", top: 0, left: 0, margin: "10px" }}
-    >
+    <div onClick={handleClick} className={styles.logButton}>
       <AntButton
         type="primary"
         icon={<BookOutlined style={{ fontSize: "30px" }} />}
@@ -26,4 +24,4 @@ const logButton: React.FC<LogButtonProps> = ({ callback }) => {
   );
 };
 
-export default logButton;
+export default LogButton;

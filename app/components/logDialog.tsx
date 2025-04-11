@@ -1,4 +1,4 @@
-import styles from "@/styles/log.module.css";
+import styles from "./LogDialog.module.css";
 import { CloseOutlined } from "@ant-design/icons";
 
 interface LogDialogProps {

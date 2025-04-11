@@ -90,9 +90,19 @@ const gameSlice = createSlice({
       state.board.cards = [action.payload, ...state.board.cards];
     },
     // Update an existing card in the state
-    updateCard(state, action: PayloadAction<Card>) {
-      state.board.cards = state.board.cards.map((card) =>
-        card.content === action.payload.content ? action.payload : card
+    setRevealedCard(state, action: PayloadAction<Card>) {
+      const { id } = action.payload;
+
+      state.board.cards = state.board.cards.map((e) =>
+        e.id === id ? { ...e, isRevealed: true } : e
+      );
+    },
+    setSelectedCard(state, action: PayloadAction<Card>) {
+      const { id } = action.payload;
+      const isSelected = state.board.cards.some((c) => c.id === id);
+
+      state.board.cards = state.board.cards.map((e) =>
+        e.id === id ? { ...e, isSelected: !isSelected } : e
       );
     },
     // Insert a new log entry
@@ -114,6 +124,8 @@ const gameSlice = createSlice({
     selectMvp: (state) => state.mvp,
     selectLog: (state) => state.log,
     selectCards: (state) => state.board.cards,
+    selectSelectedCards: (state) =>
+      state.board.cards.filter(({ isSelected }) => isSelected),
   },
 });
 
@@ -121,12 +133,17 @@ export const {
   insertPlayer,
   removePlayer,
   insertCard,
-  updateCard,
   setRedTeam,
   setBlueTeam,
+  setRevealedCard,
+  setSelectedCard,
 } = gameSlice.actions;
 
-export const { selectBlueTeam, selectRedTeam, selectCards } =
-  gameSlice.selectors;
+export const {
+  selectBlueTeam,
+  selectRedTeam,
+  selectCards,
+  selectSelectedCards,
+} = gameSlice.selectors;
 
 export default gameSlice.reducer;

@@ -1,0 +1,49 @@
+.scoreboardWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.scoreboardContainer {
+  flex: 1;
+  flex-basis: 50%;
+  max-width: 50%;
+  padding: 8px 20px;
+}
+
+.scoreboardContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.scoreboardTeamContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.scoreboardTeamContainer,
+.span {
+  color: #fff;
+  font-family: "Gabarito";
+  font-size: 16px;
+}
+
+.scoreboardPlayersContainer {
+  display: flex;
+  gap: 7px;
+}
+
+.scoreboardPlayer {
+  padding: 7px 10px;
+  background-color: #fff;
+  border-radius: 20px;
+  color: #000;
+}
+
+.scoreboardScore {
+  color: #fff;
+  font-family: "Gabarito";
+  font-weight: 400;
+  font-size: 100px;
+}

@@ -43,28 +43,6 @@
   z-index: -2;
 }
 
-.landingButton {
-  display: flex;
-  justify-content: center;
-  align-items: end;
-  flex: 1;
-  height: 200px;
-  background: rgba(217, 217, 217, 0.5);
-  font-family: "Special Elite", serif;
-  color: white;
-  font-size: 150px;
-  border: none;
-  padding: 10px;
-  margin: 100px;
-  cursor: pointer;
-  border-radius: 50px;
-  transition: background 0.3s;
-}
-
-.landingButton:hover {
-  background: rgba(217, 217, 217, 0.8);
-}
-
 .messageContainer {
   display: flex;
   justify-content: center;
