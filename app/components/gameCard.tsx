@@ -2,10 +2,10 @@ import { Card, CARD_COLOR } from "@/lib/features/game/card.types";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
 import { selectPlayer } from "@/lib/features/player";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
-import styles from "@/styles/game.module.css";
+import styles from "./GameCard.module.css";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
 
 interface GameCardProps {
   card: Card;
@@ -13,7 +13,7 @@ interface GameCardProps {
   selectedCallback: (selected: boolean) => void;
 }
 
-const gameCard: React.FC<GameCardProps> = ({
+const GameCard: React.FC<GameCardProps> = ({
   card,
   selected,
   selectedCallback,
@@ -40,7 +40,7 @@ const gameCard: React.FC<GameCardProps> = ({
   if (type === GAME_TYPE.text) {
     return (
       <motion.div
-        className={selected ? styles.gameCardSelected : styles.gameCard}
+        className={selected ? styles.cardSelected : styles.card}
         style={
           {
             "--bg-image": `url("/${CARD_COLOR[cardColor]}_card.png")`,
@@ -51,7 +51,7 @@ const gameCard: React.FC<GameCardProps> = ({
         onClick={setSelected}
       >
         {!isRevealed && (
-          <div className={styles.gameCardTextContainer}>
+          <div className={styles.cardTextContainer}>
             <span>{content.toUpperCase()}</span>
           </div>
         )}
@@ -60,7 +60,7 @@ const gameCard: React.FC<GameCardProps> = ({
   } else {
     return (
       <motion.div
-        className={styles.gameCard}
+        className={styles.card}
         animate={{ rotateY: isRevealed ? 180 : 0 }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
       >
@@ -70,4 +70,4 @@ const gameCard: React.FC<GameCardProps> = ({
   }
 };
 
-export default gameCard;
+export default GameCard;

@@ -5,6 +5,7 @@ export interface Card {
   type: GAME_TYPE;
   content: string;
   isRevealed: boolean;
+  isSelected: boolean;
   color: CARD_COLOR;
 }
 
