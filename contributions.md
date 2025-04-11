@@ -66,8 +66,8 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@cyrimu]**        | [08.04.2025]  | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-server/pull/71)  | [Implementation of GameService (Logic of Game)] | [Otherwise it is not possible to play the game]                                                                                                                                                                                                |
+|                      | [11.04.2025]              | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-server/pull/71)                                                                                                 | [Implemented translation of gameboard to target languages]    | [Players can now play in the language they desire]    |
 | **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
