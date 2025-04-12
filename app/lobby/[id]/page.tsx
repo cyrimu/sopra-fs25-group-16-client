@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
 import {
   selectHost,
+  selectLobby,
   selectLobbyId,
   selectLobbyStatus,
 } from "@/lib/features/lobby";
@@ -16,12 +17,15 @@ import PlayerTable from "@/components/PlayerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
 import { leaveLobby } from "@/lib/features/lobby/api";
+import { createGame } from "@/lib/features/game/api";
+import { selectGameId, selectGameStatus } from "@/lib/features/game";
 
 export default function Lobby() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const id = useSelector(selectLobbyId);
+  const lobbyId = useSelector(selectLobbyId);
+  const lobby = useSelector(selectLobby);
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
@@ -30,22 +34,32 @@ export default function Lobby() {
   const [isGameStarting, setGameStarting] = useState(false);
 
   const lobbyStatus = useSelector(selectLobbyStatus);
+  const gameStatus = useSelector(selectGameStatus);
+  const gameId = useSelector(selectGameId);
 
   const handleConfigPanel = () => {
     setConfigurationPanelOpen((state) => !state);
   };
 
   const handleStartGame = () => {
-    setGameStarting(true);
-    setTimeout(() => {
-      router.push(`/game/${id}`);
-    }, 3000);
+    if (gameStatus === "idle" && lobby && playerName) {
+      dispatch(createGame({ lobby: lobby, username: playerName }));
+    }
   };
 
+  useEffect(() => {
+    if (gameStatus === "succeeded") {
+      setGameStarting(true);
+      setTimeout(() => {
+        router.push(`/game/${gameId}`);
+      }, 3000);
+    }
+  }, [gameStatus]);
+
   function handleLeaveLobby() {
-    if (id && playerName) {
+    if (lobbyId && playerName) {
       try {
-        dispatch(leaveLobby({ lobbyId: id, username: playerName }));
+        dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
       } catch (error) {
         console.error(error);
       }
@@ -79,6 +93,7 @@ export default function Lobby() {
           <div className={styles.lobbyTitle}>Game Lobby</div>
         )}
         {!isConfigurationPanelOpen && <PlayerTable />}
+        {/* //TODO: CHANGE THIS !isHost */}
         {isHost && (
           <div className={styles.regularButtonContainer}>
             <button className={styles.regularButton} onClick={handleLeaveLobby}>
