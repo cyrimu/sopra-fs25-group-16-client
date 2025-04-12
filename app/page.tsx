@@ -9,15 +9,8 @@ export default function Home() {
 
   return (
     <div className={styles.centered}>
-      <div className={styles.redBlueOverlay}></div>
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div className={styles.redBlueOverlay} />
+      <div className={styles.homeContainer}>
         <LargeButton onClick={() => router.push("/create")}>Create</LargeButton>
         <LargeButton onClick={() => router.push("/join")}>Join</LargeButton>
       </div>
