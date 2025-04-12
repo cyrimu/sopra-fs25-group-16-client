@@ -1,23 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Lobby } from "./lobby.types";
-import { DEFAULT_GAME_TYPE, DEFAULT_LANGUAGE } from "@/constants";
-import { Player, PLAYER_ROLES } from "../player/player.types";
-import { Game, GAME_TYPE } from "../game/game.types";
+import { Player } from "../player/player.types";
+import { GAME_TYPE } from "../game/game.types";
 import { LANGUAGES } from "./languages.types";
-import { players } from "@/seed";
+import { createLobby } from "./api";
 
-const initialState = {
-  lobbyId: undefined,
-  host: undefined,
-  players: players,
-  game: undefined,
-  type: DEFAULT_GAME_TYPE,
-  language: DEFAULT_LANGUAGE,
-  blueTeam: undefined,
-  redTeam: undefined,
-  connections: 0,
-} satisfies Lobby as Lobby;
+interface LobbyState {
+  lobby: Lobby | undefined;
+  status: "idle" | "pending" | "succeeded" | "failed";
+  error: string | null;
+}
+const initialState: LobbyState = {
+  lobby: undefined,
+  status: "idle",
+  error: null,
+};
 
 const lobbySlice = createSlice({
   name: "lobby",
@@ -25,93 +23,81 @@ const lobbySlice = createSlice({
   reducers: {
     // Update the state with the new lobby ID
     setLobbyId(state, action: PayloadAction<string>) {
-      state.lobbyId = action.payload;
-    },
-    // Update the state with the new host
-    setHost(state, action: PayloadAction<string>) {
-      state.host = action.payload;
+      if (state.lobby) state.lobby.lobbyID = action.payload;
     },
     // Insert a new player into the state
-    insertPlayer(state, action: PayloadAction<Player>) {
-      state.players = [...state.players, action.payload];
-    },
-    // Remove an existing player from the state
-    removePlayer(state, action: PayloadAction<Player>) {
-      state.players = state.players.filter(
-        (player) => player !== action.payload
-      );
-    },
-    // Once the game has started, update the state with the new game
-    setGame(state, action: PayloadAction<Game>) {
-      state.game = action.payload;
+    setPlayer(state, action: PayloadAction<Player>) {
+      if (state.lobby) {
+        const player = action.payload;
+        // Update the playerName with a new team and role
+        state.lobby.players = state.lobby.players.map((p) => {
+          if (p.playerName === player.playerName) {
+            return {
+              ...p,
+              team: player.team,
+              role: player.role,
+            };
+          }
+          return p;
+        });
+      }
     },
     // Set the game type
     setGameType(state, action: PayloadAction<GAME_TYPE>) {
-      state.type = action.payload;
+      if (state.lobby) state.lobby.gameType = action.payload;
     },
     // Set the language
     setLanguage(state, action: PayloadAction<LANGUAGES>) {
-      state.language = action.payload;
-    },
-    // Insert a new player to the red team
-    setRedTeam(state, action: PayloadAction<Player>) {
-      const player = action.payload;
-      const { role } = player;
-      state.redTeam = {
-        operative: role === PLAYER_ROLES.operative ? player : undefined,
-        spymaster: role === PLAYER_ROLES.spymaster ? player : undefined,
-      };
-      state.blueTeam = undefined;
-    },
-    // Insert a new player to the blue team
-    setBlueTeam(state, action: PayloadAction<Player>) {
-      const player = action.payload;
-      const { role } = player;
-      state.blueTeam = {
-        operative: role === PLAYER_ROLES.operative ? player : undefined,
-        spymaster: role === PLAYER_ROLES.spymaster ? player : undefined,
-      };
-      state.redTeam = undefined;
+      if (state.lobby) state.lobby.language = action.payload;
     },
     // Update the number of connected players
     updateConnections(state, action: PayloadAction<number>) {
-      state.connections = action.payload;
+      if (state.lobby) state.lobby.playerCount = action.payload;
     },
   },
+  extraReducers(builder) {
+    builder
+      .addCase(createLobby.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(createLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
+        state.status = "succeeded";
+        // Add any fetched posts to the array
+        state.lobby = action.payload;
+      })
+      .addCase(createLobby.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Unknown Error";
+      });
+  },
   selectors: {
-    selectLobbyId: (state) => state.lobbyId,
-    selectHost: (state) => state.host,
-    selectPlayers: (state) => state.players,
-    selectGameType: (state) => state.type,
-    selectLanguage: (state) => state.language,
-    selectBlueTeam: (state) => state.blueTeam,
-    selectRedTeam: (state) => state.redTeam,
-    selectConnections: (state) => state.connections,
+    selectLobby: (state) => state.lobby,
+    selectLobbyId: (state) => state.lobby?.lobbyID,
+    selectLobbyStatus: (state) => state.status,
+    selectHost: (state) => state.lobby?.host,
+    selectPlayers: (state) => state.lobby?.players,
+    selectGameType: (state) => state.lobby?.gameType,
+    selectLanguage: (state) => state.lobby?.language,
+    selectPlayerCount: (state) => state.lobby?.playerCount,
   },
 });
 
 export const {
   setLobbyId,
-  setHost,
-  insertPlayer,
-  removePlayer,
-  setGame,
+  setPlayer,
   setGameType,
   setLanguage,
-  setBlueTeam,
-  setRedTeam,
   updateConnections,
 } = lobbySlice.actions;
 
 export const {
+  selectLobby,
   selectLobbyId,
+  selectLobbyStatus,
   selectHost,
   selectPlayers,
   selectGameType,
   selectLanguage,
-  selectBlueTeam,
-  selectRedTeam,
-  selectConnections,
 } = lobbySlice.selectors;
 
 export default lobbySlice.reducer;
