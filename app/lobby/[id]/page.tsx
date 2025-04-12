@@ -9,7 +9,7 @@ import { Modal, Popconfirm } from "antd";
 import { useState } from "react";
 import GetReadyScreen from "@/components/GetReady";
 import PlayerTable from "@/components/PlayerTable";
-import ConfigurationPanel from "@/components/ConfigurationPanel";
+import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 
 export default function Lobby() {
   const router = useRouter();
@@ -50,12 +50,10 @@ export default function Lobby() {
       <div className={styles.redBlueOverlay}></div>
       <div className={styles.messageContainer}>
         {!isConfigurationPanelOpen && (
-          <>
-            <div className={styles.lobbyTitle}>Game Lobby</div>
-            <PlayerTable />
-          </>
+          <div className={styles.lobbyTitle}>Game Lobby</div>
         )}
-        {/*to be changed*/}
+        {!isConfigurationPanelOpen && <PlayerTable />}
+
         {!isHost && (
           <div className={styles.regularButtonContainer}>
             <button

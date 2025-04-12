@@ -1,5 +1,4 @@
-import { Card, CARD_COLOR } from "@/lib/features/game/card.types";
-import { Team } from "@/lib/features/lobby/team.types";
+import { CARD_COLOR } from "@/lib/features/game/card.types";
 import styles from "./Scoreboard.module.css";
 import { useSelector } from "react-redux";
 import {
