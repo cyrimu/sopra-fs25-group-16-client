@@ -10,6 +10,7 @@ import {
   setLanguage,
 } from "@/lib/features/lobby";
 import React, { useState } from "react";
+import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 
 const ConfigurationPanel: React.FC = () => {
   const dispatch = useDispatch();
@@ -93,7 +94,8 @@ const ConfigurationPanel: React.FC = () => {
             <Select value={language} onChange={handleLanguageChange}>
               {Object.values(LANGUAGES).map((lang) => (
                 <Select.Option key={lang} value={lang}>
-                  {lang}
+                  {lang[0].toUpperCase()}
+                  {lang.substring(1)}
                 </Select.Option>
               ))}
             </Select>
