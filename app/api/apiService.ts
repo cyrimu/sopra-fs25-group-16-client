@@ -1,11 +1,10 @@
-import { getApiDomain } from "@/utils/domain";
-
-export class ApiService {
+class ApiService {
   private baseURL: string;
   private defaultHeaders: HeadersInit;
 
   constructor() {
-    this.baseURL = getApiDomain();
+    this.baseURL =
+      process.env.NEXT_PUBLIC_PROD_API_URL ?? "http://localhost:8080";
     this.defaultHeaders = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -83,6 +82,38 @@ export class ApiService {
   }
 
   /**
+   * POST form request.
+   * @param endpoint - The API endpoint (e.g. "/users").
+   * @param data - The payload to post.
+   * @returns JSON data of type T.
+   */
+  public async postForm<T>(
+    endpoint: string,
+    data: Record<string, any>
+  ): Promise<T> {
+    const url = `${this.baseURL}${endpoint}`;
+
+    // Convert data to x-www-form-urlencoded string
+    const formBody = new URLSearchParams();
+    for (const key in data) {
+      formBody.append(key, data[key]);
+    }
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: formBody.toString(),
+    });
+    return this.processResponse<T>(
+      res,
+      "An error occurred while posting the data.\n"
+    );
+  }
+
+  /**
    * PUT request.
    * @param endpoint - The API endpoint (e.g. "/users/123").
    * @param data - The payload to update.
@@ -118,3 +149,5 @@ export class ApiService {
     );
   }
 }
+
+export const apiService = new ApiService();
