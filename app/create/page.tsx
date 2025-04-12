@@ -3,27 +3,38 @@ import "@ant-design/v5-patch-for-react-19";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { RightOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { selectLobbyId, selectLobbyStatus } from "@/lib/features/lobby";
+import { createLobby } from "@/lib/features/lobby/api";
+import { AppDispatch } from "@/lib/store";
 import { setPlayerName } from "@/lib/features/player";
-import { setHost, setLobbyId } from "@/lib/features/lobby";
 
 export default function Create() {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [username, setUsername] = useState("");
+
+  const lobbyStatus = useSelector(selectLobbyStatus);
+  const id = useSelector(selectLobbyId);
 
   function handleNextButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    const uuid = crypto.randomUUID().replaceAll("-", "");
-    dispatch(setLobbyId(uuid));
-    dispatch(setPlayerName(username));
-    dispatch(setHost(username));
-
-    router.push(`/create/${uuid}`);
+    if (lobbyStatus === "idle" && username) {
+      // Store the username
+      dispatch(setPlayerName(username));
+      // Create a new lobby with a given username
+      dispatch(createLobby(username));
+    }
   }
+
+  useEffect(() => {
+    if (lobbyStatus === "succeeded") {
+      if (id) router.push(`/create/${id}`);
+    }
+  }, [lobbyStatus]);
 
   return (
     <div className={styles.centered}>
