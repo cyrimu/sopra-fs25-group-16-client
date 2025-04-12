@@ -4,7 +4,7 @@ import { Lobby } from "./lobby.types";
 import { Player } from "../player/player.types";
 import { GAME_TYPE } from "../game/game.types";
 import { LANGUAGES } from "./languages.types";
-import { createLobby, joinLobby } from "./api";
+import { createLobby, joinLobby, leaveLobby } from "./api";
 
 interface LobbyState {
   lobby: Lobby | undefined;
@@ -62,7 +62,6 @@ const lobbySlice = createSlice({
       })
       .addCase(createLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
         state.status = "succeeded";
-        // Add any fetched posts to the array
         state.lobby = action.payload;
       })
       .addCase(createLobby.rejected, (state, action) => {
@@ -75,10 +74,20 @@ const lobbySlice = createSlice({
       })
       .addCase(joinLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
         state.status = "succeeded";
-        // Add any fetched posts to the array
         state.lobby = action.payload;
       })
       .addCase(joinLobby.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Unknown Error";
+      });
+    builder
+      .addCase(leaveLobby.pending, (state, _) => {
+        state.status = "pending";
+      })
+      .addCase(leaveLobby.fulfilled, (state, _) => {
+        state = initialState;
+      })
+      .addCase(leaveLobby.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Unknown Error";
       });

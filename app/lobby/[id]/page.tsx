@@ -1,18 +1,25 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
-import { selectHost, selectLobbyId } from "@/lib/features/lobby";
+import {
+  selectHost,
+  selectLobbyId,
+  selectLobbyStatus,
+} from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GetReadyScreen from "@/components/GetReady";
 import PlayerTable from "@/components/PlayerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
+import { AppDispatch } from "@/lib/store";
+import { leaveLobby } from "@/lib/features/lobby/api";
 
 export default function Lobby() {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
   const id = useSelector(selectLobbyId);
   const playerName = useSelector(selectPlayerName);
@@ -21,6 +28,8 @@ export default function Lobby() {
 
   const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
+
+  const lobbyStatus = useSelector(selectLobbyStatus);
 
   const handleConfigPanel = () => {
     setConfigurationPanelOpen((state) => !state);
@@ -32,6 +41,23 @@ export default function Lobby() {
       router.push(`/game/${id}`);
     }, 3000);
   };
+
+  function handleLeaveLobby() {
+    if (id && playerName) {
+      try {
+        dispatch(leaveLobby({ lobbyId: id, username: playerName }));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (lobbyStatus === "idle") {
+      // After the lobby is removed go back
+      router.back();
+    }
+  }, [lobbyStatus]);
 
   const confirmDeleteLobby = () => {
     router.replace("/create");
@@ -53,8 +79,15 @@ export default function Lobby() {
           <div className={styles.lobbyTitle}>Game Lobby</div>
         )}
         {!isConfigurationPanelOpen && <PlayerTable />}
-
         {isHost && (
+          <div className={styles.regularButtonContainer}>
+            <button className={styles.regularButton} onClick={handleLeaveLobby}>
+              Leave Lobby
+            </button>
+          </div>
+        )}
+        {/* //TODO: CHANGE THIS !isHost */}
+        {!isHost && (
           <div className={styles.regularButtonContainer}>
             <button
               className={styles.regularButton}
