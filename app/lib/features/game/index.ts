@@ -1,127 +1,118 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Game, TURN_ORDER } from "./game.types";
-import { boardInitialState } from "./board.types";
 import { Card } from "./card.types";
-import {
-  DEFAULT_GAME_TYPE,
-  DEFAULT_LANGUAGE,
-  DEFAULT_STARTING_TURN,
-} from "@/constants";
-import { Player, PLAYER_ROLES } from "../player/player.types";
+import { Player } from "../player/player.types";
 import { TEAM_COLOR } from "../lobby/team.types";
+import { createGame, getGame } from "./api";
 
-const initialState = {
-  gameId: undefined,
-  host: undefined,
-  players: [],
-  blueTeam: undefined, // Not possible to change during the game
-  redTeam: undefined, // Not possible to change during the game
-  board: boardInitialState,
-  type: DEFAULT_GAME_TYPE, // Not possible to change during the game
-  language: DEFAULT_LANGUAGE, // Not possible to change during the game
-  turn: DEFAULT_STARTING_TURN,
-  remainingGuesses: undefined,
-  winner: undefined,
-  mvp: undefined,
-  log: [],
-} satisfies Game as Game;
+interface GameState {
+  game: Game | undefined;
+  status: "idle" | "pending" | "succeeded" | "failed";
+  error: string | null;
+}
+
+const initialState: GameState = {
+  game: undefined,
+  status: "idle",
+  error: null,
+};
 
 const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    // Update the state with the new game ID
-    setGameId(state, action: PayloadAction<string>) {
-      state.gameId = action.payload;
-    },
-    // Update the state with the new host
-    setHost(state, action: PayloadAction<string>) {
-      state.host = action.payload;
+    // Set a game
+    setGame(state, action: PayloadAction<Game>) {
+      const game = action.payload;
+      state.game = game;
     },
     // Insert a new player into the state
-    insertPlayer(state, action: PayloadAction<Player>) {
-      const player = action.payload;
-      state.players = [...state.players, player];
-    },
-    // Remove an existing player from the state
-    removePlayer(state, action: PayloadAction<Player>) {
-      const player = action.payload;
-      state.players = state.players.filter((p) => p !== player);
-    },
-    // Set the turn order
     setTurn(state, action: PayloadAction<TURN_ORDER>) {
-      state.turn = action.payload;
+      if (state.game) state.game.turn = action.payload;
     },
     // Set the remaining guesses
     setRemainingGuesses(state, action: PayloadAction<number>) {
-      state.remainingGuesses = action.payload;
+      if (state.game) state.game.remainingGuesses = action.payload;
     },
     // Set the winner
     setWinner(state, action: PayloadAction<TEAM_COLOR>) {
-      state.winner = action.payload;
+      if (state.game) state.game.winner = action.payload;
     },
     // Set the MVP
     setMvp(state, action: PayloadAction<Player>) {
-      state.mvp = action.payload;
-    },
-    // Insert new card into the state
-    insertCard(state, action: PayloadAction<Card>) {
-      state.board.cards = [action.payload, ...state.board.cards];
+      if (state.game) state.game.mvp = action.payload;
     },
     // Update an existing card in the state
     setRevealedCard(state, action: PayloadAction<Card>) {
       const { id } = action.payload;
-
-      state.board.cards = state.board.cards.map((e) =>
-        e.id === id ? { ...e, isRevealed: true } : e
-      );
+      if (state.game)
+        state.game.board.cards = state.game.board.cards.map((e) =>
+          e.id === id ? { ...e, isRevealed: true } : e
+        );
     },
     setSelectedCard(state, action: PayloadAction<Card>) {
       const { id } = action.payload;
-      const isSelected = state.board.cards.some((c) => c.id === id);
+      if (state.game) {
+        const isSelected = state.game.board.cards.some((c) => c.id === id);
 
-      state.board.cards = state.board.cards.map((e) =>
-        e.id === id ? { ...e, isSelected: !isSelected } : e
-      );
+        state.game.board.cards = state.game.board.cards.map((e) =>
+          e.id === id ? { ...e, isSelected: !isSelected } : e
+        );
+      }
     },
     // Insert a new log entry
     insertLog(state, action: PayloadAction<string>) {
-      state.log = [action.payload, ...state.log];
+      if (state.game) state.game.log = [action.payload, ...state.game.log];
     },
   },
   selectors: {
-    selectGameId: (state) => state.gameId,
-    selectHost: (state) => state.host,
-    selectPlayers: (state) => state.players,
-    selectBlueTeam: (state) => state.blueTeam,
-    selectRedTeam: (state) => state.redTeam,
-    selectGameType: (state) => state.type,
-    selectLanguage: (state) => state.language,
-    selectTurn: (state) => state.turn,
-    selectRemainingGuesses: (state) => state.remainingGuesses,
-    selectWinner: (state) => state.winner,
-    selectMvp: (state) => state.mvp,
-    selectLog: (state) => state.log,
-    selectCards: (state) => state.board.cards,
+    selectGameId: (state) => state.game?.gameId,
+    selectGameStatus: (state) => state.status,
+    selectPlayers: (state) => state.game?.players,
+    selectGameType: (state) => state.game?.type,
+    selectLanguage: (state) => state.game?.language,
+    selectTurn: (state) => state.game?.turn,
+    selectWinner: (state) => state.game?.winner,
+    selectMvp: (state) => state.game?.mvp,
+    selectLog: (state) => state.game?.log,
+    selectCards: (state) => state.game?.board.cards,
     selectSelectedCards: (state) =>
-      state.board.cards.filter(({ isSelected }) => isSelected),
+      state.game?.board.cards.filter(({ isSelected }) => isSelected),
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(createGame.pending, (state, _) => {
+        state.status = "pending";
+      })
+      .addCase(createGame.fulfilled, (state, action: PayloadAction<Game>) => {
+        state.status = "succeeded";
+        state.game = action.payload;
+      })
+      .addCase(createGame.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Unknown Error";
+      })
+      .addCase(getGame.pending, (state, _) => {
+        state.status = "pending";
+      })
+      .addCase(getGame.fulfilled, (state, action: PayloadAction<Game>) => {
+        state.status = "succeeded";
+        state.game = action.payload;
+      })
+      .addCase(getGame.rejected, (state, action) => {
+        state.status = "failed";
+        console.error(action.error);
+        state.error = action.error.message ?? "Unknown Error";
+      });
   },
 });
 
-export const {
-  insertPlayer,
-  removePlayer,
-  insertCard,
-  setRedTeam,
-  setBlueTeam,
-  setRevealedCard,
-  setSelectedCard,
-} = gameSlice.actions;
+export const { setRevealedCard, setSelectedCard } = gameSlice.actions;
 
 export const {
-  selectBlueTeam,
-  selectRedTeam,
+  selectGameId,
+  selectGameStatus,
   selectCards,
   selectSelectedCards,
 } = gameSlice.selectors;
