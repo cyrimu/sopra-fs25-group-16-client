@@ -1,66 +1,84 @@
-import {
-  selectBlueTeam,
-  selectRedTeam,
-  selectPlayers,
-  setRedTeam,
-  setBlueTeam,
-} from "@/lib/features/lobby";
+import { selectPlayers, setPlayer } from "@/lib/features/lobby";
 import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
-import { PLAYER_ROLES } from "@/lib/features/player/player.types";
+import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { Form, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+
+interface ColorAndRole {
+  teamColor: TEAM_COLOR;
+  role: PLAYER_ROLES;
+}
 
 const TeamsConfiguration: React.FC = () => {
   const dispatch = useDispatch();
 
-  const blueTeam = useSelector(selectBlueTeam);
-  const redTeam = useSelector(selectRedTeam);
-
   const players = useSelector(selectPlayers);
 
+  function findPlayerFromColorAndRole(
+    teamColor: TEAM_COLOR,
+    role: PLAYER_ROLES
+  ): Player | undefined {
+    return players?.find((p) => p.role === role && p.team === teamColor);
+  }
+
   return [
-    [redTeam?.spymaster, blueTeam?.spymaster],
-    [redTeam?.operative, blueTeam?.operative],
-  ].map((sameRolePlayers, rowIndex) => (
-    <Form.Item key={rowIndex}>
+    [
+      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_SPYMASTER },
+      { teamColor: TEAM_COLOR.BLUE, role: PLAYER_ROLES.BLUE_SPYMASTER },
+    ],
+
+    [
+      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_OPERATIVE },
+      { teamColor: TEAM_COLOR.BLUE, role: PLAYER_ROLES.BLUE_OPERATIVE },
+    ],
+  ].map((colorAndRole, i) => (
+    <Form.Item key={i}>
       <div style={{ display: "flex", width: "100%", gap: "10px" }}>
-        {sameRolePlayers.map((player, i) => (
-          <div key={i} style={{ flex: 1 }}>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "8px",
-                fontFamily: "Special Elite",
-                color: "white",
-              }}
-            >
-              {player?.team === TEAM_COLOR.red ? "Red" : "Blue"}{" "}
-              {player?.role === PLAYER_ROLES.spymaster
-                ? "Spymaster"
-                : "Operative"}
-            </label>
-            <Select
-              value={player}
-              onChange={(newPlayer) => {
-                if (player?.role === PLAYER_ROLES.spymaster) {
-                  dispatch(setRedTeam(newPlayer));
-                } else {
-                  dispatch(setBlueTeam(newPlayer));
-                }
-              }}
-              style={{ color: "white" }}
-            >
-              {players.map((player) => (
-                <Select.Option
-                  key={player.playerName}
-                  value={player.playerName}
-                >
-                  {player.playerName}
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-        ))}
+        {colorAndRole.map(({ teamColor, role }: ColorAndRole, i) => {
+          const value = findPlayerFromColorAndRole(teamColor, role);
+          const splittedRole = role.split("_");
+
+          return (
+            <div key={i} style={{ flex: 1 }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  fontFamily: "Special Elite",
+                  color: "white",
+                }}
+              >
+                {splittedRole[0][0] +
+                  splittedRole[0].substring(1).toLowerCase()}{" "}
+                {splittedRole[1][0] +
+                  splittedRole[1].substring(1).toLowerCase()}
+              </label>
+              <Select
+                value={value?.playerName}
+                onChange={(p) => {
+                  const newPlayer: Player = {
+                    playerName: p,
+                    role: role,
+                    team: teamColor,
+                  };
+                  dispatch(setPlayer(newPlayer));
+                }}
+                style={{ color: "white" }}
+              >
+                {players?.map((player) => {
+                  return (
+                    <Select.Option
+                      key={player.playerName}
+                      value={player.playerName}
+                    >
+                      {player.playerName}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            </div>
+          );
+        })}
       </div>
     </Form.Item>
   ));

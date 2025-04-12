@@ -1,6 +1,4 @@
 import React from "react";
-import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
-import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
 import styles from "@/styles/page.module.css";
 import { useSelector } from "react-redux";
 import { selectGameType, selectPlayers } from "@/lib/features/lobby";
@@ -33,23 +31,26 @@ const PlayerTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {players.map(({ playerName, team, role }, index) => (
-            <tr key={index}>
-              <td>{playerName}</td>
-              <td>
-                {team
-                  ? TEAM_COLOR[team].charAt(0).toUpperCase() +
-                    TEAM_COLOR[team].slice(1)
-                  : "N/A"}
-              </td>
-              <td>
-                {role
-                  ? PLAYER_ROLES[role].charAt(0).toUpperCase() +
-                    PLAYER_ROLES[role].slice(1)
-                  : "N/A"}
-              </td>
-            </tr>
-          ))}
+          {players?.map(({ playerName, team, role }, index) => {
+            const roleString = role?.split("_")[1];
+            return (
+              <tr key={index}>
+                <td>{playerName}</td>
+                <td>
+                  {`${team?.toString()[0]}${team
+                    ?.toString()
+                    .substring(1)
+                    .toLowerCase()}`}
+                </td>
+                <td>
+                  {`${roleString?.toString()[0]}${roleString
+                    ?.toString()
+                    .substring(1)
+                    .toLowerCase()}`}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>

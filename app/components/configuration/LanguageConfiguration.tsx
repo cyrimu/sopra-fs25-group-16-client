@@ -22,12 +22,15 @@ const LanguageConfiguration: React.FC = () => {
       }
     >
       <Select value={language} onChange={handleLanguageChange}>
-        {Object.values(LANGUAGES).map((lang) => (
-          <Select.Option key={lang} value={lang}>
-            {lang[0].toUpperCase()}
-            {lang.substring(1)}
-          </Select.Option>
-        ))}
+        {Object.values(LANGUAGES).map((lang) => {
+          const value = `${lang[0]}${lang[0].substring(1).toLowerCase()}`;
+          return (
+            <Select.Option key={lang} value={value}>
+              {lang[0].toUpperCase()}
+              {lang.substring(1).toLowerCase()}
+            </Select.Option>
+          );
+        })}
       </Select>
     </Form.Item>
   );
