@@ -49,26 +49,6 @@ const gameSlice = createSlice({
       const player = action.payload;
       state.players = state.players.filter((p) => p !== player);
     },
-    // Insert a new user to the red team
-    setRedTeam(state, action: PayloadAction<Player>) {
-      const player = action.payload;
-      const { role } = player;
-      state.redTeam = {
-        operative: role === PLAYER_ROLES.operative ? player : undefined,
-        spymaster: role === PLAYER_ROLES.spymaster ? player : undefined,
-      };
-      state.blueTeam = undefined;
-    },
-    // Insert a new user to the blue team
-    setBlueTeam(state, action: PayloadAction<Player>) {
-      const player = action.payload;
-      const { role } = player;
-      state.blueTeam = {
-        operative: role === PLAYER_ROLES.operative ? player : undefined,
-        spymaster: role === PLAYER_ROLES.spymaster ? player : undefined,
-      };
-      state.redTeam = undefined;
-    },
     // Set the turn order
     setTurn(state, action: PayloadAction<TURN_ORDER>) {
       state.turn = action.payload;

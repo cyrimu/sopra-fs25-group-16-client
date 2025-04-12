@@ -2,10 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Lobby } from "./lobby.types";
 import { DEFAULT_GAME_TYPE, DEFAULT_LANGUAGE } from "@/constants";
-import { Player } from "../player/player.types";
+import { Player, PLAYER_ROLES } from "../player/player.types";
 import { Game, GAME_TYPE } from "../game/game.types";
 import { LANGUAGES } from "./languages.types";
-import { Team } from "./team.types";
 import { players } from "@/seed";
 
 const initialState = {
@@ -54,13 +53,25 @@ const lobbySlice = createSlice({
     setLanguage(state, action: PayloadAction<LANGUAGES>) {
       state.language = action.payload;
     },
-    // Set the blue team
-    setBlueTeam(state, action: PayloadAction<Team>) {
-      state.blueTeam = action.payload;
+    // Insert a new player to the red team
+    setRedTeam(state, action: PayloadAction<Player>) {
+      const player = action.payload;
+      const { role } = player;
+      state.redTeam = {
+        operative: role === PLAYER_ROLES.operative ? player : undefined,
+        spymaster: role === PLAYER_ROLES.spymaster ? player : undefined,
+      };
+      state.blueTeam = undefined;
     },
-    // Set the red team
-    setRedTeam(state, action: PayloadAction<Team>) {
-      state.redTeam = action.payload;
+    // Insert a new player to the blue team
+    setBlueTeam(state, action: PayloadAction<Player>) {
+      const player = action.payload;
+      const { role } = player;
+      state.blueTeam = {
+        operative: role === PLAYER_ROLES.operative ? player : undefined,
+        spymaster: role === PLAYER_ROLES.spymaster ? player : undefined,
+      };
+      state.redTeam = undefined;
     },
     // Update the number of connected players
     updateConnections(state, action: PayloadAction<number>) {
