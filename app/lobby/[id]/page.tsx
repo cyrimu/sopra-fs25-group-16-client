@@ -1,7 +1,7 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
 import { useSelector } from "react-redux";
-import { setPlayerName } from "@/lib/features/player";
+import { selectPlayerName } from "@/lib/features/player";
 import { selectHost, selectLobbyId } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
@@ -15,9 +15,9 @@ export default function Lobby() {
   const router = useRouter();
 
   const id = useSelector(selectLobbyId);
-  const playerName = useSelector(setPlayerName);
+  const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
-  const isHost = playerName.payload === hostName;
+  const isHost = playerName === hostName;
 
   const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
@@ -54,7 +54,7 @@ export default function Lobby() {
         )}
         {!isConfigurationPanelOpen && <PlayerTable />}
 
-        {!isHost && (
+        {isHost && (
           <div className={styles.regularButtonContainer}>
             <button
               className={styles.regularButton}
