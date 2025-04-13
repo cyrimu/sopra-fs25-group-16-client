@@ -14,7 +14,7 @@ export default function Lobby() {
         <div className={styles.centered}>
 
             <div className={styles.messageContainer}>
-                <div className={styles.landingButton} style={{ fontSize: '100px', textAlign: 'center' }}>
+                <div className={styles.resultsMessage} style={{ fontSize: '100px', textAlign: 'center', minWidth: '900px' }}>
                     Better luck next time...
                 </div>
 

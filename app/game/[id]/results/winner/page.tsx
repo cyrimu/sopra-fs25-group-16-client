@@ -17,7 +17,7 @@ export default function Lobby() {
             {team === "red" && <div className={styles.redOverlay}></div>}
 
             <div className={styles.messageContainer}>
-                <div className={styles.landingButton} style={{ fontSize: '100px', textAlign: 'center' }}>
+                <div className={styles.resultsMessage} style={{ fontSize: '100px', textAlign: 'center', minWidth: '900px'}}>
                     Congrats no one can outspy you!
                 </div>
 
