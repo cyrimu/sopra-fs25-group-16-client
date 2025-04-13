@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '@/styles/page.module.css';
 import { useRouter } from 'next/navigation';
+import { Popconfirm } from "antd";
 
 interface PlayerData {
     codename: string;
@@ -21,6 +22,13 @@ const ResultsTable: React.FC = () => { //temp data until web socket connection
         { codename: 'kimpossible', team: 'red', points: 4 },
         { codename: 'karl', team: 'red', points: 4 },
     ];
+    const confirmDeleteLobby = () => {
+        router.replace('/create');
+    };
+
+    const cancelDeleteLobby = () => {
+        // Do nothing
+    };
 
     return (
         <>
@@ -61,9 +69,19 @@ const ResultsTable: React.FC = () => { //temp data until web socket connection
                         <button className={styles.regularButton} onClick={() => router.push(`/lobby/${lobbyId}`)}>
                             Return to Lobby
                         </button>
-                        <button className={styles.regularButton} onClick={() => router.push(`/lobby/${lobbyId}`)}>
-                            Delete Lobby
-                        </button>
+                        <Popconfirm
+                            title={<span style={{ color: 'black' }}>Are you sure if you want to delete the lobby?</span>}
+                            onConfirm={confirmDeleteLobby}
+                            onCancel={cancelDeleteLobby}
+                            okText="Yes"
+                            cancelText="No"
+                            icon={false}
+                        >
+                            <button className={styles.regularButton}>
+                                Delete Lobby
+                            </button>
+                        </Popconfirm>
+
                     </>
                 ) : (
                     <>
