@@ -4,11 +4,6 @@ import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { Form, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
-interface ColorAndRole {
-  teamColor: TEAM_COLOR;
-  role: PLAYER_ROLES;
-}
-
 const TeamsConfiguration: React.FC = () => {
   const dispatch = useDispatch();
 
@@ -34,7 +29,7 @@ const TeamsConfiguration: React.FC = () => {
   ].map((colorAndRole, i) => (
     <Form.Item key={i}>
       <div style={{ display: "flex", width: "100%", gap: "10px" }}>
-        {colorAndRole.map(({ teamColor, role }: ColorAndRole, i) => {
+        {colorAndRole.map(({ teamColor, role }, i) => {
           const value = findPlayerFromColorAndRole(teamColor, role);
           const splittedRole = role.split("_");
 
