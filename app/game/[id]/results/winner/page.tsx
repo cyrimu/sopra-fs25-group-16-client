@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function Lobby() {
     // temporary until websocket connection
     const router = useRouter();
-    const isHost = false;
+    const isHost = true;
     const team = "blue";
     const gameId = "abc123";
     const lobbyId = "abc123";
