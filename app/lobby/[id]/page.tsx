@@ -29,6 +29,10 @@ export default function Lobby() {
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
+  console.log("isHost", isHost);
+  console.log("playerName", playerName);
+  console.log("hostName", hostName);
+
 
   const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
@@ -71,6 +75,7 @@ export default function Lobby() {
         dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
       } catch (error) {
         console.error(error);
+
       }
     }
   }
@@ -102,16 +107,14 @@ export default function Lobby() {
           <div className={styles.lobbyTitle}>Game Lobby</div>
         )}
         {!isConfigurationPanelOpen && <PlayerTable />}
-        {/* //TODO: CHANGE THIS !isHost */}
-        {isHost && (
+        {!isHost && (
           <div className={styles.regularButtonContainer}>
             <button className={styles.regularButton} onClick={handleLeaveLobby}>
               Leave Lobby
             </button>
           </div>
         )}
-        {/* //TODO: CHANGE THIS !isHost */}
-        {!isHost && (
+        {isHost && (
           <div className={styles.regularButtonContainer}>
             <button
               className={styles.regularButton}
