@@ -1,4 +1,4 @@
-class ApiService {
+export class ApiService {
   private baseURL: string;
   private defaultHeaders: HeadersInit;
 

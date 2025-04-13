@@ -1,4 +1,4 @@
-import { ApiService } from "@/api/apiService";
+import {ApiService} from "@/api/apiService"; // import the ApiService class
 import { useMemo } from "react"; // think of usememo like a singleton, it ensures only one instance exists
 
 export const useApi = () => {
