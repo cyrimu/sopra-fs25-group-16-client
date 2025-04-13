@@ -29,10 +29,6 @@ export default function Lobby() {
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
-  console.log("isHost", isHost);
-  console.log("playerName", playerName);
-  console.log("hostName", hostName);
-
 
   const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
@@ -73,9 +69,9 @@ export default function Lobby() {
     if (lobbyId && playerName) {
       try {
         dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
+        router.push("/");
       } catch (error) {
         console.error(error);
-
       }
     }
   }
