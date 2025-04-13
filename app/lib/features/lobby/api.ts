@@ -8,7 +8,8 @@ export const createLobby = createAsyncThunk(
     const response = await apiService.postForm<Lobby>("/lobby", {
       username: username,
     });
-    return response;
+    console.log("createLobby response", response);
+      return response;
   }
 );
 
@@ -63,6 +64,7 @@ export const leaveLobby = createAsyncThunk(
     const response = await apiService.postForm(`/lobby/${lobbyId}/leave`, {
       username: username,
     });
-    return response;
+      console.log("leaveLobby response", response);
+      return response;
   }
 );
