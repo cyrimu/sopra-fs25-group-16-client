@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { Modal } from "antd";
-import styles from "@/styles/page.module.css";
 
 interface RulesModalProps {
     visible: boolean;
