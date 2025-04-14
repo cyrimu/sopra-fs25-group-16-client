@@ -7,7 +7,7 @@ export const createGame = createAsyncThunk(
   "game/createGame",
   async ({ lobby, username }: { lobby: Lobby; username: string }) => {
     console.log(lobby);
-    const response = await apiService.post<Game>(`/game?username=Alice`, {
+    const response = await apiService.post<Game>(`/game?username=${username}`, {
       lobby,
     });
     return response;
