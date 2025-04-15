@@ -12,7 +12,7 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
-import GetReadyScreen from "@/components/getReady";
+import GetReadyScreen from "@/components/GetReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
@@ -39,13 +39,9 @@ export default function Lobby() {
 
   const handleConfigPanel = () => {
     if (lobbyId && playerName && lobby) {
-      try {
-        dispatch(
-          updateLobby({ lobbyId: lobbyId, username: playerName, lobby: lobby })
-        );
-      } catch (error) {
-        console.error(error);
-      }
+      dispatch(
+        updateLobby({ lobbyId: lobbyId, username: playerName, lobby: lobby })
+      );
       setConfigurationPanelOpen((state) => !state);
     }
   };
@@ -63,15 +59,11 @@ export default function Lobby() {
         router.push(`/game/${gameId}`);
       }, 3000);
     }
-  }, [gameStatus]);
+  }, [gameId, router, gameStatus]);
 
   function handleLeaveLobby() {
     if (lobbyId && playerName) {
-      try {
-        dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
-      } catch (error) {
-        console.error(error);
-      }
+      dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
     }
   }
 
@@ -120,7 +112,7 @@ export default function Lobby() {
               Change Setup
             </button>
             <Modal
-              styles={modalStyles as any}
+              styles={modalStyles}
               title={
                 <span style={{ color: "white" }}>Configuration Panel</span>
               }
@@ -186,7 +178,7 @@ const modalStyles = {
     padding: "20px",
   },
   footer: {
-    textAlign: "center",
+    align: "center",
     backgroundColor: "#2f2f2f",
     outline: "1px dashed white",
     outlineOffset: "-10px",

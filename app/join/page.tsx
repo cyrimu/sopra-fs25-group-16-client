@@ -26,11 +26,7 @@ export default function Join() {
       // Store the username
       dispatch(setPlayerName(username));
       // Try to join the lobby and thhere fore get it
-      try {
-        dispatch(joinLobby({ lobbyId: id, username: username }));
-      } catch (error) {
-        console.error(error);
-      }
+      dispatch(joinLobby({ lobbyId: id, username: username }));
     }
   }
 
