@@ -1,6 +1,6 @@
 import { Card } from "@/lib/features/game/card.types";
 import styles from "./Board.module.css";
-import GameCard from "./GameCard";
+import GameCard from "./gameCard";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCards,
