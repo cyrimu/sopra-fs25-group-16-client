@@ -67,7 +67,7 @@ const gameSlice = createSlice({
     },
   },
   selectors: {
-    selectGameId: (state) => state.game?.gameId,
+    selectGameId: (state) => state.game?.gameID,
     selectGameStatus: (state) => state.status,
     selectPlayers: (state) => state.game?.players,
     selectGameType: (state) => state.game?.type,

@@ -4,7 +4,7 @@ import { Player } from "../player/player.types";
 import { Board } from "./board.types";
 
 export interface Game {
-  gameId: string | undefined;
+  gameID: string | undefined;
   host: string | undefined;
   players: Player[];
   blueTeam: Team | undefined;
