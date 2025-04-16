@@ -33,7 +33,6 @@ const PlayerTable: React.FC = () => {
         <tbody>
           {players?.map(({ playerName, team, role }, index) => {
             const roleString = role?.split("_")[1];
-
             return (
               <tr key={index}>
                 <td>{playerName}</td>
