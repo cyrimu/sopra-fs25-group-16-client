@@ -1,32 +1,22 @@
 import { LANGUAGES } from "../lobby/languages.types";
-import { Team, TEAM_COLOR } from "../lobby/team.types";
-import { Player } from "../player/player.types";
-import { Board } from "./board.types";
+import { Player, PLAYER_ROLES } from "../player/player.types";
+import { Card } from "./card.types";
+import { TEAM_COLOR } from "./team.types";
 
 export interface Game {
-  gameID: string | undefined;
-  host: string | undefined;
+  gameID: number;
+  host: string;
   players: Player[];
-  blueTeam: Team | undefined;
-  redTeam: Team | undefined;
-  board: Board;
+  cards: Card[];
   type: GAME_TYPE;
   language: LANGUAGES;
-  turn: TURN_ORDER;
-  remainingGuesses: number | undefined;
-  winner: TEAM_COLOR | undefined;
-  mvp: Player | undefined;
+  turn: PLAYER_ROLES;
+  remainingGuesses: number;
+  winner: TEAM_COLOR | null;
   log: string[];
 }
 
-export enum TURN_ORDER {
-  BLUE_SPYMASTER,
-  BLUE_OPERATIVE,
-  RED_SPYMASTER,
-  RED_OPERATIVE,
-}
-
 export enum GAME_TYPE {
-  text = "text",
-  image = "image",
+  TEXT = "TEXT",
+  PICTURE = "PICTURE",
 }

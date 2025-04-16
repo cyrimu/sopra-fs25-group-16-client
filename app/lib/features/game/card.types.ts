@@ -1,7 +1,7 @@
 import { GAME_TYPE } from "./game.types";
 
 export interface Card {
-  id: string;
+  id: number;
   type: GAME_TYPE;
   content: string;
   isRevealed: boolean;
@@ -10,8 +10,8 @@ export interface Card {
 }
 
 export enum CARD_COLOR {
-  blue,
-  red,
-  grey,
-  black,
+  BLUE = "BLUE",
+  RED = "RED",
+  WHITE = "WHITE",
+  BLACK = "BLACK",
 }
