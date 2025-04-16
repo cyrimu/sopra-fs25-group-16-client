@@ -82,18 +82,45 @@ reason).
 
 ---
 
-## Contributions Week 4 - [Begin Date] to [End Date]
+## Contributions Week 4 - [14.04.2025] to [20.04.2025]
 
-_Continue with the same table format as above._
+| **Student**        | **Date**     | **Link to Commit**                                                               | **Description**                                               | **Relevance**                                                                                                 |
+| ------------------ | ------------ | -------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **[@githubUser1]** | [date]       | [Link to Commit 1]                                                               | [Brief description of the task]                               | [Why this contribution is relevant]                                                                           |
+|                    | [date]       | [Link to Commit 2]                                                               | [Brief description of the task]                               | [Why this contribution is relevant]                                                                           |
+| **[@sgm17]**       | [16.04.2025] | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-client/pull/42) | [Still removing and adapting the structure of the interfaces] | [Added new components such as the MakeGuess the HintForm and the span texts that control the different turns] |
+|                    | [date]       | [Link to Commit 2]                                                               | [Brief description of the task]                               | [Why this contribution is relevant]                                                                           |
+| **[@githubUser3]** | [date]       | [Link to Commit 1]                                                               | [Brief description of the task]                               | [Why this contribution is relevant]                                                                           |
+|                    | [date]       | [Link to Commit 2]                                                               | [Brief description of the task]                               | [Why this contribution is relevant]                                                                           |
+| **[@githubUser4]** | [date]       | [Link to Commit 1]                                                               | [Brief description of the task]                               | [Why this contribution is relevant]                                                                           |
+|                    | [date]       | [Link to Commit 2]                                                               | [Brief description of the task]                               | [Why this contribution is relevant]                                                                           |
 
 ---
 
 ## Contributions Week 5 - [Begin Date] to [End Date]
 
-_Continue with the same table format as above._
+| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
+| ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
 ---
 
 ## Contributions Week 6 - [Begin Date] to [End Date]
 
-_Continue with the same table format as above._
+| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
+| ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
