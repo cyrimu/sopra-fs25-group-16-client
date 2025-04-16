@@ -1,5 +1,5 @@
 import { selectPlayers, setPlayer } from "@/lib/features/lobby";
-import { TEAM_COLOR } from "@/lib/features/lobby/team.types";
+import { TEAM_COLOR } from "@/lib/features/game/team.types";
 import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { Form, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";

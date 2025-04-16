@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { Modal, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import GetReady from "@/components/GetReady";
-import PlayerTable from "@/components/playerTable";
+import PlayerTable from "@/components/PlayerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
 import { leaveLobby, updateLobby } from "@/lib/features/lobby/api";
