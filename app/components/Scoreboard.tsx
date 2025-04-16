@@ -14,8 +14,8 @@ const Scoreboard: React.FC = () => {
     return cards?.filter((e) => e.color === cardColor && !e.isRevealed).length;
   }
 
-  const redCardsNumber = calculateTeamCardsLeft(CARD_COLOR.red);
-  const blueCardsNumber = calculateTeamCardsLeft(CARD_COLOR.blue);
+  const redCardsNumber = calculateTeamCardsLeft(CARD_COLOR.RED);
+  const blueCardsNumber = calculateTeamCardsLeft(CARD_COLOR.BLUE);
 
   const blueOperative = players?.find(
     (e) => e.role === PLAYER_ROLES.BLUE_OPERATIVE
