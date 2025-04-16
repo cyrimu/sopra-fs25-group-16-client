@@ -6,6 +6,6 @@ export interface Team {
 }
 
 export enum TEAM_COLOR {
-  blue = "blue",
-  red = "red",
+  BLUE = "BLUE",
+  RED = "RED",
 }
