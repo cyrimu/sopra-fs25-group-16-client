@@ -11,7 +11,7 @@ const Board: React.FC = () => {
       <div className={styles.boardContainer}>
         <div className={styles.boardGrid}>
           {cards?.map((e, i) => {
-            return <GameCard key={i} card={e} />;
+            return <GameCard key={i} selected={e.isSelected} card={e} />;
           })}
         </div>
       </div>
