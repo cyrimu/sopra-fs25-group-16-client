@@ -1,26 +1,27 @@
 import { Card, CARD_COLOR } from "@/lib/features/game/card.types";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
-import { selectPlayer } from "@/lib/features/player";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import styles from "./GameCard.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
+import { selectPlayerName } from "@/lib/features/player";
+import { selectPlayers } from "@/lib/features/lobby";
+import { setSelectedCard } from "@/lib/features/game";
 
 interface GameCardProps {
   card: Card;
   selected: boolean;
-  selectedCallback: (selected: boolean) => void;
 }
 
-const GameCard: React.FC<GameCardProps> = ({
-  card,
-  selected,
-  selectedCallback,
-}) => {
+const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
+  const dispatch = useDispatch();
+
   const { color, type, content, isRevealed } = card;
-  const { role } = useSelector(selectPlayer);
-  const setSelected = () => selectedCallback(!selected);
+  const playerName = useSelector(selectPlayerName);
+  const players = useSelector(selectPlayers);
+
+  const { role } = players?.find((e) => e.playerName === playerName)!;
 
   const animation = useMemo(
     () => ({ rotateY: isRevealed ? 180 : 0 }),
@@ -28,27 +29,42 @@ const GameCard: React.FC<GameCardProps> = ({
   );
 
   function determineBackgroundImage(): CARD_COLOR {
-    if (role === PLAYER_ROLES.operative && !isRevealed) {
+    if (
+      role === PLAYER_ROLES.BLUE_OPERATIVE ||
+      (role === PLAYER_ROLES.RED_OPERATIVE && !isRevealed)
+    ) {
       // The only case where the card will be forced to grey
-      return CARD_COLOR.grey;
+      return CARD_COLOR.WHITE;
     }
     return color;
   }
 
   const cardColor = determineBackgroundImage();
 
-  if (type === GAME_TYPE.text) {
+  function handleSelectCard() {
+    if (
+      role === PLAYER_ROLES.RED_SPYMASTER ||
+      role === PLAYER_ROLES.BLUE_SPYMASTER
+    )
+      return;
+
+    dispatch(setSelectedCard(card.id));
+  }
+
+  if (type === GAME_TYPE.TEXT) {
     return (
       <motion.div
         className={selected ? styles.cardSelected : styles.card}
         style={
           {
-            "--bg-image": `url("/${CARD_COLOR[cardColor]}_card.png")`,
+            "--bg-image": `url("/${CARD_COLOR[
+              cardColor
+            ].toLowerCase()}_card.png")`,
           } as React.CSSProperties
         }
         animate={animation}
         transition={{ duration: 0.6, ease: "easeInOut" }}
-        onClick={setSelected}
+        onClick={handleSelectCard}
       >
         {!isRevealed && (
           <div className={styles.cardTextContainer}>

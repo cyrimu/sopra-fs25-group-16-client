@@ -1,7 +1,7 @@
-import { TEAM_COLOR } from "../lobby/team.types";
+import { TEAM_COLOR } from "../game/team.types";
 
 export interface Player {
-  playerName: string | undefined;
+  playerName: string;
   role: PLAYER_ROLES | undefined;
   team: TEAM_COLOR | undefined;
 }
@@ -11,4 +11,9 @@ export enum PLAYER_ROLES {
   RED_SPYMASTER = "RED_SPYMASTER",
   BLUE_OPERATIVE = "BLUE_OPERATIVE",
   RED_OPERATIVE = "RED_OPERATIVE",
+}
+
+export function playerRoleToTeamColor(playerRole: PLAYER_ROLES) {
+  const color = playerRole.split("_")[0];
+  return TEAM_COLOR[color as keyof typeof TEAM_COLOR];
 }

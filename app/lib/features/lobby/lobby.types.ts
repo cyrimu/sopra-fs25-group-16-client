@@ -3,11 +3,11 @@ import { Player } from "../player/player.types";
 import { LANGUAGES } from "./languages.types";
 
 export interface Lobby {
-  host: string | undefined;
+  host: string;
   language: LANGUAGES;
   gameType: GAME_TYPE;
-  lobbyID: string | undefined;
+  lobbyID: string;
   players: Player[];
-  currentGame: Game | undefined;
+  currentGame: Game | null;
   playerCount: number;
 }

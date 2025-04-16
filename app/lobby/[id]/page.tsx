@@ -12,8 +12,8 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
-import GetReadyScreen from "@/components/GetReady";
-import PlayerTable from "@/components/playerTable";
+import GetReady from "@/components/GetReady";
+import PlayerTable from "@/components/PlayerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
 import { leaveLobby, updateLobby } from "@/lib/features/lobby/api";
@@ -83,7 +83,7 @@ export default function Lobby() {
   };
 
   if (isGameStarting) {
-    return <GetReadyScreen />;
+    return <GetReady />;
   }
 
   return (
@@ -94,16 +94,14 @@ export default function Lobby() {
           <div className={styles.lobbyTitle}>Game Lobby</div>
         )}
         {!isConfigurationPanelOpen && <PlayerTable />}
-        {/* //TODO: CHANGE THIS !isHost */}
-        {isHost && (
+        {!isHost && (
           <div className={styles.regularButtonContainer}>
             <button className={styles.regularButton} onClick={handleLeaveLobby}>
               Leave Lobby
             </button>
           </div>
         )}
-        {/* //TODO: CHANGE THIS !isHost */}
-        {!isHost && (
+        {isHost && (
           <div className={styles.regularButtonContainer}>
             <button
               className={styles.regularButton}
