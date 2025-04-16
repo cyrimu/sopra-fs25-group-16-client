@@ -4,7 +4,7 @@ import LogButton from "@/components/buttons/LogButton";
 import GameSubmit from "@/components/buttons/GameSubmit";
 import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
-import LogDialog from "@/components/logDialog";
+import LogDialog from "@/components/LogDialog";
 import Board from "@/components/Board";
 import { useState } from "react";
 
