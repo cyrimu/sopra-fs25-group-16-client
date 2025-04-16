@@ -82,7 +82,7 @@ const gameSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(createGame.pending, (state, _) => {
+      .addCase(createGame.pending, (state) => {
         state.status = "pending";
       })
       .addCase(createGame.fulfilled, (state, action: PayloadAction<Game>) => {
@@ -93,7 +93,7 @@ const gameSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message ?? "Unknown Error";
       })
-      .addCase(getGame.pending, (state, _) => {
+      .addCase(getGame.pending, (state) => {
         state.status = "pending";
       })
       .addCase(getGame.fulfilled, (state, action: PayloadAction<Game>) => {

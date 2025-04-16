@@ -11,6 +11,7 @@ interface LobbyState {
   status: "idle" | "pending" | "succeeded" | "failed";
   error: string | null;
 }
+
 const initialState: LobbyState = {
   lobby: undefined,
   status: "idle",
@@ -57,7 +58,7 @@ const lobbySlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(createLobby.pending, (state, _) => {
+      .addCase(createLobby.pending, (state) => {
         state.status = "pending";
       })
       .addCase(createLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
@@ -69,22 +70,24 @@ const lobbySlice = createSlice({
         state.error = action.error.message ?? "Unknown Error";
       });
     builder
-      .addCase(joinLobby.pending, (state, _) => {
+      .addCase(joinLobby.pending, (state) => {
         state.status = "pending";
       })
       .addCase(joinLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
         state.status = "succeeded";
-        state.lobby = action.payload;
+        const lobby = action.payload;
+        state.lobby = { ...lobby, players: lobby.players.filter((p) => p) };
       })
       .addCase(joinLobby.rejected, (state, action) => {
         state.status = "failed";
+        console.error(action.error);
         state.error = action.error.message ?? "Unknown Error";
       });
     builder
-      .addCase(leaveLobby.pending, (state, _) => {
+      .addCase(leaveLobby.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(leaveLobby.fulfilled, (state, _) => {
+      .addCase(leaveLobby.fulfilled, (state) => {
         state = initialState;
       })
       .addCase(leaveLobby.rejected, (state, action) => {
