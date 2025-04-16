@@ -7,13 +7,14 @@ import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { selectPlayerName } from "@/lib/features/player";
 import { selectPlayers } from "@/lib/features/lobby";
-import { selectSelectedCards, setSelectedCard } from "@/lib/features/game";
+import { setSelectedCard } from "@/lib/features/game";
 
 interface GameCardProps {
   card: Card;
+  selected: boolean;
 }
 
-const GameCard: React.FC<GameCardProps> = ({ card }) => {
+const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const dispatch = useDispatch();
 
   const { color, type, content, isRevealed } = card;
@@ -21,14 +22,6 @@ const GameCard: React.FC<GameCardProps> = ({ card }) => {
   const players = useSelector(selectPlayers);
 
   const { role } = players?.find((e) => e.playerName === playerName)!;
-
-  const selectedCards = useSelector(selectSelectedCards);
-
-  const selected = selectedCards?.includes(card);
-
-  function handleSelectedCard() {
-    dispatch(setSelectedCard(card));
-  }
 
   const animation = useMemo(
     () => ({ rotateY: isRevealed ? 180 : 0 }),
@@ -41,25 +34,37 @@ const GameCard: React.FC<GameCardProps> = ({ card }) => {
       (role === PLAYER_ROLES.RED_OPERATIVE && !isRevealed)
     ) {
       // The only case where the card will be forced to grey
-      return CARD_COLOR.grey;
+      return CARD_COLOR.WHITE;
     }
     return color;
   }
 
   const cardColor = determineBackgroundImage();
 
-  if (type === GAME_TYPE.text) {
+  function handleSelectCard() {
+    if (
+      role === PLAYER_ROLES.RED_SPYMASTER ||
+      role === PLAYER_ROLES.BLUE_SPYMASTER
+    )
+      return;
+
+    dispatch(setSelectedCard(card.id));
+  }
+
+  if (type === GAME_TYPE.TEXT) {
     return (
       <motion.div
         className={selected ? styles.cardSelected : styles.card}
         style={
           {
-            "--bg-image": `url("/${CARD_COLOR[cardColor]}_card.png")`,
+            "--bg-image": `url("/${CARD_COLOR[
+              cardColor
+            ].toLowerCase()}_card.png")`,
           } as React.CSSProperties
         }
         animate={animation}
         transition={{ duration: 0.6, ease: "easeInOut" }}
-        onClick={handleSelectedCard}
+        onClick={handleSelectCard}
       >
         {!isRevealed && (
           <div className={styles.cardTextContainer}>
