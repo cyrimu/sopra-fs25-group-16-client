@@ -1,23 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./GameSubmit.module.css";
-import { selectSelectedCards, setRevealedCard } from "@/lib/features/game";
+import styles from "./MakeGuess.module.css";
+import { selectSelectedCards } from "@/lib/features/game";
 
-const GameSubmit: React.FC = () => {
+const MakeGuess: React.FC = () => {
   const dispatch = useDispatch();
 
   const selectedCards = useSelector(selectSelectedCards);
 
   function submitSelectionHandle() {
+    if (!selectedCards) return;
+
     for (let i = 0; i < selectedCards.length; i++) {
       const card = selectedCards[i];
-      dispatch(setRevealedCard(card));
+      dispatch({
+        type: "socket/makeGuess",
+        payload: card,
+      });
     }
   }
 
   return (
     <button
       className={styles.submitSelectionButton}
-      disabled={selectedCards.length === 0}
+      disabled={selectedCards?.length === 0}
       onClick={submitSelectionHandle}
     >
       Submit Selection
@@ -25,4 +30,4 @@ const GameSubmit: React.FC = () => {
   );
 };
 
-export default GameSubmit;
+export default MakeGuess;
