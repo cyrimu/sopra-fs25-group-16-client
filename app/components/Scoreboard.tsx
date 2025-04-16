@@ -1,25 +1,34 @@
 import { CARD_COLOR } from "@/lib/features/game/card.types";
 import styles from "./Scoreboard.module.css";
 import { useSelector } from "react-redux";
-import {
-  selectBlueTeam,
-  selectCards,
-  selectRedTeam,
-} from "@/lib/features/game";
+import { selectCards } from "@/lib/features/game";
+import { selectPlayers } from "@/lib/features/lobby";
+import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 
 const Scoreboard: React.FC = () => {
   const cards = useSelector(selectCards);
-
-  const blueTeam = useSelector(selectBlueTeam);
-  const redTeam = useSelector(selectRedTeam);
+  const players = useSelector(selectPlayers);
 
   function calculateTeamCardsLeft(cardColor: CARD_COLOR) {
     // Number of cards for each team still to reveal
-    return cards.filter((e) => e.color === cardColor && !e.isRevealed).length;
+    return cards?.filter((e) => e.color === cardColor && !e.isRevealed).length;
   }
 
   const redCardsNumber = calculateTeamCardsLeft(CARD_COLOR.red);
   const blueCardsNumber = calculateTeamCardsLeft(CARD_COLOR.blue);
+
+  const blueOperative = players?.find(
+    (e) => e.role === PLAYER_ROLES.BLUE_OPERATIVE
+  );
+  const blueSpymaster = players?.find(
+    (e) => e.role === PLAYER_ROLES.BLUE_SPYMASTER
+  );
+  const redOperative = players?.find(
+    (e) => e.role === PLAYER_ROLES.RED_OPERATIVE
+  );
+  const redSpymaster = players?.find(
+    (e) => e.role === PLAYER_ROLES.RED_SPYMASTER
+  );
 
   return (
     <div className={styles.scoreboardWrapper}>
@@ -32,13 +41,13 @@ const Scoreboard: React.FC = () => {
             <span>Operative</span>
             <div className={styles.scoreboardPlayersContainer}>
               <div className={styles.scoreboardPlayer}>
-                {redTeam?.operative?.playerName ?? "Empty"}
+                {redOperative?.playerName ?? "Empty"}
               </div>
             </div>
             <span>Spymaster</span>
             <div className={styles.scoreboardPlayersContainer}>
               <div className={styles.scoreboardPlayer}>
-                {redTeam?.spymaster?.playerName ?? "Empty"}
+                {redSpymaster?.playerName ?? "Empty"}
               </div>
             </div>
           </div>
@@ -58,13 +67,13 @@ const Scoreboard: React.FC = () => {
             <span>Operative</span>
             <div className={styles.scoreboardPlayersContainer}>
               <div className={styles.scoreboardPlayer}>
-                {blueTeam?.operative?.playerName ?? "Empty"}
+                {blueOperative?.playerName ?? "Empty"}
               </div>
             </div>
             <span>Spymaster</span>
             <div className={styles.scoreboardPlayersContainer}>
               <div className={styles.scoreboardPlayer}>
-                {blueTeam?.spymaster?.playerName ?? "Empty"}
+                {blueSpymaster?.playerName ?? "Empty"}
               </div>
             </div>
           </div>
