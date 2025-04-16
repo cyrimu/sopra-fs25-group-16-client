@@ -2,11 +2,7 @@ import { Button as AntButton, ButtonProps } from "antd";
 import styles from "./RulesButton.module.css";
 import React from "react";
 
-interface CustomButtonProps extends ButtonProps {
-  iconType?: "question";
-}
-
-const RulesButton: React.FC<CustomButtonProps> = ({ iconType, ...props }) => {
+const RulesButton: React.FC = ({ ...props }) => {
   return (
     <div className={styles.rulesButton}>
       <AntButton

@@ -1,7 +1,6 @@
 import { selectLanguage, setLanguage } from "@/lib/features/lobby";
 import { LANGUAGES } from "@/lib/features/lobby/languages.types";
 import { Form, Select } from "antd";
-import { span } from "framer-motion/client";
 import { useDispatch, useSelector } from "react-redux";
 
 const LanguageConfiguration: React.FC = () => {
