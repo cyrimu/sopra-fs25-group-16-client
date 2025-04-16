@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Game, TURN_ORDER } from "./game.types";
+import { Game } from "./game.types";
 import { Card } from "./card.types";
-import { Player } from "../player/player.types";
-import { TEAM_COLOR } from "../lobby/team.types";
+import { PLAYER_ROLES } from "../player/player.types";
+import { TEAM_COLOR } from "../game/team.types";
 import { createGame, getGame } from "./api";
 
 interface GameState {
@@ -28,7 +28,7 @@ const gameSlice = createSlice({
       state.game = game;
     },
     // Insert a new player into the state
-    setTurn(state, action: PayloadAction<TURN_ORDER>) {
+    setTurn(state, action: PayloadAction<PLAYER_ROLES>) {
       if (state.game) state.game.turn = action.payload;
     },
     // Set the remaining guesses
@@ -39,25 +39,20 @@ const gameSlice = createSlice({
     setWinner(state, action: PayloadAction<TEAM_COLOR>) {
       if (state.game) state.game.winner = action.payload;
     },
-    // Set the MVP
-    setMvp(state, action: PayloadAction<Player>) {
-      if (state.game) state.game.mvp = action.payload;
-    },
     // Update an existing card in the state
     setRevealedCard(state, action: PayloadAction<Card>) {
       const { id } = action.payload;
       if (state.game)
-        state.game.board.cards = state.game.board.cards.map((e) =>
+        state.game.cards = state.game.cards.map((e) =>
           e.id === id ? { ...e, isRevealed: true } : e
         );
     },
-    setSelectedCard(state, action: PayloadAction<Card>) {
-      const { id } = action.payload;
+    // Update the selected card state
+    setSelectedCard(state, action: PayloadAction<number>) {
+      const id = action.payload;
       if (state.game) {
-        const isSelected = state.game.board.cards.some((c) => c.id === id);
-
-        state.game.board.cards = state.game.board.cards.map((e) =>
-          e.id === id ? { ...e, isSelected: !isSelected } : e
+        state.game.cards = state.game.cards.map((e) =>
+          e.id === id ? { ...e, isSelected: !e.isSelected } : e
         );
       }
     },
@@ -74,11 +69,10 @@ const gameSlice = createSlice({
     selectLanguage: (state) => state.game?.language,
     selectTurn: (state) => state.game?.turn,
     selectWinner: (state) => state.game?.winner,
-    selectMvp: (state) => state.game?.mvp,
     selectLog: (state) => state.game?.log,
-    selectCards: (state) => state.game?.board.cards,
+    selectCards: (state) => state.game?.cards,
     selectSelectedCards: (state) =>
-      state.game?.board.cards.filter(({ isSelected }) => isSelected),
+      state.game?.cards.filter(({ isSelected }) => isSelected),
   },
   extraReducers(builder) {
     builder
@@ -87,7 +81,11 @@ const gameSlice = createSlice({
       })
       .addCase(createGame.fulfilled, (state, action: PayloadAction<Game>) => {
         state.status = "succeeded";
-        state.game = action.payload;
+        const game = action.payload;
+        state.game = {
+          ...game,
+          cards: game.cards.map((e, i) => ({ ...e, id: i, isSelected: false })),
+        };
       })
       .addCase(createGame.rejected, (state, action) => {
         state.status = "failed";
@@ -112,6 +110,7 @@ export const { setRevealedCard, setSelectedCard } = gameSlice.actions;
 
 export const {
   selectGameId,
+  selectTurn,
   selectGameStatus,
   selectCards,
   selectSelectedCards,
