@@ -32,23 +32,23 @@ const GameTypeConfiguration: React.FC = () => {
           style={{ width: "100%" }}
         >
           <Radio.Button
-            value={GAME_TYPE.text}
+            value={GAME_TYPE.TEXT}
             style={{
               width: "50%",
-              color: gameType === GAME_TYPE.text ? "black" : "white",
+              color: gameType === GAME_TYPE.TEXT ? "black" : "white",
               backgroundColor:
-                gameType === GAME_TYPE.text ? "white" : "#2f2f2f",
+                gameType === GAME_TYPE.TEXT ? "white" : "#2f2f2f",
             }}
           >
             Word
           </Radio.Button>
           <Radio.Button
-            value={GAME_TYPE.image}
+            value={GAME_TYPE.PICTURE}
             style={{
               width: "50%",
-              color: gameType === GAME_TYPE.image ? "black" : "white",
+              color: gameType === GAME_TYPE.PICTURE ? "black" : "white",
               backgroundColor:
-                gameType === GAME_TYPE.image ? "white" : "#2f2f2f",
+                gameType === GAME_TYPE.PICTURE ? "white" : "#2f2f2f",
             }}
           >
             Picture
