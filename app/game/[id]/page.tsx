@@ -9,13 +9,14 @@ import Board from "@/components/Board";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
-import { selectPlayers } from "@/lib/features/lobby";
+import { selectPlayers } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
 } from "@/lib/features/player/player.types";
 import { selectGameId, selectTurn } from "@/lib/features/game";
 import HintForm from "@/components/ClueForm";
+import SkipGuess from "@/components/buttons/SkipGuess";
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -75,19 +76,19 @@ export default function Game() {
   );
 
   function ActionElement() {
-    const color = playerRoleToTeamColor(role!);
+    const color = playerRoleToTeamColor(turn!);
 
-    if (turn !== role) {
+    if (color != team) {
       return waitNextTurn;
     } else if (color === team && role !== turn) {
       if (
-        role === PLAYER_ROLES.RED_OPERATIVE ||
-        role === PLAYER_ROLES.BLUE_OPERATIVE
+        role == PLAYER_ROLES.RED_OPERATIVE ||
+        role == PLAYER_ROLES.BLUE_OPERATIVE
       ) {
         return waitClue;
       } else if (
-        role === PLAYER_ROLES.RED_SPYMASTER ||
-        role === PLAYER_ROLES.BLUE_SPYMASTER
+        role == PLAYER_ROLES.RED_SPYMASTER ||
+        role == PLAYER_ROLES.BLUE_SPYMASTER
       ) {
         return waitGuess;
       }
@@ -96,7 +97,11 @@ export default function Game() {
     switch (role) {
       case PLAYER_ROLES.BLUE_OPERATIVE:
       case PLAYER_ROLES.RED_OPERATIVE:
-        return <MakeGuess />;
+        return (
+          <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
+            <MakeGuess /> <SkipGuess />
+          </div>
+        );
       case PLAYER_ROLES.BLUE_SPYMASTER:
       case PLAYER_ROLES.RED_SPYMASTER:
         return <HintForm />;
