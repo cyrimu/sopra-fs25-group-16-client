@@ -1,5 +1,5 @@
 import styles from "./Board.module.css";
-import GameCard from "./GameCard";
+import GameCard from "./gameCard";
 import { useSelector } from "react-redux";
 import { selectCards } from "@/lib/features/game";
 
