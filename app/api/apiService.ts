@@ -90,7 +90,8 @@ export class ApiService {
    */
   public async postForm<T>(
     endpoint: string,
-    data: Record<string, never>
+    // deno-lint-ignore no-explicit-any
+    data: Record<string, any>
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
 
