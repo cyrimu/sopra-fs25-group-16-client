@@ -1,3 +1,4 @@
+import process from "node:process";
 export class ApiService {
   private baseURL: string;
   private defaultHeaders: HeadersInit;
@@ -89,7 +90,7 @@ export class ApiService {
    */
   public async postForm<T>(
     endpoint: string,
-    data: Record<string, any>
+    data: Record<string, never>
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
 
