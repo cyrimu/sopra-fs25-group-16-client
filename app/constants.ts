@@ -8,5 +8,5 @@ export const RED_CARDS = 8;
 export const BLACK_CARDS = 1;
 // Default values
 export const DEFAULT_LANGUAGE = LANGUAGES.english;
-export const DEFAULT_GAME_TYPE = GAME_TYPE.text;
+export const DEFAULT_GAME_TYPE = GAME_TYPE.TEXT;
 export const DEFAULT_STARTING_TURN = TURN_ORDER.BLUE_OPERATIVE;

@@ -1,6 +1,6 @@
 "use client";
 
-import ResultsTable from "@/components/ResultsTable";
+import ResultsTable from "@/components/resultsTable";
 import styles from "@/styles/page.module.css";
 
 export default function Lobby() {

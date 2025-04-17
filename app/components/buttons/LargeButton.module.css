@@ -1,7 +1,7 @@
 .landingButton {
   display: flex;
   justify-content: center;
-  align-items: end;
+  align-items: flex-end;
   flex: 1;
   height: 200px;
   background: rgba(217, 217, 217, 0.5);

@@ -19,7 +19,7 @@ const PlayerTable: React.FC = () => {
           fontSize: "20px",
         }}
       >
-        Mode: {gameType === GAME_TYPE.text ? "Word" : "Picture"}
+        Mode: {gameType === GAME_TYPE.TEXT ? "Word" : "Picture"}
       </div>
       <br />
       <table className={styles.tableField}>

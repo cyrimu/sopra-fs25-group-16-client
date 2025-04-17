@@ -21,7 +21,7 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const playerName = useSelector(selectPlayerName);
   const players = useSelector(selectPlayers);
 
-  const { role } = players?.find((e) => e.playerName === playerName)!;
+  const role = players?.find((e) => e.playerName === playerName)?.role;
 
   const animation = useMemo(
     () => ({ rotateY: isRevealed ? 180 : 0 }),

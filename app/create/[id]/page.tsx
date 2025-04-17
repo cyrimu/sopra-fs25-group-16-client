@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 export default function Create() {
   const router = useRouter();
   const id = useSelector(selectLobbyId);
-  const url = `${window.location.origin}/join/${id}`;
+  const url = `${globalThis.location.origin}/join/${id}`;
 
   function handleOpenLobby() {
     router.push(`/lobby/${id}`);
