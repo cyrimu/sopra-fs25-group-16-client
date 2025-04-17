@@ -4,7 +4,7 @@ import LogButton from "@/components/buttons/LogButton";
 import MakeGuess from "@/components/buttons/MakeGuess";
 import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
-import LogDialog from "@/components/LogDialog";
+import LogDialog from "@/components/logDialog";
 import Board from "@/components/Board";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
