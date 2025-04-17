@@ -13,7 +13,6 @@ const ResultsTable: React.FC = () => { //temp data until web socket connection
     
     const router = useRouter();
     const isHost = true;
-    const gameId = "abc123";
     const lobbyId = "abc123";
 
     const players: PlayerData[] = [
