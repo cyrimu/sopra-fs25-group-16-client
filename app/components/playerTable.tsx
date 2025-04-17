@@ -19,7 +19,7 @@ const PlayerTable: React.FC = () => {
           fontSize: "20px",
         }}
       >
-        Mode: {gameType === GAME_TYPE.text ? "Word" : "Picture"}
+        Mode: {gameType === GAME_TYPE.TEXT ? "Word" : "Picture"}
       </div>
       <br />
       <table className={styles.tableField}>
@@ -31,26 +31,28 @@ const PlayerTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {players?.map(({ playerName, team, role }, index) => {
-            const roleString = role?.split("_")[1];
-            return (
-              <tr key={index}>
-                <td>{playerName}</td>
-                <td>
-                  {`${team?.toString()[0]}${team
-                    ?.toString()
-                    .substring(1)
-                    .toLowerCase()}`}
-                </td>
-                <td>
-                  {`${roleString?.toString()[0]}${roleString
-                    ?.toString()
-                    .substring(1)
-                    .toLowerCase()}`}
-                </td>
-              </tr>
-            );
-          })}
+          {players
+            ?.filter((p) => p)
+            ?.map(({ playerName, team, role }, index) => {
+              const roleString = role?.split("_")[1];
+              return (
+                <tr key={index}>
+                  <td>{playerName}</td>
+                  <td>
+                    {`${team?.toString()[0]}${team
+                      ?.toString()
+                      .substring(1)
+                      .toLowerCase()}`}
+                  </td>
+                  <td>
+                    {`${roleString?.toString()[0]}${roleString
+                      ?.toString()
+                      .substring(1)
+                      .toLowerCase()}`}
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </>
