@@ -13,6 +13,8 @@ export default function Lobby() {
 
     return (
         <div className={styles.centered}>
+
+
             {team === "blue" && <div className={styles.blueOverlay}></div>}
             {team === "red" && <div className={styles.redOverlay}></div>}
 
