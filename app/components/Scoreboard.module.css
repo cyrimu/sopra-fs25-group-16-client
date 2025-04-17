@@ -41,6 +41,13 @@
   color: #000;
 }
 
+.scoreboardMyPlayer {
+  padding: 7px 10px;
+  background-color: yellow;
+  border-radius: 20px;
+  color: #000;
+}
+
 .scoreboardScore {
   color: #fff;
   font-family: "Gabarito";
