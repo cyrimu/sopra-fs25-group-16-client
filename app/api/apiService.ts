@@ -1,11 +1,10 @@
-import process from "node:process";
 export class ApiService {
-  private baseURL: string;
-  private defaultHeaders: HeadersInit;
+  private readonly baseURL: string;
+  private readonly defaultHeaders: HeadersInit;
 
   constructor() {
     this.baseURL =
-      process.env.NEXT_PUBLIC_PROD_API_URL ?? "http://localhost:8080";
+        process.env.NEXT_PUBLIC_PROD_API_URL ?? "http://localhost:8080";
     this.defaultHeaders = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -19,11 +18,11 @@ export class ApiService {
    * @param res - The response from fetch.
    * @param errorMessage - A descriptive error message for this call.
    * @returns Parsed JSON data.
-   * @throws ApplicationError if res.ok is false.
+   * @throws ApplicationError if res.Ok is false.
    */
   private async processResponse<T>(
-    res: Response,
-    errorMessage: string
+      res: Response,
+      errorMessage: string
   ): Promise<T> {
     if (!res.ok) {
       let errorDetail = res.statusText;
@@ -38,12 +37,11 @@ export class ApiService {
         // If parsing fails, keep using res.statusText
       }
       const detailedMessage = `${errorMessage} (${res.status}: ${errorDetail})`;
-      const error = new Error(detailedMessage);
-      throw error;
+      throw new Error(detailedMessage);
     }
     return res.headers.get("Content-Type")?.includes("application/json")
-      ? (res.json() as Promise<T>)
-      : Promise.resolve(res as T);
+        ? (await res.json() as Promise<T>)
+        : Promise.resolve(res as T);
   }
 
   /**
@@ -58,8 +56,8 @@ export class ApiService {
       headers: this.defaultHeaders,
     });
     return this.processResponse<T>(
-      res,
-      "An error occurred while fetching the data.\n"
+        res,
+        "An error occurred while fetching the data.\n"
     );
   }
 
@@ -77,8 +75,8 @@ export class ApiService {
       body: JSON.stringify(data),
     });
     return this.processResponse<T>(
-      res,
-      "An error occurred while posting the data.\n"
+        res,
+        "An error occurred while posting the data.\n"
     );
   }
 
@@ -89,9 +87,8 @@ export class ApiService {
    * @returns JSON data of type T.
    */
   public async postForm<T>(
-    endpoint: string,
-    // deno-lint-ignore no-explicit-any
-    data: Record<string, any>
+      endpoint: string,
+      data: Record<string, string>
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
 
@@ -110,8 +107,8 @@ export class ApiService {
       body: formBody.toString(),
     });
     return this.processResponse<T>(
-      res,
-      "An error occurred while posting the data.\n"
+        res,
+        "An error occurred while posting the data.\n"
     );
   }
 
@@ -129,8 +126,8 @@ export class ApiService {
       body: JSON.stringify(data),
     });
     return this.processResponse<T>(
-      res,
-      "An error occurred while updating the data.\n"
+        res,
+        "An error occurred while updating the data.\n"
     );
   }
 
@@ -139,17 +136,19 @@ export class ApiService {
    * @param endpoint - The API endpoint (e.g. "/users/123").
    * @returns JSON data of type T.
    */
-  public async delete<T>(endpoint: string): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    const res = await fetch(url, {
-      method: "DELETE",
-      headers: this.defaultHeaders,
-    });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while deleting the data.\n"
-    );
-  }
+  /*
+      public async delete<T>(endpoint: string): Promise<T> {
+          const url = `${this.baseURL}${endpoint}`;
+          const res = await fetch(url, {
+            method: "DELETE",
+            headers: this.defaultHeaders,
+          });
+          return this.processResponse<T>(
+            res,
+            "An error occurred while deleting the data.\n"
+          );
+      */
+
 }
 
 export const apiService = new ApiService();

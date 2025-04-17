@@ -92,6 +92,7 @@ const lobbySlice = createSlice({
        // deno-lint-ignore no-unused-vars
        state
      ) => {
+       // eslint-disable-next-line @typescript-eslint/no-unused-vars
        state = initialState;
      })
       .addCase(leaveLobby.rejected, (state, action) => {
