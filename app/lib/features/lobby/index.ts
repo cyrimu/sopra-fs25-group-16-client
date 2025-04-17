@@ -62,9 +62,8 @@ const lobbySlice = createSlice({
         state.status = "pending";
       })
       .addCase(createLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
-        const lobby = action.payload;
         state.status = "succeeded";
-        state.lobby = { ...lobby, players: lobby.players.filter((p) => p) };
+        state.lobby = action.payload;
       })
       .addCase(createLobby.rejected, (state, action) => {
         state.status = "failed";
@@ -75,9 +74,8 @@ const lobbySlice = createSlice({
         state.status = "pending";
       })
       .addCase(joinLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
-        const lobby = action.payload;
         state.status = "succeeded";
-        state.lobby = { ...lobby, players: lobby.players.filter((p) => p) };
+        state.lobby = action.payload;
       })
       .addCase(joinLobby.rejected, (state, action) => {
         state.status = "failed";
