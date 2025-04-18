@@ -51,5 +51,6 @@ export const isSocketAction = (action: unknown): action is SocketActions => {
     "socket/disconnect",
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return socketActionTypes.includes((action as any).type);
 };

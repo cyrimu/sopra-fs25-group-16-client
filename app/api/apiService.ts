@@ -92,6 +92,7 @@ export class ApiService {
    */
   public async postForm<T>(
     endpoint: string,
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     data: Record<string, any>
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
