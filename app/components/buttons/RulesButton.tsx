@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button as AntButton, ButtonProps } from "antd";
-import RulesModal from "../rulesModal";
+import RulesModal from "../RulesModal";
 import styles from "./RulesButton.module.css";
 
 const RulesButton: React.FC<ButtonProps> = ({ ...props }) => {
