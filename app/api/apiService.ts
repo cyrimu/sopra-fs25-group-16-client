@@ -1,10 +1,13 @@
-class ApiService {
+import { getApiDomain } from "../../utils/domain";
+
+export class ApiService {
   private baseURL: string;
   private defaultHeaders: HeadersInit;
 
   constructor() {
-    this.baseURL =
-      process.env.NEXT_PUBLIC_PROD_API_URL ?? "http://localhost:8080";
+    this.baseURL = getApiDomain();
+    console.log(this.baseURL);
+
     this.defaultHeaders = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -149,5 +152,3 @@ class ApiService {
     );
   }
 }
-
-export const apiService = new ApiService();
