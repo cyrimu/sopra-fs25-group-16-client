@@ -86,10 +86,16 @@ const lobbySlice = createSlice({
       .addCase(leaveLobby.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(leaveLobby.fulfilled, (state) => {
-        state = initialState;
-        state.status = "idle";
-      })
+      .addCase(
+        leaveLobby.fulfilled,
+        (
+          // deno-lint-ignore no-unused-vars
+          state
+        ) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          state = initialState;
+        }
+      )
       .addCase(leaveLobby.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Unknown Error";

@@ -9,8 +9,16 @@ interface PlayerData {
   points: number;
 }
 
+<<<<<<< HEAD
 const ResultsTable: React.FC = () => {
   //temp data until web socket connection
+=======
+const ResultsTable: React.FC = () => { //temp data until web socket connection
+    
+    const router = useRouter();
+    const isHost = true;
+    const lobbyId = "abc123";
+>>>>>>> ad49f85ac0d77823159c81ce15eeb0e8ce198ee7
 
   const router = useRouter();
   const isHost = true;

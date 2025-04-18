@@ -20,3 +20,8 @@ export enum GAME_TYPE {
   TEXT = "TEXT",
   PICTURE = "PICTURE",
 }
+
+export enum TURN_ORDER {
+  BLUE_OPERATIVE = "BLUE_OPERATIVE",
+  RED_OPERATIVE = "RED_OPERATIVE",
+}
