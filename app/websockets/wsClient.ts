@@ -2,12 +2,17 @@ import SockJS from "sockjs-client";
 import { Client, IMessage } from "@stomp/stompjs";
 import { Middleware } from "@reduxjs/toolkit";
 import { setGame } from "@/lib/features/game";
+import { isSocketAction } from "./wsActions";
 
 export const createSocketMiddleware = (): Middleware => {
   let client: Client | null = null;
   let gameID: string;
 
-  return (storeAPI) => (next) => (action: any) => {
+  return (storeAPI) => (next) => (action) => {
+    if (!isSocketAction(action)) {
+      return next(action); // Skip unhandled actions
+    }
+
     switch (action.type) {
       case "socket/connect":
         if (client) return next(action);
