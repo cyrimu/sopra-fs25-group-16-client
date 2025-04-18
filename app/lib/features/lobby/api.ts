@@ -1,6 +1,8 @@
-import { apiService } from "@/api/apiService";
+import { ApiService } from "@/api/apiService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Lobby } from "./lobby.types";
+
+const apiService = new ApiService();
 
 export const createLobby = createAsyncThunk(
   "lobby/createLobby",

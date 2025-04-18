@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+import { getApiDomain } from "../../utils/domain";
+
+export class ApiService {
+  private baseURL: string;
+  private defaultHeaders: HeadersInit;
+
+  constructor() {
+    this.baseURL = getApiDomain();
+    console.log(this.baseURL);
+
+=======
 export class ApiService {
   private readonly baseURL: string;
   private readonly defaultHeaders: HeadersInit;
@@ -5,6 +17,7 @@ export class ApiService {
   constructor() {
     this.baseURL =
         process.env.NEXT_PUBLIC_PROD_API_URL ?? "http://localhost:8080";
+>>>>>>> ad49f85ac0d77823159c81ce15eeb0e8ce198ee7
     this.defaultHeaders = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -87,8 +100,14 @@ export class ApiService {
    * @returns JSON data of type T.
    */
   public async postForm<T>(
+<<<<<<< HEAD
+    endpoint: string,
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    data: Record<string, any>
+=======
       endpoint: string,
       data: Record<string, string>
+>>>>>>> ad49f85ac0d77823159c81ce15eeb0e8ce198ee7
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
 
@@ -150,5 +169,3 @@ export class ApiService {
       */
 
 }
-
-export const apiService = new ApiService();

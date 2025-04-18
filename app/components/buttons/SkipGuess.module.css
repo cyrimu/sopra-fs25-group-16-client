@@ -1,0 +1,9 @@
+.skipGuessButton {
+  padding: 12px 18px;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50px;
+  font-family: "Gabarito";
+  background-color: #000;
+  cursor: pointer;
+}

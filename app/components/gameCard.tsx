@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { selectPlayerName } from "@/lib/features/player";
-import { selectPlayers } from "@/lib/features/lobby";
+import { selectPlayers } from "@/lib/features/game";
 import { setSelectedCard } from "@/lib/features/game";
 
 interface GameCardProps {
@@ -30,8 +30,9 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
 
   function determineBackgroundImage(): CARD_COLOR {
     if (
-      role === PLAYER_ROLES.BLUE_OPERATIVE ||
-      (role === PLAYER_ROLES.RED_OPERATIVE && !isRevealed)
+      (role === PLAYER_ROLES.BLUE_OPERATIVE ||
+        role === PLAYER_ROLES.RED_OPERATIVE) &&
+      !isRevealed
     ) {
       // The only case where the card will be forced to grey
       return CARD_COLOR.WHITE;

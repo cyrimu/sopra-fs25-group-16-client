@@ -1,13 +1,20 @@
 import { CARD_COLOR } from "@/lib/features/game/card.types";
 import styles from "./Scoreboard.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCards } from "@/lib/features/game";
-import { selectPlayers } from "@/lib/features/lobby";
+import { selectPlayers } from "@/lib/features/game";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
+import { selectPlayerName, setPlayerName } from "@/lib/features/player";
+import { isProduction } from "../../utils/environment";
 
 const Scoreboard: React.FC = () => {
+  const dispatch = useDispatch();
+
   const cards = useSelector(selectCards);
   const players = useSelector(selectPlayers);
+  const playerName = useSelector(selectPlayerName);
+
+  const production = isProduction();
 
   function calculateTeamCardsLeft(cardColor: CARD_COLOR) {
     // Number of cards for each team still to reveal
@@ -30,6 +37,11 @@ const Scoreboard: React.FC = () => {
     (e) => e.role === PLAYER_ROLES.RED_SPYMASTER
   );
 
+  function changeTeam(playerName: string | undefined) {
+    if (!playerName) return;
+    dispatch(setPlayerName(playerName));
+  }
+
   return (
     <div className={styles.scoreboardWrapper}>
       <div
@@ -40,15 +52,37 @@ const Scoreboard: React.FC = () => {
           <div className={styles.scoreboardTeamContainer}>
             <span>Operative</span>
             <div className={styles.scoreboardPlayersContainer}>
-              <div className={styles.scoreboardPlayer}>
+              <div
+                className={
+                  redOperative?.playerName === playerName
+                    ? styles.scoreboardMyPlayer
+                    : styles.scoreboardPlayer
+                }
+              >
                 {redOperative?.playerName ?? "Empty"}
               </div>
+              {!production && (
+                <button onClick={() => changeTeam(redOperative?.playerName)}>
+                  Join Team
+                </button>
+              )}
             </div>
             <span>Spymaster</span>
             <div className={styles.scoreboardPlayersContainer}>
-              <div className={styles.scoreboardPlayer}>
+              <div
+                className={
+                  redSpymaster?.playerName === playerName
+                    ? styles.scoreboardMyPlayer
+                    : styles.scoreboardPlayer
+                }
+              >
                 {redSpymaster?.playerName ?? "Empty"}
               </div>
+              {!production && (
+                <button onClick={() => changeTeam(redSpymaster?.playerName)}>
+                  Join Team
+                </button>
+              )}
             </div>
           </div>
           <span className={styles.scoreboardScore}>{redCardsNumber}</span>
@@ -66,15 +100,37 @@ const Scoreboard: React.FC = () => {
           <div className={styles.scoreboardTeamContainer}>
             <span>Operative</span>
             <div className={styles.scoreboardPlayersContainer}>
-              <div className={styles.scoreboardPlayer}>
+              <div
+                className={
+                  blueOperative?.playerName === playerName
+                    ? styles.scoreboardMyPlayer
+                    : styles.scoreboardPlayer
+                }
+              >
                 {blueOperative?.playerName ?? "Empty"}
               </div>
+              {!production && (
+                <button onClick={() => changeTeam(blueOperative?.playerName)}>
+                  Join Team
+                </button>
+              )}
             </div>
             <span>Spymaster</span>
             <div className={styles.scoreboardPlayersContainer}>
-              <div className={styles.scoreboardPlayer}>
+              <div
+                className={
+                  blueSpymaster?.playerName === playerName
+                    ? styles.scoreboardMyPlayer
+                    : styles.scoreboardPlayer
+                }
+              >
                 {blueSpymaster?.playerName ?? "Empty"}
               </div>
+              {!production && (
+                <button onClick={() => changeTeam(blueSpymaster?.playerName)}>
+                  Join Team
+                </button>
+              )}
             </div>
           </div>
         </div>

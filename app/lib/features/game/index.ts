@@ -25,7 +25,10 @@ const gameSlice = createSlice({
     // Set a game
     setGame(state, action: PayloadAction<Game>) {
       const game = action.payload;
-      state.game = game;
+      state.game = {
+        ...game,
+        cards: game.cards.map((e, i) => ({ ...e, id: i, isSelected: false })),
+      };
     },
     // Insert a new player into the state
     setTurn(state, action: PayloadAction<PLAYER_ROLES>) {
@@ -62,6 +65,7 @@ const gameSlice = createSlice({
     },
   },
   selectors: {
+    selectLogs: (state) => state.game?.log,
     selectGameId: (state) => state.game?.gameID,
     selectGameStatus: (state) => state.status,
     selectPlayers: (state) => state.game?.players,
@@ -82,6 +86,7 @@ const gameSlice = createSlice({
       .addCase(createGame.fulfilled, (state, action: PayloadAction<Game>) => {
         state.status = "succeeded";
         const game = action.payload;
+
         state.game = {
           ...game,
           cards: game.cards.map((e, i) => ({ ...e, id: i, isSelected: false })),
@@ -106,14 +111,16 @@ const gameSlice = createSlice({
   },
 });
 
-export const { setRevealedCard, setSelectedCard } = gameSlice.actions;
+export const { setRevealedCard, setSelectedCard, setGame } = gameSlice.actions;
 
 export const {
   selectGameId,
+  selectLogs,
   selectTurn,
   selectGameStatus,
   selectCards,
   selectSelectedCards,
+  selectPlayers,
 } = gameSlice.selectors;
 
 export default gameSlice.reducer;

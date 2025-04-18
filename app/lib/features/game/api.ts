@@ -1,15 +1,48 @@
-import { apiService } from "@/api/apiService";
+import { ApiService } from "@/api/apiService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Game } from "./game.types";
 import { Lobby } from "../lobby/lobby.types";
+import { TEAM_COLOR } from "./team.types";
+import { PLAYER_ROLES } from "../player/player.types";
+import { isProduction } from "../../../../utils/environment";
+
+const apiService = new ApiService();
+
+const production = isProduction();
 
 export const createGame = createAsyncThunk(
   "game/createGame",
   async ({ lobby, username }: { lobby: Lobby; username: string }) => {
-    console.log(lobby);
-    const response = await apiService.post<Game>(`/game?username=${username}`, {
-      lobby,
-    });
+    const updatedLobby: Lobby = {
+      ...lobby,
+      players: [
+        {
+          role: PLAYER_ROLES.BLUE_SPYMASTER,
+          playerName: username,
+          team: TEAM_COLOR.BLUE,
+        },
+        {
+          role: PLAYER_ROLES.RED_SPYMASTER,
+          playerName: "Laura",
+          team: TEAM_COLOR.RED,
+        },
+        {
+          role: PLAYER_ROLES.RED_OPERATIVE,
+          playerName: "Marta",
+          team: TEAM_COLOR.RED,
+        },
+        {
+          role: PLAYER_ROLES.BLUE_OPERATIVE,
+          playerName: "Emma",
+          team: TEAM_COLOR.BLUE,
+        },
+      ],
+    };
+
+    const response = await apiService.post<Game>(
+      `/game?username=${username}`,
+      production ? lobby : updatedLobby
+    );
     return response;
   }
 );

@@ -1,3 +1,4 @@
+import { createSocketMiddleware } from "@/websockets/wsClient";
 import { configureStore } from "@reduxjs/toolkit";
 import player from "./features/player/index";
 import lobby from "./features/lobby/index";
@@ -10,6 +11,7 @@ export const makeStore = () => {
       lobby,
       game,
     },
+    middleware: (gDM) => gDM().concat(createSocketMiddleware()),
   });
 };
 
