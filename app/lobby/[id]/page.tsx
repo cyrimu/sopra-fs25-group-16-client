@@ -12,7 +12,7 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
-import GetReady from "@/components/getReady";
+import GetReady from "@/components/GetReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
