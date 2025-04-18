@@ -21,6 +21,7 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const playerName = useSelector(selectPlayerName);
   const players = useSelector(selectPlayers);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const { role } = players?.find((e) => e.playerName === playerName)!;
 
   const animation = useMemo(
