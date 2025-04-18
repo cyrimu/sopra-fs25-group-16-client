@@ -13,7 +13,7 @@ const ConfigurationPanel: React.FC = () => {
   return (
     <Form layout="vertical">
       <GameTypeConfiguration />
-      {gameType === GAME_TYPE.text && <LanguageConfiguration />}
+      {gameType === GAME_TYPE.TEXT && <LanguageConfiguration />}
       <TeamsConfiguration />
     </Form>
   );
