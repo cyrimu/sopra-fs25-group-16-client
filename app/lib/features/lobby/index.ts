@@ -88,6 +88,7 @@ const lobbySlice = createSlice({
       })
       .addCase(leaveLobby.fulfilled, (state) => {
         state = initialState;
+        state.status = "idle";
       })
       .addCase(leaveLobby.rejected, (state, action) => {
         state.status = "failed";
