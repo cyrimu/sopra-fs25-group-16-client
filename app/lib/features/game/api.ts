@@ -6,8 +6,6 @@ import { TEAM_COLOR } from "./team.types";
 import { PLAYER_ROLES } from "../player/player.types";
 import { isProduction } from "../../../../utils/environment";
 
-const apiService = new ApiService();
-
 const production = isProduction();
 
 export const createGame = createAsyncThunk(
@@ -39,6 +37,8 @@ export const createGame = createAsyncThunk(
       ],
     };
 
+    const apiService = new ApiService();
+
     const response = await apiService.post<Game>(
       `/game?username=${username}`,
       production ? lobby : updatedLobby
@@ -50,6 +50,8 @@ export const createGame = createAsyncThunk(
 export const getGame = createAsyncThunk(
   "game/getGame",
   async ({ gameId, username }: { gameId: string; username: string }) => {
+    const apiService = new ApiService();
+
     const response = await apiService.get<Game>(
       `/game/${gameId}?username=${username}`
     );
