@@ -9,7 +9,7 @@ import Board from "@/components/Board";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
-import { selectPlayers } from "@/lib/features/game";
+import { selectPlayers, selectWinner } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
@@ -17,11 +17,15 @@ import {
 import { selectGameId, selectTurn } from "@/lib/features/game";
 import HintForm from "@/components/ClueForm";
 import SkipGuess from "@/components/buttons/SkipGuess";
+import { useRouter } from "next/navigation";
 
 export default function Game() {
   const dispatch = useDispatch();
 
+  const router = useRouter();
+
   const gameID = useSelector(selectGameId);
+  const winner = useSelector(selectWinner);
 
   const [isLog, setIsLog] = useState(false);
   const playerName = useSelector(selectPlayerName);
@@ -31,6 +35,12 @@ export default function Game() {
   const player = players?.find((e) => e.playerName === playerName);
   const role = player!.role;
   const team = player!.team;
+
+  useEffect(() => {
+    if (winner) {
+      router.push("/results/winner");
+    }
+  }, [turn]);
 
   useEffect(() => {
     dispatch({

@@ -115,6 +115,7 @@ export const { setRevealedCard, setSelectedCard, setGame } = gameSlice.actions;
 
 export const {
   selectGameId,
+  selectWinner,
   selectLogs,
   selectTurn,
   selectGameStatus,
