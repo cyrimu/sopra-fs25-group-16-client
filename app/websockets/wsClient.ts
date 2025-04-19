@@ -3,6 +3,7 @@ import { Client, IMessage } from "@stomp/stompjs";
 import { Middleware } from "@reduxjs/toolkit";
 import { setGame } from "@/lib/features/game";
 import { isSocketAction } from "./wsActions";
+import { getApiDomain } from "../../utils/domain";
 
 export const createSocketMiddleware = (): Middleware => {
   let client: Client | null = null;
@@ -17,8 +18,7 @@ export const createSocketMiddleware = (): Middleware => {
       case "socket/connect":
         if (client) return next(action);
 
-        const url =
-          process.env.NEXT_PUBLIC_PROD_API_URL ?? "http://localhost:8080";
+        const url = getApiDomain();
 
         const socket = new SockJS(`${url}/live`);
 
