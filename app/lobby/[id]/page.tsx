@@ -10,7 +10,7 @@ import {
 } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
-import { Modal, Popconfirm } from "antd";
+import { Modal, Popconfirm, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import GetReady from "@/components/getReady";
 import PlayerTable from "@/components/playerTable";
@@ -162,7 +162,15 @@ export default function Lobby() {
                 onClick={handleStartGame}
                 disabled={nonNullPlayers !== 4}
             >
-              Start Game
+              <Tooltip
+                  title={
+                    nonNullPlayers !== 4
+                        ? "You need exactly 4 players to start the game"
+                        : ""
+                  }
+              >
+                Start Game
+              </Tooltip>
             </button>
             <Popconfirm
               title={
