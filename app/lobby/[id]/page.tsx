@@ -16,7 +16,7 @@ import GetReady from "@/components/GetReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
-import { leaveLobby, updateLobby } from "@/lib/features/lobby/api";
+import { getLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { selectGameId, selectGameStatus } from "@/lib/features/game";
 
@@ -66,6 +66,25 @@ export default function Lobby() {
       dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
     }
   }
+
+  useEffect(() => {
+    if (lobbyStatus === "succeeded" && !isHost) {
+      setInterval(() => {
+        if (playerName && lobbyId) {
+          dispatch(getLobby({ lobbyId: lobbyId, username: playerName }));
+        }
+      }, 1000);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (lobbyStatus === "succeeded" && gameId) {
+      setGameStarting(true);
+      setTimeout(() => {
+        router.push(`/game/${gameId}`);
+      }, 3000);
+    }
+  }, []);
 
   useEffect(() => {
     if (lobbyStatus === "idle") {
