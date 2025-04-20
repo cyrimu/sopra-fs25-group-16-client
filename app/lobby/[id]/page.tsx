@@ -10,9 +10,9 @@ import {
 } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
-import { Modal, Popconfirm } from "antd";
+import { Modal, Popconfirm, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import GetReady from "@/components/GetReady";
+import GetReady from "@/components/getReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
@@ -29,6 +29,7 @@ export default function Lobby() {
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
+  const nonNullPlayers = lobby?.players?.filter((player) => player !== null).length || 0;
 
   const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
@@ -45,6 +46,13 @@ export default function Lobby() {
       setConfigurationPanelOpen((state) => !state);
     }
   };
+
+  useEffect(() => {
+    if (lobby?.players) {
+      const nonNullPlayers = lobby.players.filter((player) => player !== null);
+      console.log("Non-null players:", nonNullPlayers.length);
+    }
+  }, [lobby]);
 
   const handleStartGame = () => {
     if (gameStatus === "idle" && lobby && playerName) {
@@ -75,7 +83,7 @@ export default function Lobby() {
         }
       }, 1000);
     }
-  }, []);
+  }, [dispatch, isHost, lobbyId, lobbyStatus, playerName]);
 
   useEffect(() => {
     if (lobbyStatus === "succeeded" && gameId) {
@@ -84,14 +92,14 @@ export default function Lobby() {
         router.push(`/game/${gameId}`);
       }, 3000);
     }
-  }, []);
+  }, [lobbyStatus, gameId, router]);
 
   useEffect(() => {
     if (lobbyStatus === "idle") {
       // After the lobby is removed go back
       router.back();
     }
-  }, [lobbyStatus]);
+  }, [lobbyStatus, router]);
 
   const confirmDeleteLobby = () => {
     router.replace("/create");
@@ -147,8 +155,22 @@ export default function Lobby() {
             >
               <ConfigurationPanel />
             </Modal>
-            <button className={styles.regularButton} onClick={handleStartGame}>
-              Start Game
+            <button
+                className={`${styles.regularButton} ${
+                    nonNullPlayers !== 4 ? styles.disabledButton : ""
+                }`}
+                onClick={handleStartGame}
+                disabled={nonNullPlayers !== 4}
+            >
+              <Tooltip
+                  title={
+                    nonNullPlayers !== 4
+                        ? "You need exactly 4 players to start the game"
+                        : ""
+                  }
+              >
+                Start Game
+              </Tooltip>
             </button>
             <Popconfirm
               title={

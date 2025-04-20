@@ -34,7 +34,7 @@ export default function Create() {
     if (lobbyStatus === "succeeded") {
       if (id) router.push(`/create/${id}`);
     }
-  }, [lobbyStatus]);
+  }, [id, lobbyStatus, router]);
 
   return (
     <div className={styles.centered}>

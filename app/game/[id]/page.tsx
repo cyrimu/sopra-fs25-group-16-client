@@ -40,14 +40,14 @@ export default function Game() {
     if (winner) {
       router.push("/results/winner");
     }
-  }, [turn]);
+  }, [router, turn, winner]);
 
   useEffect(() => {
     dispatch({
       type: "socket/connect",
       payload: { gameID: gameID },
     });
-  }, []);
+  }, [dispatch, gameID]);
 
   const waitNextTurn = (
     <span

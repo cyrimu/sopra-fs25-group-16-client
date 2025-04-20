@@ -8,6 +8,8 @@ import { useMemo } from "react";
 import { selectPlayerName } from "@/lib/features/player";
 import { selectPlayers } from "@/lib/features/game";
 import { setSelectedCard } from "@/lib/features/game";
+import Image from "next/image";
+
 
 interface GameCardProps {
   card: Card;
@@ -52,37 +54,39 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
     dispatch(setSelectedCard(card.id));
   }
 
-  if (type === GAME_TYPE.TEXT) {
+  if (type !== GAME_TYPE.TEXT) {
     return (
-      <motion.div
-        className={selected ? styles.cardSelected : styles.card}
-        style={
-          {
-            "--bg-image": `url("/${CARD_COLOR[
-              cardColor
-            ].toLowerCase()}_card.png")`,
-          } as React.CSSProperties
-        }
-        animate={animation}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-        onClick={handleSelectCard}
-      >
-        {!isRevealed && (
-          <div className={styles.cardTextContainer}>
-            <span>{content.toUpperCase()}</span>
-          </div>
-        )}
-      </motion.div>
+        <motion.div
+            className={styles.card}
+            animate={{rotateY: isRevealed ? 180 : 0}}
+            transition={{duration: 0.6, ease: "easeInOut"}}
+        >
+          <Image
+              src={"https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zebra_%2824694097565%29.jpg/1200px-Zebra_%2824694097565%29.jpg"}
+              alt=""/>
+        </motion.div>
     );
   } else {
     return (
-      <motion.div
-        className={styles.card}
-        animate={{ rotateY: isRevealed ? 180 : 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-      >
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zebra_%2824694097565%29.jpg/1200px-Zebra_%2824694097565%29.jpg" />
-      </motion.div>
+        <motion.div
+            className={selected ? styles.cardSelected : styles.card}
+            style={
+              {
+                "--bg-image": `url("/${CARD_COLOR[
+                    cardColor
+                    ].toLowerCase()}_card.png")`,
+              } as React.CSSProperties
+            }
+            animate={animation}
+            transition={{duration: 0.6, ease: "easeInOut"}}
+            onClick={handleSelectCard}
+        >
+          {!isRevealed && (
+              <div className={styles.cardTextContainer}>
+                <span>{content.toUpperCase()}</span>
+              </div>
+          )}
+        </motion.div>
     );
   }
 };
