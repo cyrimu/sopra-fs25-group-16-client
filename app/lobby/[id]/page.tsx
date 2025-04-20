@@ -83,7 +83,7 @@ export default function Lobby() {
         }
       }, 1000);
     }
-  }, []);
+  }, [dispatch, isHost, lobbyId, lobbyStatus, playerName]);
 
   useEffect(() => {
     if (lobbyStatus === "succeeded" && gameId) {
@@ -92,14 +92,14 @@ export default function Lobby() {
         router.push(`/game/${gameId}`);
       }, 3000);
     }
-  }, []);
+  }, [lobbyStatus, gameId, router]);
 
   useEffect(() => {
     if (lobbyStatus === "idle") {
       // After the lobby is removed go back
       router.back();
     }
-  }, [lobbyStatus]);
+  }, [lobbyStatus, router]);
 
   const confirmDeleteLobby = () => {
     router.replace("/create");
