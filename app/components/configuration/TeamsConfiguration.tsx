@@ -13,8 +13,7 @@ const TeamsConfiguration: React.FC = () => {
     teamColor: TEAM_COLOR,
     role: PLAYER_ROLES
   ): Player | undefined {
-    return players?.find((p) => p.role === role && p.team === teamColor);
-  }
+    return players?.find((p) => p && p.role === role && p.team === teamColor);  }
 
   return [
     [
@@ -49,27 +48,24 @@ const TeamsConfiguration: React.FC = () => {
                   splittedRole[1].substring(1).toLowerCase()}
               </label>
               <Select
-                value={value?.playerName}
-                onChange={(p) => {
-                  const newPlayer: Player = {
-                    playerName: p,
-                    role: role,
-                    team: teamColor,
-                  };
-                  dispatch(setPlayer(newPlayer));
-                }}
-                style={{ color: "white" }}
+                  value={value?.playerName}
+                  onChange={(p) => {
+                    const newPlayer: Player = {
+                      playerName: p,
+                      role: role,
+                      team: teamColor,
+                    };
+                    dispatch(setPlayer(newPlayer));
+                  }}
+                  style={{ color: "white" }}
               >
-                {players?.map((player) => {
-                  return (
-                    <Select.Option
-                      key={player.playerName}
-                      value={player.playerName}
-                    >
-                      {player.playerName}
-                    </Select.Option>
-                  );
-                })}
+                {players
+                    ?.filter((player) => player) // Filter out null or undefined players
+                    .map((player) => (
+                        <Select.Option key={player.playerName} value={player.playerName}>
+                          {player.playerName}
+                        </Select.Option>
+                    ))}
               </Select>
             </div>
           );
