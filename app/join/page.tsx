@@ -34,7 +34,7 @@ export default function Join() {
     if (lobbyStatus === "succeeded") {
       if (id) router.push(`/lobby/${id}`);
     }
-  }, [lobbyStatus]);
+  }, [id, lobbyStatus, router]);
 
   return (
     <div className={styles.centered}>
