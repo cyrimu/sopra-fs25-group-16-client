@@ -29,7 +29,7 @@ export default function Lobby() {
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
-  const numberOfPlayers = lobby?.players.length || 0;
+  const nonNullPlayers = lobby?.players?.filter((player) => player !== null).length || 0;
 
   const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
@@ -156,8 +156,11 @@ export default function Lobby() {
               <ConfigurationPanel />
             </Modal>
             <button
-                className={styles.regularButton}
+                className={`${styles.regularButton} ${
+                    nonNullPlayers !== 4 ? styles.disabledButton : ""
+                }`}
                 onClick={handleStartGame}
+                disabled={nonNullPlayers !== 4}
             >
               Start Game
             </button>
