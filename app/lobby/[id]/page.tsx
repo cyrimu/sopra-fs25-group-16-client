@@ -12,7 +12,7 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
-import GetReady from "@/components/GetReady";
+import GetReady from "@/components/getReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
@@ -29,6 +29,7 @@ export default function Lobby() {
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
+  const numberOfPlayers = lobby?.players.length || 0;
 
   const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
@@ -45,6 +46,13 @@ export default function Lobby() {
       setConfigurationPanelOpen((state) => !state);
     }
   };
+
+  useEffect(() => {
+    if (lobby?.players) {
+      const nonNullPlayers = lobby.players.filter((player) => player !== null);
+      console.log("Non-null players:", nonNullPlayers.length);
+    }
+  }, [lobby]);
 
   const handleStartGame = () => {
     if (gameStatus === "idle" && lobby && playerName) {
@@ -147,7 +155,10 @@ export default function Lobby() {
             >
               <ConfigurationPanel />
             </Modal>
-            <button className={styles.regularButton} onClick={handleStartGame}>
+            <button
+                className={styles.regularButton}
+                onClick={handleStartGame}
+            >
               Start Game
             </button>
             <Popconfirm
