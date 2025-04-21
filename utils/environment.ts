@@ -5,6 +5,5 @@
  * Returns true if the application is running in production.
  */
 export function isProduction(): boolean {
-  console.log(process.env.NODE_ENV);
   return process.env.NODE_ENV === "production";
 }
