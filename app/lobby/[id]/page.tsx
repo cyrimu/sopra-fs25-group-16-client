@@ -12,7 +12,7 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import GetReady from "@/components/getReady";
+import GetReady from "@/components/GetReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
@@ -29,7 +29,8 @@ export default function Lobby() {
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
-  const nonNullPlayers = lobby?.players?.filter((player) => player !== null).length || 0;
+  const nonNullPlayers =
+    lobby?.players?.filter((player) => player !== null).length || 0;
 
   const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
@@ -156,18 +157,18 @@ export default function Lobby() {
               <ConfigurationPanel />
             </Modal>
             <button
-                className={`${styles.regularButton} ${
-                    nonNullPlayers !== 4 ? styles.disabledButton : ""
-                }`}
-                onClick={handleStartGame}
-                disabled={nonNullPlayers !== 4}
+              className={`${styles.regularButton} ${
+                nonNullPlayers !== 4 ? styles.disabledButton : ""
+              }`}
+              onClick={handleStartGame}
+              disabled={nonNullPlayers !== 4}
             >
               <Tooltip
-                  title={
-                    nonNullPlayers !== 4
-                        ? "You need exactly 4 players to start the game"
-                        : ""
-                  }
+                title={
+                  nonNullPlayers !== 4
+                    ? "You need exactly 4 players to start the game"
+                    : ""
+                }
               >
                 Start Game
               </Tooltip>
