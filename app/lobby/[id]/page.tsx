@@ -19,6 +19,7 @@ import { AppDispatch } from "@/lib/store";
 import { getLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { selectGameId, selectGameStatus } from "@/lib/features/game";
+import { isProduction } from "../../../utils/environment";
 
 export default function Lobby() {
   const router = useRouter();
@@ -161,7 +162,7 @@ export default function Lobby() {
                 nonNullPlayers !== 4 ? styles.disabledButton : ""
               }`}
               onClick={handleStartGame}
-              disabled={nonNullPlayers !== 4}
+              disabled={isProduction() && nonNullPlayers !== 4}
             >
               <Tooltip
                 title={
