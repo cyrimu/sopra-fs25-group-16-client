@@ -2,25 +2,23 @@ import React from "react";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Popconfirm } from "antd";
-
-interface PlayerData {
-  codename: string;
-  team: string;
-  points: number;
-}
+import { selectGameId, selectPlayers } from "@/lib/features/game";
+import { selectLobbyId, selectHost } from "@/lib/features/lobby";
+import { selectPlayerName } from "@/lib/features/player";
+import { useSelector } from "react-redux";
 
 const ResultsTable: React.FC = () => {
-  //temp data until web socket connection
   const router = useRouter();
-  const isHost = true;
-  const lobbyId = "abc123";
 
-  const players: PlayerData[] = [
-    { codename: "double0seven", team: "blue", points: 0 },
-    { codename: "totallyspy", team: "blue", points: 5 },
-    { codename: "kimpossible", team: "red", points: 4 },
-    { codename: "karl", team: "red", points: 4 },
-  ];
+  const lobbyId = useSelector(selectLobbyId);
+  const gameId = useSelector(selectGameId);
+
+  const playerName = useSelector(selectPlayerName);
+  const hostName = useSelector(selectHost);
+  const isHost = playerName === hostName;
+
+  const players = useSelector(selectPlayers);
+
   const confirmDeleteLobby = () => {
     router.replace("/create");
   };
@@ -75,13 +73,19 @@ const ResultsTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {players.map((player, index) => (
-            <tr key={index}>
-              <td>{player.codename}</td>
-              <td>{player.team}</td>
-              <td>{player.points}</td>
-            </tr>
-          ))}
+          {players?.map(({ playerName, role, team }, i) => {
+            const roleString = role?.split("_")[1];
+
+            return (
+              <tr key={i}>
+                <td>{playerName}</td>
+                <td>{team}</td>
+                {roleString && (
+                  <td>{`${roleString[0]} ${roleString.substring(1)}`}</td>
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
