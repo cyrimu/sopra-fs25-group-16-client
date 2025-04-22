@@ -16,7 +16,7 @@ import GetReadyScreen from "@/components/getReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
-import { leaveLobby, updateLobby } from "@/lib/features/lobby/api";
+import { leaveLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { selectGameId, selectGameStatus } from "@/lib/features/game";
 

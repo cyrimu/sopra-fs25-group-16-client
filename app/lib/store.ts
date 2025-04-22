@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import player from "./features/player/index";
 import lobby from "./features/lobby/index";
 import game from "./features/game/index";
+import results from "./features/results/index"; 
 
 export const makeStore = () => {
   return configureStore({
@@ -9,6 +10,7 @@ export const makeStore = () => {
       player,
       lobby,
       game,
+      results,
     },
   });
 };

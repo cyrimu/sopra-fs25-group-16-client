@@ -1,34 +1,40 @@
-import React from 'react';
-import styles from '@/styles/page.module.css';
-import { useRouter } from 'next/navigation';
+import "@ant-design/v5-patch-for-react-19";
+import React, { useEffect } from "react";
+import styles from "@/styles/page.module.css";
+import { useRouter } from "next/navigation";
 import { Popconfirm } from "antd";
 
-interface PlayerData {
-    codename: string;
-    team: string;
-    points: number;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { getLobbyResults } from "@/lib/features/results/api";
+import { RootState } from "@/lib/store";
+import { AppDispatch } from "@/lib/store";
 
-const ResultsTable: React.FC = () => { //temp data until web socket connection
-    
+const ResultsTable: React.FC = () => {
     const router = useRouter();
+    const dispatch = useDispatch<AppDispatch>();
+
+    const lobbyId = "12f96965"; // TODO: Replace logic
+    const username = "yourUsername"; // TODO: Replace logic
     const isHost = true;
-    const gameId = "abc123";
-    const lobbyId = "abc123";
 
-    const players: PlayerData[] = [
-        { codename: 'double0seven', team: 'blue', points: 0 },
-        { codename: 'totallyspy', team: 'blue', points: 5 },
-        { codename: 'kimpossible', team: 'red', points: 4 },
-        { codename: 'karl', team: 'red', points: 4 },
-    ];
+    const { lobby, status, error } = useSelector((state: RootState) => state.results);
+
+    useEffect(() => {
+        dispatch(getLobbyResults({ lobbyId, username }));
+    }, [dispatch, lobbyId, username]);
+
+    if (status === "loading") return <div>Loading results...</div>;
+    if (status === "failed") return <div>Error loading results: {error}</div>;
+    if (!lobby || !lobby.currentGame) return <div>No game data available.</div>;
+
+    const winner = lobby?.currentGame?.winner;
+    const players = lobby?.players;
+
     const confirmDeleteLobby = () => {
-        router.replace('/create');
+        router.replace("/create");
     };
 
-    const cancelDeleteLobby = () => {
-        // Do nothing
-    };
+    const cancelDeleteLobby = () => {};
 
     return (
         <>
