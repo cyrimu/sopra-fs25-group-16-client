@@ -1,20 +1,29 @@
 "use client";
 
+import { selectGameId, selectWinner } from "@/lib/features/game";
+import { TEAM_COLOR } from "@/lib/features/game/team.types";
+import { selectHost, selectLobbyId } from "@/lib/features/lobby";
+import { selectPlayerName } from "@/lib/features/player";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function Lobby() {
-  // temporary until websocket connection
   const router = useRouter();
-  const isHost = true;
-  // const team = "blue";
-  const gameId = "abc123";
-  const lobbyId = "abc123";
+
+  const lobbyId = useSelector(selectLobbyId);
+  const gameId = useSelector(selectGameId);
+
+  const playerName = useSelector(selectPlayerName);
+  const hostName = useSelector(selectHost);
+  const isHost = playerName === hostName;
+
+  const team = useSelector(selectWinner);
 
   return (
     <div className={styles.centered}>
-      {/* {team === "blue" && <div className={styles.blueOverlay}></div>}
-            {team === "red" && <div className={styles.redOverlay}></div>} */}
+      {team == TEAM_COLOR.BLUE && <div className={styles.blueOverlay} />}
+      {team == TEAM_COLOR.RED && <div className={styles.redOverlay} />}
 
       <div className={styles.messageContainer}>
         <div
