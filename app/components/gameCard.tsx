@@ -66,7 +66,10 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
 
     // Number of selected cars < clue
     const providedClue = lastProvidedClue();
-    if (selectedCards && selectedCards.length < providedClue) {
+    if (
+      (selectedCards && selectedCards.length < providedClue) ||
+      selectedCards?.map((e) => e.id).includes(card.id)
+    ) {
       dispatch(setSelectedCard(card.id));
     }
   }
