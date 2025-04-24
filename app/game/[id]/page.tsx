@@ -38,7 +38,11 @@ export default function Game() {
 
   useEffect(() => {
     if (winner) {
-      router.push("/results/winner");
+      if (winner == player?.team) {
+        router.push(`/game/${gameID}/results/winner`);
+      } else {
+        router.push(`/game/${gameID}/results/looser`);
+      }
     }
   }, [router, turn, winner]);
 

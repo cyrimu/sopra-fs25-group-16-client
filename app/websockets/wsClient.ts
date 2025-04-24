@@ -47,6 +47,7 @@ export const createSocketMiddleware = (): Middleware => {
 
       case "socket/sendClue":
         if (client?.connected && client) {
+          console.log("Clue sent", action.payload);
           client.publish({
             destination: `/app/game/${gameID}/clue`,
             body: JSON.stringify(action.payload),
@@ -55,6 +56,7 @@ export const createSocketMiddleware = (): Middleware => {
         break;
       case "socket/guess":
         if (client?.connected && client) {
+          console.log("Guess sent", action.payload);
           client.publish({
             destination: `/app/game/${gameID}/guess`,
             body: JSON.stringify(action.payload),
@@ -64,6 +66,7 @@ export const createSocketMiddleware = (): Middleware => {
 
       case "socket/skipGuess":
         if (client?.connected && client) {
+          console.log("Skip guess sent", action.payload);
           client.publish({
             destination: `/app/game/${gameID}/skipGuess`,
             body: action.payload,
