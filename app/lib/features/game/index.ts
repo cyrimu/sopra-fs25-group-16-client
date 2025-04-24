@@ -22,6 +22,10 @@ const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
+    // Restart the game status
+    restartGame() {
+      return initialState;
+    },
     // Set a game
     setGame(state, action: PayloadAction<Game>) {
       const game = action.payload;
@@ -111,7 +115,8 @@ const gameSlice = createSlice({
   },
 });
 
-export const { setRevealedCard, setSelectedCard, setGame } = gameSlice.actions;
+export const { restartGame, setRevealedCard, setSelectedCard, setGame } =
+  gameSlice.actions;
 
 export const {
   selectGameId,
