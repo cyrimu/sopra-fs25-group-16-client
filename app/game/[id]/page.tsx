@@ -44,7 +44,7 @@ export default function Game() {
         router.push(`/game/${gameID}/results/looser`);
       }
     }
-  }, [router, turn, winner]);
+  }, [router, turn, winner, gameID, player?.team]);
 
   useEffect(() => {
     dispatch({
