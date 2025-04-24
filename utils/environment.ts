@@ -5,5 +5,7 @@
  * Returns true if the application is running in production.
  */
 export function isProduction(): boolean {
+  // Deploy the development version to Vercel
+  return false;
   return process.env.NODE_ENV === "production";
 }
