@@ -1,6 +1,6 @@
 "use client";
 
-import { restartGame, selectGameId, setGame } from "@/lib/features/game";
+import { restartGame, selectGameId } from "@/lib/features/game";
 import {
   selectLobbyId,
   selectHost,
