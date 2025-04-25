@@ -40,6 +40,7 @@ export default function Create() {
                 display: "flex",
                 justifyContent: "space-between",
                 width: "100%",
+                textAlign: "left",
               }}
             >
               <span>{url}</span>
@@ -56,6 +57,7 @@ export default function Create() {
                 display: "flex",
                 justifyContent: "space-between",
                 width: "100%",
+                textAlign: "left",
               }}
             >
               <span>{id}</span>
