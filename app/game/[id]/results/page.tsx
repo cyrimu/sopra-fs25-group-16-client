@@ -3,7 +3,7 @@
 import ResultsTable from "@/components/resultsTable";
 import styles from "@/styles/page.module.css";
 
-export default function Lobby() {
+function Results() {
   return (
     <div className={styles.centered}>
       <div className={styles.redBlueOverlay}></div>
@@ -14,3 +14,5 @@ export default function Lobby() {
     </div>
   );
 }
+
+export default Results;
