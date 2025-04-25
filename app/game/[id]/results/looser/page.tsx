@@ -11,7 +11,7 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function Lobby() {
+function Looser() {
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -86,3 +86,5 @@ export default function Lobby() {
     </div>
   );
 }
+
+export default Looser;
