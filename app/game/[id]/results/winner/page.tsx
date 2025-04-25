@@ -1,15 +1,21 @@
 "use client";
 
-import { selectGameId, selectWinner } from "@/lib/features/game";
+import { restartGame, selectGameId, selectWinner } from "@/lib/features/game";
 import { TEAM_COLOR } from "@/lib/features/game/team.types";
-import { selectHost, selectLobbyId } from "@/lib/features/lobby";
+import {
+  restartCurrentGame,
+  selectHost,
+  selectLobbyId,
+} from "@/lib/features/lobby";
 import { selectPlayerName } from "@/lib/features/player";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function Lobby() {
+function Winner() {
   const router = useRouter();
+
+  const dispatch = useDispatch();
 
   const lobbyId = useSelector(selectLobbyId);
   const gameId = useSelector(selectGameId);
@@ -19,6 +25,12 @@ export default function Lobby() {
   const isHost = playerName === hostName;
 
   const team = useSelector(selectWinner);
+
+  function handleExitLobby() {
+    dispatch(restartGame());
+    dispatch(restartCurrentGame());
+    router.push(`/lobby/${lobbyId}`);
+  }
 
   return (
     <div className={styles.centered}>
@@ -69,7 +81,7 @@ export default function Lobby() {
             <div className={styles.regularButtonContainer}>
               <button
                 className={styles.regularButton}
-                onClick={() => router.push(`/lobby/${lobbyId}`)}
+                onClick={handleExitLobby}
               >
                 Exit Lobby
               </button>
@@ -77,50 +89,8 @@ export default function Lobby() {
           </>
         )}
       </div>
-
-      {isHost ? (
-        <>
-          <div className={styles.regularButtonContainer}>
-            <button
-              className={styles.regularButton}
-              onClick={() => router.push(`/lobby/${lobbyId}`)}
-            >
-              Play Again
-            </button>
-            <button
-              className={styles.regularButton}
-              onClick={() => router.push(`/lobby/${lobbyId}`)}
-            >
-              Return to Lobby
-            </button>
-            <button
-              className={styles.regularButton}
-              onClick={() => router.push(`/game/${gameId}/results`)}
-            >
-              View Results
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          <div
-            className={styles.lobbyTitle}
-            style={{ fontSize: "30px", textAlign: "center" }}
-          >
-            Wait for the host to restart the game...
-            <br />
-            or
-          </div>
-          <div className={styles.regularButtonContainer}>
-            <button
-              className={styles.regularButton}
-              onClick={() => router.push(`/lobby/${lobbyId}`)}
-            >
-              Exit Lobby
-            </button>
-          </div>
-        </>
-      )}
     </div>
   );
 }
+
+export default Winner;
