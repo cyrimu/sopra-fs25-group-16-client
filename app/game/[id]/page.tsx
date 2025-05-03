@@ -4,12 +4,11 @@ import LogButton from "@/components/buttons/LogButton";
 import MakeGuess from "@/components/buttons/MakeGuess";
 import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
-import LogDialog from "@/components/logDialog";
 import Board from "@/components/Board";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
-import { selectPlayers, selectWinner } from "@/lib/features/game";
+import { selectLogs, selectPlayers, selectWinner } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
@@ -18,11 +17,15 @@ import { selectGameId, selectTurn } from "@/lib/features/game";
 import HintForm from "@/components/ClueForm";
 import SkipGuess from "@/components/buttons/SkipGuess";
 import { useRouter } from "next/navigation";
+import Modal from "antd/es/modal/Modal";
+import { CloseOutlined } from "@ant-design/icons";
 
 export default function Game() {
   const dispatch = useDispatch();
 
   const router = useRouter();
+
+  const logs = useSelector(selectLogs);
 
   const gameID = useSelector(selectGameId);
   const winner = useSelector(selectWinner);
@@ -126,9 +129,31 @@ export default function Game() {
 
   return (
     <div className={styles.centered}>
+      <Modal
+        title="Logs"
+        open={isLog}
+        onCancel={() => setIsLog(false)}
+        footer={null}
+        closeIcon={<CloseOutlined style={{ fontSize: 20 }} />}
+        styles={modalStyles}
+      >
+        <ul
+          style={{
+            paddingTop: "10px",
+            fontSize: 16,
+            textAlign: "center",
+            listStyleType: "none",
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          {logs?.map((log, index) => (
+            <li key={index}>{log}</li>
+          ))}
+        </ul>
+      </Modal>
       <div className={styles.gameBackground}>
-        {!isLog && <LogButton callback={() => setIsLog(true)} />}
-        {isLog && <LogDialog callback={() => setIsLog(false)} />}
+        <LogButton callback={() => setIsLog(true)} />
         <div className={styles.gameContainer}>
           <Board />
           <ActionElement />
@@ -138,3 +163,11 @@ export default function Game() {
     </div>
   );
 }
+
+const modalStyles = {
+  body: {
+    backgroundColor: "#000000cc",
+    color: "white",
+    padding: "20px",
+  },
+};

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button as AntButton, ButtonProps } from "antd";
 import styles from "./RulesButton.module.css";
-import RulesModal from "../rulesModal";
+import RulesModal from "../RulesModal";
 
 const RulesButton: React.FC<ButtonProps> = ({ ...props }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
