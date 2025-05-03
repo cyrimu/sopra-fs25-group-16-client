@@ -95,15 +95,18 @@ reason).
 |        **[@calvinkoch00]**               | [14.04.2025]       | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/b1d67e39ba0fc9fe2ee58a93bd58913531c281db)                                                                                                       | [Get an Overview of the API Implementation and Set-Up in FE/BE]                               | [To have a coherent Set-Up I needed to analyze what was already done and understand the set-up.]                                                                           |
 |   | [21.04.2025]       | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/89da1d2fe6b0addab2ff657273b8d983ffe42e8e)                                                                                                       | [Results Section Set-Up to connect to the Rest Endpoints in BE]                               | [FE needs to be able to display users and results in the results screen to provide additional information]                                                                           |
 
+|        **[@cyrimu]**               | [14.04.2025]       | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/f312238ba73cbdebbf0f0e5e55df93415b599a41)                                                                                                     | [Implemented several tests to increase test coverage, mainly for the GameService]                               | [As requirement for M3 test coverage needed to be above 50% and this increases reliability of the system]                                                                           |
+|   | [15.04.2025]       | [Link to Commit 2 (Will not add Links to all commits in order to keep this file readable](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/466418c1213bd4493fdc16cb7a5a067c62c460de)                                                                                                      | [Several minor bug-fixes: Fixed an endpoint returning wrong objects, authorization issues with deployment, etc.]                               | [fixes were necessary to get an running prototyp for M3]        
+
 
 ---
 
-## Contributions Week 5 - [Begin Date] to [End Date]
+## Contributions Week 5 - [28.04.2025] to [04.05.2025]
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@cyrimu]** | [03.05.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/67add3018f5bcaa35a065be94ea0de12829cfae8) | [Added more test for previously uncovered classes to increase test coverage in the direction of 80%] | [This is a requirement for M4 and increases reliability] |
+|                    | [03.05.2025]   | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/c4e0302ac885ce530ec89d397e2675dca062361b) | [Tried to hide API Key instead of hard coding for 6 hours, but failed] | [It technically isn't and potentially can be seen as joker week since I did not have time to contribute something more meaningful this week] |
 | **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
