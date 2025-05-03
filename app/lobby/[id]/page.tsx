@@ -5,6 +5,7 @@ import { selectPlayerName } from "@/lib/features/player";
 import {
   selectHost,
   selectLobby,
+  selectLobbyCurrentGameId,
   selectLobbyId,
   selectLobbyStatus,
 } from "@/lib/features/lobby";
@@ -12,7 +13,7 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import GetReady from "@/components/getReady";
+import GetReady from "@/components/GetReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
@@ -20,6 +21,8 @@ import { getLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { selectGameId, selectGameStatus } from "@/lib/features/game";
 import { isProduction } from "../../../utils/environment";
+import RefreshButton from "@/components/buttons/RefreshButton";
+import { Button as AntButton } from "antd";
 
 export default function Lobby() {
   const router = useRouter();
@@ -27,6 +30,8 @@ export default function Lobby() {
 
   const lobbyId = useSelector(selectLobbyId);
   const lobby = useSelector(selectLobby);
+  const lobbyCurrentGameId = useSelector(selectLobbyCurrentGameId);
+
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
@@ -40,28 +45,7 @@ export default function Lobby() {
   const gameStatus = useSelector(selectGameStatus);
   const gameId = useSelector(selectGameId);
 
-  const handleConfigPanel = () => {
-    if (lobbyId && playerName && lobby) {
-      dispatch(
-        updateLobby({ lobbyId: lobbyId, username: playerName, lobby: lobby })
-      );
-      setConfigurationPanelOpen((state) => !state);
-    }
-  };
-
-  useEffect(() => {
-    if (lobby?.players) {
-      const nonNullPlayers = lobby.players.filter((player) => player !== null);
-      console.log("Non-null players:", nonNullPlayers.length);
-    }
-  }, [lobby]);
-
-  const handleStartGame = () => {
-    if (gameStatus === "idle" && lobby && playerName) {
-      dispatch(createGame({ lobby: lobby, username: playerName }));
-    }
-  };
-
+  // HOST ONLY: redirect to the game after creating it
   useEffect(() => {
     if (gameStatus === "succeeded") {
       setGameStarting(true);
@@ -71,45 +55,57 @@ export default function Lobby() {
     }
   }, [gameId, router, gameStatus]);
 
+  // PLAYERS ONLY: redirect to the game once the game object exists inside the lobby
+  useEffect(() => {
+    console.log(lobby?.currentGame);
+    if (lobbyStatus === "succeeded" && lobbyCurrentGameId) {
+      setGameStarting(true);
+      setTimeout(() => {
+        router.push(`/game/${lobbyCurrentGameId}`);
+      }, 3000);
+    }
+  }, [lobbyStatus, lobbyCurrentGameId, router]);
+
+  // Lobby object does not exist anymore
+  useEffect(() => {
+    if (lobbyStatus === "idle") {
+      router.back();
+    }
+  }, [lobbyStatus, router]);
+
   function handleLeaveLobby() {
     if (lobbyId && playerName) {
       dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
     }
   }
 
-  useEffect(() => {
-    if (lobbyStatus === "succeeded" && !isHost) {
-      setInterval(() => {
-        if (playerName && lobbyId) {
-          dispatch(getLobby({ lobbyId: lobbyId, username: playerName }));
-        }
-      }, 1000);
+  const handleConfigPanel = () => {
+    if (lobbyId && playerName && lobby) {
+      dispatch(
+        updateLobby({ lobbyId: lobbyId, username: playerName, lobby: lobby })
+      );
+      setConfigurationPanelOpen((state) => !state);
     }
-  }, [dispatch, isHost, lobbyId, lobbyStatus, playerName]);
-
-  useEffect(() => {
-    if (lobbyStatus === "succeeded" && gameId) {
-      setGameStarting(true);
-      setTimeout(() => {
-        router.push(`/game/${gameId}`);
-      }, 3000);
-    }
-  }, [lobbyStatus, gameId, router]);
-
-  useEffect(() => {
-    if (lobbyStatus === "idle") {
-      // After the lobby is removed go back
-      router.back();
-    }
-  }, [lobbyStatus, router]);
-
-  const confirmDeleteLobby = () => {
-    router.replace("/create");
   };
 
-  const cancelDeleteLobby = () => {
+  const handleStartGame = () => {
+    if (gameStatus === "idle" && lobby && playerName) {
+      dispatch(createGame({ lobby: lobby, username: playerName }));
+    }
+  };
+
+  // Fetch the new lobby from the server
+  const refreshLobby = () => {
+    if (lobbyStatus === "succeeded") {
+      if (playerName && lobbyId) {
+        dispatch(getLobby({ lobbyId: lobbyId, username: playerName }));
+      }
+    }
+  };
+
+  function confirmDeleteLobby() {
     router.back();
-  };
+  }
 
   if (isGameStarting) {
     return <GetReady />;
@@ -117,12 +113,37 @@ export default function Lobby() {
 
   return (
     <div className={styles.centered}>
-      <div className={styles.redBlueOverlay}></div>
+      <div className={styles.redBlueOverlay} />
+      <div className={styles.refreshButton}>
+        <AntButton
+          type="primary"
+          icon={<RefreshButton />}
+          shape="circle"
+          style={{ width: 50, height: 50 }}
+          onClick={refreshLobby}
+        />
+      </div>
+      <Modal
+        styles={modalStyles}
+        title={<span style={{ color: "white" }}>Configuration Panel</span>}
+        open={isConfigurationPanelOpen}
+        onOk={handleConfigPanel}
+        okButtonProps={{
+          style: { fontFamily: "Gabarito", fontSize: "20px" },
+        }}
+        okText="Save"
+        onCancel={handleConfigPanel}
+        cancelButtonProps={{
+          style: { fontFamily: "Gabarito", fontSize: "20px" },
+        }}
+        cancelText="Cancel"
+      >
+        <ConfigurationPanel />
+      </Modal>
       <div className={styles.messageContainer}>
-        {!isConfigurationPanelOpen && (
-          <div className={styles.lobbyTitle}>Game Lobby</div>
-        )}
-        {!isConfigurationPanelOpen && <PlayerTable />}
+        <div className={styles.lobbyTitle}>Game Lobby</div>
+        <PlayerTable />
+
         {!isHost && (
           <div className={styles.regularButtonContainer}>
             <button className={styles.regularButton} onClick={handleLeaveLobby}>
@@ -138,25 +159,6 @@ export default function Lobby() {
             >
               Change Setup
             </button>
-            <Modal
-              styles={modalStyles}
-              title={
-                <span style={{ color: "white" }}>Configuration Panel</span>
-              }
-              open={isConfigurationPanelOpen}
-              onOk={handleConfigPanel}
-              okButtonProps={{
-                style: { fontFamily: "Gabarito", fontSize: "20px" },
-              }}
-              okText="Save"
-              onCancel={handleConfigPanel}
-              cancelButtonProps={{
-                style: { fontFamily: "Gabarito", fontSize: "20px" },
-              }}
-              cancelText="Cancel"
-            >
-              <ConfigurationPanel />
-            </Modal>
             <button
               className={`${styles.regularButton} ${
                 nonNullPlayers !== 4 ? styles.disabledButton : ""
@@ -174,20 +176,6 @@ export default function Lobby() {
                 Start Game
               </Tooltip>
             </button>
-            <Popconfirm
-              title={
-                <span style={{ color: "black" }}>
-                  Are you sure if you want to delete the lobby?
-                </span>
-              }
-              onConfirm={confirmDeleteLobby}
-              onCancel={cancelDeleteLobby}
-              okText="Yes"
-              cancelText="No"
-              icon={false}
-            >
-              <button className={styles.regularButton}>Delete Lobby</button>
-            </Popconfirm>
           </div>
         )}
       </div>
