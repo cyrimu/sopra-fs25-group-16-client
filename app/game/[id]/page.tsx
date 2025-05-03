@@ -132,7 +132,18 @@ export default function Game() {
     <div className={styles.centered}>
       <FullScreenPopup />
       <Modal
-        title="Logs"
+        title={
+          <span
+            style={{
+              color: "white",
+              fontFamily: "Special Elite",
+              fontSize: "20px",
+              textDecoration: "underline",
+            }}
+          >
+            Logs
+          </span>
+        }
         open={isLog}
         onCancel={() => setIsLog(false)}
         footer={null}
@@ -167,6 +178,16 @@ export default function Game() {
 }
 
 const modalStyles = {
+  content: {
+    backgroundColor: "#000000cc",
+    fontFamily: "Special Elite",
+  },
+  header: {
+    backgroundColor: "#000000cc",
+    fontFamily: "Special Elite",
+    borderRadius: "20px",
+    padding: "20px",
+  },
   body: {
     backgroundColor: "#000000cc",
     color: "white",
