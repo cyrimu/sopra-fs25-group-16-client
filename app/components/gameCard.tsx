@@ -37,11 +37,11 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
 
   const logs = useSelector(selectLogs);
 
-  function lastProvidedClue(): number {
-    const lastClue = logs?.findLast((e) => e.includes("provided the Clue"));
-    const numArr = lastClue!.split(" : ");
-    return Number(numArr[numArr.length - 1]);
-  }
+  // function lastProvidedClue(): string {
+  //   const lastClue = logs?.findLast((e) => e.includes("provided the Clue"));
+  //   const numArr = lastClue!.split(" : ")[0].split(": ");
+  //   return numArr[numArr.length - 1];
+  // }
 
   function determineBackgroundImage(): CARD_COLOR {
     if (
@@ -64,10 +64,9 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
     )
       return;
 
-    // Number of selected cars < clue
-    const providedClue = lastProvidedClue();
+    // Select one card at a time
     if (
-      (selectedCards && selectedCards.length < providedClue) ||
+      (selectedCards && selectedCards.length < 1) ||
       selectedCards?.map((e) => e.id).includes(card.id)
     ) {
       dispatch(setSelectedCard(card.id));
