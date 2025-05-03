@@ -6,11 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { selectPlayerName } from "@/lib/features/player";
-import {
-  selectLogs,
-  selectPlayers,
-  selectSelectedCards,
-} from "@/lib/features/game";
+import { selectPlayers, selectSelectedCards } from "@/lib/features/game";
 import { setSelectedCard } from "@/lib/features/game";
 import Image from "next/image";
 
@@ -34,14 +30,6 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
     () => ({ rotateY: isRevealed ? 180 : 0 }),
     [isRevealed]
   );
-
-  const logs = useSelector(selectLogs);
-
-  // function lastProvidedClue(): string {
-  //   const lastClue = logs?.findLast((e) => e.includes("provided the Clue"));
-  //   const numArr = lastClue!.split(" : ")[0].split(": ");
-  //   return numArr[numArr.length - 1];
-  // }
 
   function determineBackgroundImage(): CARD_COLOR {
     if (

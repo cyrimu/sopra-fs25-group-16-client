@@ -19,6 +19,7 @@ import SkipGuess from "@/components/buttons/SkipGuess";
 import { useRouter } from "next/navigation";
 import Modal from "antd/es/modal/Modal";
 import { CloseOutlined } from "@ant-design/icons";
+import FullScreenPopup from "@/components/FullScreenPopup";
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -129,6 +130,7 @@ export default function Game() {
 
   return (
     <div className={styles.centered}>
+      <FullScreenPopup />
       <Modal
         title="Logs"
         open={isLog}
