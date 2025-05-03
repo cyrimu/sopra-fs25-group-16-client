@@ -34,22 +34,23 @@ const PlayerTable: React.FC = () => {
           {players
             ?.filter((p) => p)
             ?.map(({ playerName, team, role }, index) => {
-              const roleString = role?.split("_")[1];
+              const roleSplit = role?.split("_")[1];
+
+              const teamString =
+                team?.toString()[0] +
+                " " +
+                team?.toString().substring(1).toLowerCase();
+
+              const roleString =
+                roleSplit?.toString()[0] +
+                "" +
+                roleSplit?.toString().substring(1).toLowerCase();
+
               return (
                 <tr key={index}>
                   <td>{playerName}</td>
-                  <td>
-                    {`${team?.toString()[0]}${team
-                      ?.toString()
-                      .substring(1)
-                      .toLowerCase()}`}
-                  </td>
-                  <td>
-                    {`${roleString?.toString()[0]}${roleString
-                      ?.toString()
-                      .substring(1)
-                      .toLowerCase()}`}
-                  </td>
+                  <td>{!team ? "Not assigned" : teamString}</td>
+                  <td>{!role ? "Not assigned" : roleString}</td>
                 </tr>
               );
             })}
