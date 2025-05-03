@@ -6,6 +6,5 @@
  */
 export function isProduction(): boolean {
   // Deploy the development version to Vercel
-  return false;
   return process.env.NODE_ENV === "production";
 }
