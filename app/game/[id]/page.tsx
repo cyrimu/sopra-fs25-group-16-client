@@ -169,21 +169,31 @@ export default function Game() {
         {showTurnMessage && (
           <div
             style={{
-              position: "absolute",
-              top: "20px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              backgroundColor: "black",
-              color: "white",
-              padding: "10px 20px",
-              borderRadius: "8px",
-              fontFamily: "Special Elite",
-              fontSize: "20px",
-              boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
-              zIndex: 999,
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 9999,
             }}
           >
-            It's your turn now!
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: "30px 50px",
+                borderRadius: "16px",
+                fontSize: "28px",
+                fontFamily: "Special Elite",
+                color: "#000",
+                boxShadow: "0 6px 16px rgba(0,0,0,0.4)",
+                textAlign: "center",
+              }}
+            >
+            It’s your turn now!
+            </div>
           </div>
         )}
           <Board />
