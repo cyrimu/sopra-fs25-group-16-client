@@ -94,6 +94,7 @@ reason).
 |                      | [17.04.2025] | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/681f6cbc19e47f2f0daac7af458be2280b5c388a) | [Tests to cover REST Game Controller]                         | [Tests to make sure that our rest endpoints for game work correctly, Pushed sonarqube test coverage to 65%]   |
 |        **[@calvinkoch00]**               | [14.04.2025]       | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/b1d67e39ba0fc9fe2ee58a93bd58913531c281db)                                                                                                       | [Get an Overview of the API Implementation and Set-Up in FE/BE]                               | [To have a coherent Set-Up I needed to analyze what was already done and understand the set-up.]                                                                           |
 |   | [21.04.2025]       | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/89da1d2fe6b0addab2ff657273b8d983ffe42e8e)                                                                                                       | [Results Section Set-Up to connect to the Rest Endpoints in BE]                               | [FE needs to be able to display users and results in the results screen to provide additional information]                                                                           |
+|                    | [04.05.2025]   | [Link to Commit 3](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/d4d2b1555ea883943f539818a85d9fc98fcb8ab2) | [Finalize Resukts Table, Ordered List, updated logic] | [Players now see a clear view of all Players and the winning teams in the results table in an ordered and structured view] |
 
 |        **[@cyrimu]**               | [14.04.2025]       | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/f312238ba73cbdebbf0f0e5e55df93415b599a41)                                                                                                     | [Implemented several tests to increase test coverage, mainly for the GameService]                               | [As requirement for M3 test coverage needed to be above 50% and this increases reliability of the system]                                                                           |
 |   | [15.04.2025]       | [Link to Commit 2 (Will not add Links to all commits in order to keep this file readable](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/466418c1213bd4493fdc16cb7a5a067c62c460de)                                                                                                      | [Several minor bug-fixes: Fixed an endpoint returning wrong objects, authorization issues with deployment, etc.]                               | [fixes were necessary to get an running prototyp for M3]        
@@ -109,8 +110,9 @@ reason).
 |                    | [03.05.2025]   | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/c4e0302ac885ce530ec89d397e2675dca062361b) | [Tried to hide API Key instead of hard coding for 6 hours, but failed] | [It technically isn't and potentially can be seen as joker week since I did not have time to contribute something more meaningful this week] |
 | **[@winnerpio]** | [04.05.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/dbda75b9df0ac82e34e9796b8a6d17e4401b4c29) | [Created Tests for Lobby Service] | [Pushes our test coverage higher, tests make us more sure that our app will work] |
 |                    | [04.05.2025]   | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/b2ae2f8efcb425a92c57082301a761eec19f3ae7) [Link to Commit 3](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/e712d46e7d19c77142a1dd45adb246b1d26b9677) | [Created imageService for using external APIs to generate images for codenames pictures. Some bugs with open AI api persist though] | [Important extension of our game for M4 as it allows us to play with images.] |
-| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@calvinkoch00]** | [04.05.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/87a033283fc17b809b054556cae7bd0fcfb8508c), [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/dd736a466e95df44129af6f53ad435ef9e6eb891) | [Now the latest Clue gets Displayed for everyone, except if its a spymasters turn] | [This helps the players while guessing words so they don't need to open th gamelog to see the latest clues] |
+|                    | [04.05.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/932740a1e2721116516a1b76ccaa2e10879ccd9f),[Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/e4f4bdf97692d7c8257370314570391a4ef2f91b), [Link to Commit 3](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/809a48e9f96a3ad845fb56558227c1ebe0683bbc)  | [Every Time its a players turn they get a message notifyign them that its their turn] | [This helps improve gameflow and helps players to keep track of whats happening in the game] |
+
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
@@ -128,3 +130,34 @@ reason).
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+
+---
+
+## Contributions Week 7 - [Begin Date] to [End Date]
+
+| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
+| ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+
+---
+
+## Contributions Week 8 - [Begin Date] to [End Date]
+
+| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
+| ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+
