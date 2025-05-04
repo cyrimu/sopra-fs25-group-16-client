@@ -44,9 +44,21 @@ export const updateLobby = createAsyncThunk(
 
     const response = await apiService.put<Lobby>(
       `/lobby/${lobbyId}?username=${username}`,
+      lobby
+    );
+    return response;
+  }
+);
+
+export const deleteLobby = createAsyncThunk(
+  "lobby/deleteLobby",
+  async ({ lobbyId, username }: { lobbyId: string; username: string }) => {
+    const apiService = new ApiService();
+
+    const response = await apiService.delete(
+      `/lobby/${lobbyId}/delete?username=${username}`,
       {
         username: username,
-        lobby: lobby,
       }
     );
     return response;

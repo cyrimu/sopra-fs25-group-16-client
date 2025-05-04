@@ -10,4 +10,5 @@ export interface Lobby {
   players: Player[];
   currentGame: Game | null;
   playerCount: number;
+  playersReady: string[];
 }

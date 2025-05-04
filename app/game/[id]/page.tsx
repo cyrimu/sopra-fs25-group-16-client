@@ -52,7 +52,7 @@ export default function Game() {
 
   useEffect(() => {
     dispatch({
-      type: "socket/connect",
+      type: "game/connect",
       payload: { gameID: gameID },
     });
   }, [dispatch, gameID]);

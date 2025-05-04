@@ -9,10 +9,14 @@ type SocketActions =
   | SocketDisconnectAction;
 
 interface SocketConnectAction {
-  type: "socket/connect";
+  type: "game/connect";
   payload: {
     gameID: string;
   };
+}
+
+interface SocketDisconnectAction {
+  type: "game/disconnect";
 }
 
 interface SocketSendClueAction {
@@ -34,21 +38,17 @@ interface SocketSkipGuessAction {
   payload: string;
 }
 
-interface SocketDisconnectAction {
-  type: "socket/disconnect";
-}
-
 export const isSocketAction = (action: unknown): action is SocketActions => {
   if (typeof action !== "object" || action === null || !("type" in action)) {
     return false;
   }
 
   const socketActionTypes = [
-    "socket/connect",
+    "game/connect",
+    "game/disconnect",
     "socket/sendClue",
     "socket/guess",
     "socket/skipGuess",
-    "socket/disconnect",
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
