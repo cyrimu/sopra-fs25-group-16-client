@@ -36,9 +36,8 @@ export default function Game() {
 
   const role = player?.role;
   const team = player?.team;
-  const isSpymasterTurn =
-    role === turn &&
-    (role === PLAYER_ROLES.RED_SPYMASTER || role === PLAYER_ROLES.BLUE_SPYMASTER);
+  const isGlobalSpymasterTurn =
+    turn === PLAYER_ROLES.RED_SPYMASTER || turn === PLAYER_ROLES.BLUE_SPYMASTER;
 
   const lastClueString = useSelector(selectLastClueString);
   let displayedClue: { word: string; number: number } | null = null;
@@ -153,7 +152,7 @@ export default function Game() {
         <div className={styles.gameContainer}>
           <Board />
           
-          {displayedClue && !isSpymasterTurn && (
+          {displayedClue && !isGlobalSpymasterTurn && (
             <div
               style={{
                 backgroundColor: "#444",
@@ -168,7 +167,7 @@ export default function Game() {
                 boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
               }}
             >
-              Clue: <strong>{displayedClue.word}</strong> ({displayedClue.number})
+               Clue: <strong>{displayedClue.word}</strong> ({displayedClue.number})
             </div>
           )}
   
