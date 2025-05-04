@@ -6,7 +6,7 @@ import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
 import LogDialog from "@/components/logDialog";
 import Board from "@/components/Board";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
 import { selectPlayers, selectWinner, selectLastClueString } from "@/lib/features/game";
@@ -51,6 +51,9 @@ export default function Game() {
     }
   }
 
+  const [showTurnMessage, setShowTurnMessage] = useState(false);
+  const prevTurnRef = useRef<PLAYER_ROLES | null>(null);
+
   useEffect(() => {
     if (winner) {
       if (winner == player?.team) {
@@ -67,6 +70,18 @@ export default function Game() {
       payload: { gameID: gameID },
     });
   }, [dispatch, gameID]);
+
+  useEffect(() => {
+    const isNowMyTurn = turn === role;
+    const wasMyTurn = prevTurnRef.current === role;
+  
+    if (isNowMyTurn && !wasMyTurn) {
+      setShowTurnMessage(true);
+      setTimeout(() => setShowTurnMessage(false), 3000); // auto-hide after 3s
+    }
+  
+    prevTurnRef.current = turn;
+  }, [turn, role]);
 
   const waitNextTurn = (
     <span
@@ -150,6 +165,27 @@ export default function Game() {
         {isLog && <LogDialog callback={() => setIsLog(false)} />}
   
         <div className={styles.gameContainer}>
+
+        {showTurnMessage && (
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              backgroundColor: "black",
+              color: "white",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              fontFamily: "Special Elite",
+              fontSize: "20px",
+              boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
+              zIndex: 999,
+            }}
+          >
+            It's your turn now!
+          </div>
+        )}
           <Board />
           
           {displayedClue && !isGlobalSpymasterTurn && (
