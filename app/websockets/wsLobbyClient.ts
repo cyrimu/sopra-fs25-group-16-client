@@ -50,7 +50,8 @@ export const createLobbySocketMiddleware = (): Middleware => {
                   return;
                 } else if (data.type === "game") {
                   console.log("Received game", data);
-                  storeAPI.dispatch(
+                  const dispatch: AppDispatch = storeAPI.dispatch;
+                  dispatch(
                     getGame({
                       username: data.username,
                       gameId: data.gameId,
