@@ -52,6 +52,7 @@ export default function Game() {
   }
 
   const [showTurnMessage, setShowTurnMessage] = useState(false);
+  const [visible, setVisible] = useState(false);
   const prevTurnRef = useRef<PLAYER_ROLES | null>(null);
 
   useEffect(() => {
@@ -77,7 +78,12 @@ export default function Game() {
   
     if (isNowMyTurn && !wasMyTurn) {
       setShowTurnMessage(true);
-      setTimeout(() => setShowTurnMessage(false), 3000); // auto-hide after 3s
+      setVisible(true);
+  
+      // Fade out after 2.5s
+      setTimeout(() => setVisible(false), 2500);
+      // Hide completely after 3s
+      setTimeout(() => setShowTurnMessage(false), 3000);
     }
   
     prevTurnRef.current = turn;
@@ -178,6 +184,8 @@ export default function Game() {
               alignItems: "center",
               justifyContent: "center",
               zIndex: 9999,
+              opacity: visible ? 1 : 0,
+              transition: "opacity 0.5s ease-in-out",
             }}
           >
             <div
@@ -196,6 +204,7 @@ export default function Game() {
             </div>
           </div>
         )}
+
           <Board />
           
           {displayedClue && !isGlobalSpymasterTurn && (
