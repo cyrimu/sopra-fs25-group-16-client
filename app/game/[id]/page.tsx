@@ -9,7 +9,7 @@ import Board from "@/components/Board";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
-import { selectPlayers, selectWinner } from "@/lib/features/game";
+import { selectPlayers, selectWinner, selectLastClueString } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
@@ -33,8 +33,24 @@ export default function Game() {
   const turn = useSelector(selectTurn);
 
   const player = players?.find((e) => e.playerName === playerName);
-  const role = player!.role;
-  const team = player!.team;
+
+  const role = player?.role;
+  const team = player?.team;
+  const isSpymasterTurn =
+    role === turn &&
+    (role === PLAYER_ROLES.RED_SPYMASTER || role === PLAYER_ROLES.BLUE_SPYMASTER);
+
+  const lastClueString = useSelector(selectLastClueString);
+  let displayedClue: { word: string; number: number } | null = null;
+  if (lastClueString) {
+    const match = lastClueString.match(/provided the Clue: (.+?) ?: ?(\d+)/);
+    if (match) {
+      displayedClue = {
+        word: match[1],
+        number: parseInt(match[2]),
+      };
+    }
+  }
 
   useEffect(() => {
     if (winner) {
@@ -90,24 +106,28 @@ export default function Game() {
   );
 
   function ActionElement() {
-    const color = playerRoleToTeamColor(turn!);
+    if (!turn || !team) return waitNextTurn;
 
-    if (color != team) {
+    const color = playerRoleToTeamColor(turn);
+  
+    if (!color || color !== team) {
       return waitNextTurn;
-    } else if (color === team && role !== turn) {
+    }
+  
+    if (color === team && role !== turn) {
       if (
-        role == PLAYER_ROLES.RED_OPERATIVE ||
-        role == PLAYER_ROLES.BLUE_OPERATIVE
+        role === PLAYER_ROLES.RED_OPERATIVE ||
+        role === PLAYER_ROLES.BLUE_OPERATIVE
       ) {
         return waitClue;
       } else if (
-        role == PLAYER_ROLES.RED_SPYMASTER ||
-        role == PLAYER_ROLES.BLUE_SPYMASTER
+        role === PLAYER_ROLES.RED_SPYMASTER ||
+        role === PLAYER_ROLES.BLUE_SPYMASTER
       ) {
         return waitGuess;
       }
     }
-
+  
     switch (role) {
       case PLAYER_ROLES.BLUE_OPERATIVE:
       case PLAYER_ROLES.RED_OPERATIVE:
@@ -120,7 +140,7 @@ export default function Game() {
       case PLAYER_ROLES.RED_SPYMASTER:
         return <HintForm />;
       default:
-        break;
+        return waitNextTurn;
     }
   }
 
@@ -129,12 +149,32 @@ export default function Game() {
       <div className={styles.gameBackground}>
         {!isLog && <LogButton callback={() => setIsLog(true)} />}
         {isLog && <LogDialog callback={() => setIsLog(false)} />}
+  
         <div className={styles.gameContainer}>
           <Board />
+          
+          {displayedClue && !isSpymasterTurn && (
+            <div
+              style={{
+                backgroundColor: "#444",
+                color: "white",
+                fontSize: "24px",
+                margin: "20px auto",
+                padding: "10px 20px",
+                borderRadius: "8px",
+                fontFamily: "Special Elite",
+                textAlign: "center",
+                width: "fit-content",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+              }}
+            >
+              Clue: <strong>{displayedClue.word}</strong> ({displayedClue.number})
+            </div>
+          )}
+  
           <ActionElement />
           <Scoreboard />
         </div>
       </div>
     </div>
   );
-}

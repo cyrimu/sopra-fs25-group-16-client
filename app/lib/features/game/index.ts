@@ -5,6 +5,7 @@ import { Card } from "./card.types";
 import { PLAYER_ROLES } from "../player/player.types";
 import { TEAM_COLOR } from "../game/team.types";
 import { createGame, getGame } from "./api";
+import type { RootState } from "@/lib/store";
 
 interface GameState {
   game: Game | undefined;
@@ -117,6 +118,16 @@ const gameSlice = createSlice({
 
 export const { restartGame, setRevealedCard, setSelectedCard, setGame } =
   gameSlice.actions;
+
+
+  export const selectLastClueString = (state: RootState): string | undefined => {
+    const log = state.game.game?.log;
+    if (!log) return undefined;
+  
+    return [...log].reverse().find((entry) =>
+      entry.includes("provided the Clue:")
+    );
+  };
 
 export const {
   selectGameId,
