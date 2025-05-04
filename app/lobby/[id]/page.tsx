@@ -21,8 +21,6 @@ import { getLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { selectGameId, selectGameStatus } from "@/lib/features/game";
 import { isProduction } from "../../../utils/environment";
-import RefreshButton from "@/components/buttons/RefreshButton";
-import { Button as AntButton } from "antd";
 
 export default function Lobby() {
   const router = useRouter();
@@ -94,15 +92,6 @@ export default function Lobby() {
     }
   };
 
-  // Fetch the new lobby from the server
-  const refreshLobby = () => {
-    if (lobbyStatus === "succeeded") {
-      if (playerName && lobbyId) {
-        dispatch(getLobby({ lobbyId: lobbyId, username: playerName }));
-      }
-    }
-  };
-
   function confirmDeleteLobby() {
     router.back();
   }
@@ -114,15 +103,6 @@ export default function Lobby() {
   return (
     <div className={styles.centered}>
       <div className={styles.redBlueOverlay} />
-      <div className={styles.refreshButton}>
-        <AntButton
-          type="primary"
-          icon={<RefreshButton />}
-          shape="circle"
-          style={{ width: 50, height: 50 }}
-          onClick={refreshLobby}
-        />
-      </div>
       <Modal
         styles={modalStyles}
         title={<span style={{ color: "white" }}>Configuration Panel</span>}
@@ -176,6 +156,20 @@ export default function Lobby() {
                 Start Game
               </Tooltip>
             </button>
+            <Popconfirm
+              title={
+                <span style={{ color: "black" }}>
+                  Are you sure if you want to delete the lobby?
+                </span>
+              }
+              onConfirm={confirmDeleteLobby}
+              onCancel={cancelDeleteLobby}
+              okText="Yes"
+              cancelText="No"
+              icon={false}
+            >
+              <button className={styles.regularButton}>Delete Lobby</button>
+            </Popconfirm>
           </div>
         )}
       </div>

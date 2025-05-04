@@ -26,6 +26,11 @@ const lobbySlice = createSlice({
     restartCurrentGame(state) {
       if (state.lobby) state.lobby.currentGame = null;
     },
+    // Set a new lobby object
+    setLobby(state, action: PayloadAction<Lobby | undefined>) {
+      const lobby = action.payload;
+      if (lobby) state.lobby = action.payload;
+    },
     // Update the state with the new lobby ID
     setLobbyId(state, action: PayloadAction<string>) {
       if (state.lobby) state.lobby.lobbyID = action.payload;
@@ -91,19 +96,6 @@ const lobbySlice = createSlice({
         state.error = action.error.message ?? "Unknown Error";
       });
     builder
-      .addCase(getLobby.pending, (state) => {
-        state.status = "pending";
-      })
-      .addCase(getLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
-        state.status = "succeeded";
-        state.lobby = action.payload;
-      })
-      .addCase(getLobby.rejected, (state, action) => {
-        state.status = "failed";
-        console.error(action.error);
-        state.error = action.error.message ?? "Unknown Error";
-      });
-    builder
       .addCase(leaveLobby.pending, (state) => {
         state.status = "pending";
       })
@@ -128,6 +120,7 @@ const lobbySlice = createSlice({
 
 export const {
   restartCurrentGame,
+  setLobby,
   setLobbyId,
   setPlayer,
   setGameType,
