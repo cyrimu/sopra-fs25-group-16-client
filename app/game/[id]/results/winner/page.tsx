@@ -22,7 +22,7 @@ function Winner() {
 
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
-  const isHost = playerName === hostName;
+  const isHost = true;
 
   const team = useSelector(selectWinner);
 

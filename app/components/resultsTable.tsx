@@ -2,22 +2,30 @@ import React from "react";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Popconfirm } from "antd";
-import { selectPlayers } from "@/lib/features/game";
+import { selectPlayers, selectWinner } from "@/lib/features/game";
 import { selectLobbyId, selectHost } from "@/lib/features/lobby";
 import { selectPlayerName } from "@/lib/features/player";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { stringify } from "querystring";
 
 const ResultsTable: React.FC = () => {
   const router = useRouter();
 
   const lobbyId = useSelector(selectLobbyId);
   // const gameId = useSelector(selectGameId);
+  const capitalize = (s: string) =>
+    s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 
   const playerName = useSelector(selectPlayerName);
   const hostName = useSelector(selectHost);
   const isHost = playerName === hostName;
 
   const players = useSelector(selectPlayers);
+  const winner = useSelector(selectWinner);
+  const winnerTeam = winner === "RED" ? "RED" : "BLUE";
+  const loserTeam = winner === "RED" ? "BLUE" : "RED";
+
+  
 
   const confirmDeleteLobby = () => {
     router.replace("/create");
@@ -48,7 +56,7 @@ const ResultsTable: React.FC = () => {
             marginRight: "30px",
           }}
         >
-          Winner: Red
+          Winners: {capitalize(winnerTeam)}
         </div>
         <div
           className={styles.messageField}
@@ -60,7 +68,7 @@ const ResultsTable: React.FC = () => {
             textAlign: "center",
           }}
         >
-          Loser: Blue
+          Losers: {capitalize(loserTeam)}
         </div>
       </div>
 
@@ -69,20 +77,24 @@ const ResultsTable: React.FC = () => {
           <tr>
             <th>codename</th>
             <th>team</th>
-            <th>points</th>
+            <th>role</th>
           </tr>
         </thead>
         <tbody>
-          {players?.map(({ playerName, role, team }, i) => {
-            const roleString = role?.split("_")[1];
-
+        {players
+          ?.slice()
+          .sort((a, b) => {
+            if (a.team === winner && b.team !== winner) return -1;
+            if (a.team !== winner && b.team === winner) return 1;
+            return 0;
+          })
+          .map(({ playerName, team, role }, i) => {
+            const roleString = role?.split("_")[1]; // "SPYMASTER" or "OPERATIVE"
             return (
               <tr key={i}>
                 <td>{playerName}</td>
-                <td>{team}</td>
-                {roleString && (
-                  <td>{`${roleString[0]} ${roleString.substring(1)}`}</td>
-                )}
+                <td>{capitalize(team)}</td>
+                <td>{capitalize(roleString)}</td>
               </tr>
             );
           })}
