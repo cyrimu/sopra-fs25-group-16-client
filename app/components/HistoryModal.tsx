@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
-import { Modal } from "antd";
+import { Modal, Popconfirm } from "antd";
 import { Player, PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
 import { LANGUAGES } from "@/lib/features/lobby/languages.types";
 import { TEAM_COLOR } from "@/lib/features/game/team.types";
 import styles from "./HistoryModal.module.css";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlayCircleOutlined } from "@ant-design/icons";
 
 interface HistoryModalProps {
   visible: boolean;
@@ -78,6 +78,14 @@ const oldGameExamples: OldGame[] = [
 ];
 
 const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
+  function handleDeleteLobby() {
+    throw new Error("Function not implemented.");
+  }
+
+  function handleStartOldGame() {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <Modal title={"Old Games"} open={visible} onCancel={onClose} footer={null}>
       <p>
@@ -91,8 +99,9 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
             <th>id</th>
             <th>players</th>
             <th>role</th>
-            <th>ready</th>
+            <th>language</th>
             <th>delete</th>
+            <th>play</th>
           </tr>
         </thead>
         <tbody>
@@ -108,7 +117,40 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
                   <td>{joinPlayers}</td>
                   <td>{type}</td>
                   <td>{language}</td>
-                  <td>{<DeleteOutlined />}</td>
+                  <td>
+                    {
+                      <Popconfirm
+                        title={
+                          <span style={{ color: "black" }}>
+                            Are you sure if you want to delete the game?
+                          </span>
+                        }
+                        onConfirm={handleDeleteLobby}
+                        okText="Yes"
+                        cancelText="No"
+                        icon={false}
+                      >
+                        <DeleteOutlined />
+                      </Popconfirm>
+                    }
+                  </td>
+                  <td>
+                    {
+                      <Popconfirm
+                        title={
+                          <span style={{ color: "black" }}>
+                            Are you sure if you want to resume this game?
+                          </span>
+                        }
+                        onConfirm={handleStartOldGame}
+                        okText="Yes"
+                        cancelText="No"
+                        icon={false}
+                      >
+                        <PlayCircleOutlined />
+                      </Popconfirm>
+                    }
+                  </td>
                 </tr>
               );
             }
