@@ -2,6 +2,21 @@ import { ApiService } from "@/api/apiService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Lobby } from "./lobby.types";
 
+export const getLobby = async ({
+  lobbyId,
+  username,
+}: {
+  lobbyId: string;
+  username: string;
+}) => {
+  const apiService = new ApiService();
+
+  const response = await apiService.get<Lobby>(
+    `/lobby/${lobbyId}?username=${username}`
+  );
+  return response;
+};
+
 export const createLobby = createAsyncThunk(
   "lobby/createLobby",
   async (username: string) => {
@@ -10,18 +25,6 @@ export const createLobby = createAsyncThunk(
     const response = await apiService.postForm<Lobby>("/lobby", {
       username: username,
     });
-    return response;
-  }
-);
-
-export const getLobby = createAsyncThunk(
-  "lobby/getLobby",
-  async ({ lobbyId, username }: { lobbyId: string; username: string }) => {
-    const apiService = new ApiService();
-
-    const response = await apiService.get<Lobby>(
-      `/lobby/${lobbyId}?username=${username}`
-    );
     return response;
   }
 );
@@ -41,9 +44,21 @@ export const updateLobby = createAsyncThunk(
 
     const response = await apiService.put<Lobby>(
       `/lobby/${lobbyId}?username=${username}`,
+      lobby
+    );
+    return response;
+  }
+);
+
+export const deleteLobby = createAsyncThunk(
+  "lobby/deleteLobby",
+  async ({ lobbyId, username }: { lobbyId: string; username: string }) => {
+    const apiService = new ApiService();
+
+    const response = await apiService.delete(
+      `/lobby/${lobbyId}/delete?username=${username}`,
       {
         username: username,
-        lobby: lobby,
       }
     );
     return response;

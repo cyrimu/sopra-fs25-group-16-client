@@ -22,7 +22,7 @@ const MakeGuess: React.FC = () => {
       };
 
       dispatch({
-        type: "socket/guess",
+        type: "game/guess",
         payload: guess,
       });
     }

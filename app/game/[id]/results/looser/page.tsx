@@ -1,15 +1,11 @@
 "use client";
 
 import { restartGame, selectGameId } from "@/lib/features/game";
-import {
-  selectLobbyId,
-  selectHost,
-  restartCurrentGame,
-} from "@/lib/features/lobby";
-import { selectPlayerName } from "@/lib/features/player";
+import { selectLobbyId, restartCurrentGame } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { selectIsHost } from "../../../../../utils/helpers";
 
 function Looser() {
   const router = useRouter();
@@ -19,9 +15,7 @@ function Looser() {
   const lobbyId = useSelector(selectLobbyId);
   const gameId = useSelector(selectGameId);
 
-  const playerName = useSelector(selectPlayerName);
-  const hostName = useSelector(selectHost);
-  const isHost = playerName === hostName;
+  const isHost = useSelector(selectIsHost);
 
   function handleExitLobby() {
     dispatch(restartGame());

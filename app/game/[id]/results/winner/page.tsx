@@ -2,15 +2,11 @@
 
 import { restartGame, selectGameId, selectWinner } from "@/lib/features/game";
 import { TEAM_COLOR } from "@/lib/features/game/team.types";
-import {
-  restartCurrentGame,
-  selectHost,
-  selectLobbyId,
-} from "@/lib/features/lobby";
-import { selectPlayerName } from "@/lib/features/player";
+import { restartCurrentGame, selectLobbyId } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { selectIsHost } from "../../../../../utils/helpers";
 
 function Winner() {
   const router = useRouter();
@@ -20,9 +16,7 @@ function Winner() {
   const lobbyId = useSelector(selectLobbyId);
   const gameId = useSelector(selectGameId);
 
-  const playerName = useSelector(selectPlayerName);
-  const hostName = useSelector(selectHost);
-  const isHost = playerName === hostName;
+  const isHost = useSelector(selectIsHost);
 
   const team = useSelector(selectWinner);
 

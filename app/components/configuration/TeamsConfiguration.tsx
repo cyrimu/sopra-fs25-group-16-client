@@ -9,11 +9,12 @@ const TeamsConfiguration: React.FC = () => {
 
   const players = useSelector(selectPlayers);
 
-  function findPlayerFromColorAndRole(
+  const playerFromColorAndRole = (
     teamColor: TEAM_COLOR,
     role: PLAYER_ROLES
-  ): Player | undefined {
-    return players?.find((p) => p && p.role === role && p.team === teamColor);  }
+  ) => {
+    return players?.find((p) => p && p.role === role && p.team === teamColor);
+  };
 
   return [
     [
@@ -29,7 +30,7 @@ const TeamsConfiguration: React.FC = () => {
     <Form.Item key={i}>
       <div style={{ display: "flex", width: "100%", gap: "10px" }}>
         {colorAndRole.map(({ teamColor, role }, i) => {
-          const value = findPlayerFromColorAndRole(teamColor, role);
+          const value = playerFromColorAndRole(teamColor, role);
           const splittedRole = role.split("_");
 
           return (
@@ -48,24 +49,27 @@ const TeamsConfiguration: React.FC = () => {
                   splittedRole[1].substring(1).toLowerCase()}
               </label>
               <Select
-                  value={value?.playerName}
-                  onChange={(p) => {
-                    const newPlayer: Player = {
-                      playerName: p,
-                      role: role,
-                      team: teamColor,
-                    };
-                    dispatch(setPlayer(newPlayer));
-                  }}
-                  style={{ color: "white" }}
+                value={value?.playerName}
+                onChange={(p) => {
+                  const newPlayer: Player = {
+                    playerName: p,
+                    role: role,
+                    team: teamColor,
+                  };
+                  dispatch(setPlayer(newPlayer));
+                }}
+                style={{ color: "white" }}
               >
                 {players
-                    ?.filter((player) => player) // Filter out null or undefined players
-                    .map((player) => (
-                        <Select.Option key={player.playerName} value={player.playerName}>
-                          {player.playerName}
-                        </Select.Option>
-                    ))}
+                  ?.filter((player) => player) // Filter out null or undefined players
+                  .map((player) => (
+                    <Select.Option
+                      key={player.playerName}
+                      value={player.playerName}
+                    >
+                      {player.playerName}
+                    </Select.Option>
+                  ))}
               </Select>
             </div>
           );

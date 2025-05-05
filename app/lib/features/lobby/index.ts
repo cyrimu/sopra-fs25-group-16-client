@@ -4,7 +4,7 @@ import { Lobby } from "./lobby.types";
 import { Player } from "../player/player.types";
 import { GAME_TYPE } from "../game/game.types";
 import { LANGUAGES } from "./languages.types";
-import { createLobby, joinLobby, leaveLobby } from "./api";
+import { createLobby, deleteLobby, joinLobby, leaveLobby } from "./api";
 
 interface LobbyState {
   lobby: Lobby | undefined;
@@ -26,6 +26,10 @@ const lobbySlice = createSlice({
     restartCurrentGame(state) {
       if (state.lobby) state.lobby.currentGame = null;
     },
+    // Set an updated lobby object
+    setLobby(state, action: PayloadAction<Lobby>) {
+      state.lobby = action.payload;
+    },
     // Update the state with the new lobby ID
     setLobbyId(state, action: PayloadAction<string>) {
       if (state.lobby) state.lobby.lobbyID = action.payload;
@@ -35,7 +39,9 @@ const lobbySlice = createSlice({
       if (state.lobby) {
         const player = action.payload;
         // Update the playerName with a new team and role
-        state.lobby.players = state.lobby.players.map((p) => {
+        const players = state.lobby.players.filter((p) => p);
+
+        state.lobby.players = players.map((p) => {
           if (p.playerName === player.playerName) {
             return {
               ...p,
@@ -58,6 +64,16 @@ const lobbySlice = createSlice({
     // Update the number of connected players
     updateConnections(state, action: PayloadAction<number>) {
       if (state.lobby) state.lobby.playerCount = action.payload;
+    },
+    // Delete lobby
+    lobbyBeenDeleted() {
+      return initialState;
+    },
+    // Set players ready
+    setPlayersReady(state, action: PayloadAction<string[]>) {
+      if (state.lobby) {
+        state.lobby.playersReady = action.payload;
+      }
     },
   },
   extraReducers(builder) {
@@ -90,17 +106,17 @@ const lobbySlice = createSlice({
       .addCase(leaveLobby.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(
-        leaveLobby.fulfilled,
-        (
-          // deno-lint-ignore no-unused-vars
-          state
-        ) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          state = initialState;
-        }
-      )
+      .addCase(leaveLobby.fulfilled, () => initialState)
       .addCase(leaveLobby.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Unknown Error";
+      });
+    builder
+      .addCase(deleteLobby.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(deleteLobby.fulfilled, () => initialState)
+      .addCase(deleteLobby.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Unknown Error";
       });
@@ -109,31 +125,32 @@ const lobbySlice = createSlice({
     selectLobby: (state) => state.lobby,
     selectLobbyId: (state) => state.lobby?.lobbyID,
     selectLobbyStatus: (state) => state.status,
-    selectHost: (state) => state.lobby?.host,
     selectPlayers: (state) => state.lobby?.players,
     selectGameType: (state) => state.lobby?.gameType,
     selectLanguage: (state) => state.lobby?.language,
-    selectPlayerCount: (state) => state.lobby?.playerCount,
+    selectPlayersReady: (state) => state.lobby?.playersReady,
   },
 });
 
 export const {
-  restartCurrentGame,
+  setLobby,
   setLobbyId,
-  setPlayer,
   setGameType,
   setLanguage,
-  updateConnections,
+  setPlayer,
+  setPlayersReady,
+  restartCurrentGame,
+  lobbyBeenDeleted,
 } = lobbySlice.actions;
 
 export const {
   selectLobby,
   selectLobbyId,
   selectLobbyStatus,
-  selectHost,
   selectPlayers,
   selectGameType,
   selectLanguage,
+  selectPlayersReady,
 } = lobbySlice.selectors;
 
 export default lobbySlice.reducer;

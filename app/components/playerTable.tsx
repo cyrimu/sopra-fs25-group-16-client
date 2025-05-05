@@ -1,12 +1,24 @@
 import React from "react";
 import styles from "@/styles/page.module.css";
 import { useSelector } from "react-redux";
-import { selectGameType, selectPlayers } from "@/lib/features/lobby";
+import {
+  selectGameType,
+  selectPlayers,
+  selectPlayersReady,
+} from "@/lib/features/lobby";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
+import { PlayerReadyStatus } from "./PlayerReady";
+import { selectPlayerName } from "@/lib/features/player";
 
 const PlayerTable: React.FC = () => {
   const gameType = useSelector(selectGameType);
   const players = useSelector(selectPlayers);
+  const username = useSelector(selectPlayerName);
+  const playersReady = useSelector(selectPlayersReady);
+
+  function isReady(playerName: string): boolean {
+    return playersReady?.some((e) => e === playerName) ?? false;
+  }
 
   return (
     <>
@@ -28,27 +40,35 @@ const PlayerTable: React.FC = () => {
             <th>codename</th>
             <th>team</th>
             <th>role</th>
+            <th>ready</th>
           </tr>
         </thead>
         <tbody>
           {players
             ?.filter((p) => p)
             ?.map(({ playerName, team, role }, index) => {
-              const roleString = role?.split("_")[1];
+              const roleSplit = role?.split("_")[1];
+
+              const teamString =
+                team?.toString()[0] +
+                " " +
+                team?.toString().substring(1).toLowerCase();
+
+              const roleString =
+                roleSplit?.toString()[0] +
+                "" +
+                roleSplit?.toString().substring(1).toLowerCase();
+
               return (
                 <tr key={index}>
                   <td>{playerName}</td>
+                  <td>{!team ? "N/A" : teamString}</td>
+                  <td>{!role ? "N/A" : roleString}</td>
                   <td>
-                    {`${team?.toString()[0]}${team
-                      ?.toString()
-                      .substring(1)
-                      .toLowerCase()}`}
-                  </td>
-                  <td>
-                    {`${roleString?.toString()[0]}${roleString
-                      ?.toString()
-                      .substring(1)
-                      .toLowerCase()}`}
+                    <PlayerReadyStatus
+                      isReady={isReady(playerName)}
+                      isSelf={playerName == username}
+                    />
                   </td>
                 </tr>
               );

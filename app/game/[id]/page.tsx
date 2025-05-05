@@ -4,12 +4,10 @@ import LogButton from "@/components/buttons/LogButton";
 import MakeGuess from "@/components/buttons/MakeGuess";
 import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
-import LogDialog from "@/components/logDialog";
 import Board from "@/components/Board";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPlayerName } from "@/lib/features/player";
-import { selectPlayers, selectWinner } from "@/lib/features/game";
+import { selectLogs, selectWinner } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
@@ -18,37 +16,39 @@ import { selectGameId, selectTurn } from "@/lib/features/game";
 import HintForm from "@/components/ClueForm";
 import SkipGuess from "@/components/buttons/SkipGuess";
 import { useRouter } from "next/navigation";
+import Modal from "antd/es/modal/Modal";
+import { CloseOutlined } from "@ant-design/icons";
+import FullScreenPopup from "@/components/FullScreenPopup";
+import { selectMyPlayerInGame } from "../../../utils/helpers";
 
 export default function Game() {
   const dispatch = useDispatch();
 
   const router = useRouter();
 
+  const logs = useSelector(selectLogs);
+
   const gameID = useSelector(selectGameId);
   const winner = useSelector(selectWinner);
 
   const [isLog, setIsLog] = useState(false);
-  const playerName = useSelector(selectPlayerName);
-  const players = useSelector(selectPlayers);
   const turn = useSelector(selectTurn);
 
-  const player = players?.find((e) => e.playerName === playerName);
-  const role = player!.role;
-  const team = player!.team;
+  const myPlayerInGame = useSelector(selectMyPlayerInGame);
 
   useEffect(() => {
     if (winner) {
-      if (winner == player?.team) {
+      if (winner == myPlayerInGame?.team) {
         router.push(`/game/${gameID}/results/winner`);
       } else {
         router.push(`/game/${gameID}/results/looser`);
       }
     }
-  }, [router, turn, winner, gameID, player?.team]);
+  }, [router, turn, winner, gameID, myPlayerInGame?.team]);
 
   useEffect(() => {
     dispatch({
-      type: "socket/connect",
+      type: "game/connect",
       payload: { gameID: gameID },
     });
   }, [dispatch, gameID]);
@@ -90,25 +90,35 @@ export default function Game() {
   );
 
   function ActionElement() {
-    const color = playerRoleToTeamColor(turn!);
+    if (!myPlayerInGame) {
+      throw new Error("The player is undefined");
+    } else if (!turn) {
+      throw new Error("The turn is undefined");
+    } else if (!myPlayerInGame.role) {
+      throw new Error("The role is undefined");
+    } else if (!myPlayerInGame.team) {
+      throw new Error("The role is undefined");
+    }
 
-    if (color != team) {
+    const color = playerRoleToTeamColor(turn);
+
+    if (color != myPlayerInGame.team) {
       return waitNextTurn;
-    } else if (color === team && role !== turn) {
+    } else if (color === myPlayerInGame.team && myPlayerInGame.role !== turn) {
       if (
-        role == PLAYER_ROLES.RED_OPERATIVE ||
-        role == PLAYER_ROLES.BLUE_OPERATIVE
+        myPlayerInGame.role === PLAYER_ROLES.RED_OPERATIVE ||
+        myPlayerInGame.role === PLAYER_ROLES.BLUE_OPERATIVE
       ) {
         return waitClue;
       } else if (
-        role == PLAYER_ROLES.RED_SPYMASTER ||
-        role == PLAYER_ROLES.BLUE_SPYMASTER
+        myPlayerInGame.role === PLAYER_ROLES.RED_SPYMASTER ||
+        myPlayerInGame.role === PLAYER_ROLES.BLUE_SPYMASTER
       ) {
         return waitGuess;
       }
     }
 
-    switch (role) {
+    switch (myPlayerInGame.role) {
       case PLAYER_ROLES.BLUE_OPERATIVE:
       case PLAYER_ROLES.RED_OPERATIVE:
         return (
@@ -126,9 +136,43 @@ export default function Game() {
 
   return (
     <div className={styles.centered}>
+      <FullScreenPopup />
+      <Modal
+        title={
+          <span
+            style={{
+              color: "white",
+              fontFamily: "Special Elite",
+              fontSize: "20px",
+              textDecoration: "underline",
+            }}
+          >
+            Logs
+          </span>
+        }
+        open={isLog}
+        onCancel={() => setIsLog(false)}
+        footer={null}
+        closeIcon={<CloseOutlined style={{ fontSize: 20 }} />}
+        styles={modalStyles}
+      >
+        <ul
+          style={{
+            paddingTop: "10px",
+            fontSize: 16,
+            textAlign: "center",
+            listStyleType: "none",
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          {logs?.map((log, index) => (
+            <li key={index}>{log}</li>
+          ))}
+        </ul>
+      </Modal>
       <div className={styles.gameBackground}>
-        {!isLog && <LogButton callback={() => setIsLog(true)} />}
-        {isLog && <LogDialog callback={() => setIsLog(false)} />}
+        <LogButton callback={() => setIsLog(true)} />
         <div className={styles.gameContainer}>
           <Board />
           <ActionElement />
@@ -138,3 +182,21 @@ export default function Game() {
     </div>
   );
 }
+
+const modalStyles = {
+  content: {
+    backgroundColor: "#000000cc",
+    fontFamily: "Special Elite",
+  },
+  header: {
+    backgroundColor: "#000000cc",
+    fontFamily: "Special Elite",
+    borderRadius: "20px",
+    padding: "20px",
+  },
+  body: {
+    backgroundColor: "#000000cc",
+    color: "white",
+    padding: "20px",
+  },
+};

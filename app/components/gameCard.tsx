@@ -5,14 +5,9 @@ import styles from "./GameCard.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
-import { selectPlayerName } from "@/lib/features/player";
-import {
-  selectLogs,
-  selectPlayers,
-  selectSelectedCards,
-} from "@/lib/features/game";
 import { setSelectedCard } from "@/lib/features/game";
 import Image from "next/image";
+import { selectMyPlayerInGame } from "../../utils/helpers";
 
 interface GameCardProps {
   card: Card;
@@ -23,30 +18,18 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const dispatch = useDispatch();
 
   const { color, type, content, isRevealed } = card;
-  const playerName = useSelector(selectPlayerName);
-  const players = useSelector(selectPlayers);
 
-  const role = players?.find((e) => e.playerName === playerName)?.role;
-
-  const selectedCards = useSelector(selectSelectedCards);
+  const myPlayerInGame = useSelector(selectMyPlayerInGame);
 
   const animation = useMemo(
     () => ({ rotateY: isRevealed ? 180 : 0 }),
     [isRevealed]
   );
 
-  const logs = useSelector(selectLogs);
-
-  function lastProvidedClue(): number {
-    const lastClue = logs?.findLast((e) => e.includes("provided the Clue"));
-    const numArr = lastClue!.split(" : ");
-    return Number(numArr[numArr.length - 1]);
-  }
-
   function determineBackgroundImage(): CARD_COLOR {
     if (
-      (role === PLAYER_ROLES.BLUE_OPERATIVE ||
-        role === PLAYER_ROLES.RED_OPERATIVE) &&
+      (myPlayerInGame?.role === PLAYER_ROLES.BLUE_OPERATIVE ||
+        myPlayerInGame?.role === PLAYER_ROLES.RED_OPERATIVE) &&
       !isRevealed
     ) {
       // The only case where the card will be forced to grey
@@ -58,20 +41,15 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const cardColor = determineBackgroundImage();
 
   function handleSelectCard() {
+    if (!myPlayerInGame) return;
+
     if (
-      role === PLAYER_ROLES.RED_SPYMASTER ||
-      role === PLAYER_ROLES.BLUE_SPYMASTER
+      myPlayerInGame.role === PLAYER_ROLES.RED_SPYMASTER ||
+      myPlayerInGame.role === PLAYER_ROLES.BLUE_SPYMASTER
     )
       return;
 
-    // Number of selected cars < clue
-    const providedClue = lastProvidedClue();
-    if (
-      (selectedCards && selectedCards.length < providedClue) ||
-      selectedCards?.map((e) => e.id).includes(card.id)
-    ) {
-      dispatch(setSelectedCard(card.id));
-    }
+    dispatch(setSelectedCard(card.id));
   }
 
   if (type !== GAME_TYPE.TEXT) {

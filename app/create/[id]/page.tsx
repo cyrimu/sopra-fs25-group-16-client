@@ -4,19 +4,57 @@ import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { CopyOutlined } from "@ant-design/icons";
 import { selectLobbyId } from "@/lib/features/lobby";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { AppDispatch } from "@/lib/store";
 
 export default function Create() {
   const router = useRouter();
+
+  const dispatch = useDispatch<AppDispatch>();
+
   const id = useSelector(selectLobbyId);
+
   const url = `${globalThis.location.origin}/join/${id}`;
 
   function handleOpenLobby() {
     router.push(`/lobby/${id}`);
   }
 
-  function handleDeleteLobby() {
-    router.back();
+  // Connect to the ws before for the host
+  useEffect(() => {
+    if (id) {
+      dispatch({
+        type: "lobby/connect",
+        payload: { lobbyID: id },
+      });
+    }
+  }, [dispatch, id]);
+
+  if (!id) {
+    return (
+      <div className={styles.centered}>
+        <div className={styles.redOverlay}></div>
+        <div className={styles.messageContainer}>
+          <div className={styles.messageField}>
+            Seems that the lobby you created does not exist anymore. <br />
+            <br />
+            You should navigate back and create a new lobby. <br />
+            <br />
+            - CN
+            <br />
+          </div>
+          <div className={styles.regularButtonContainer}>
+            <button
+              className={styles.regularButton}
+              onClick={() => router.replace("/create")}
+            >
+              Create New Lobby
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -66,9 +104,6 @@ export default function Create() {
           </button>
         </div>
         <div className={styles.regularButtonContainer}>
-          <button className={styles.regularButton} onClick={handleDeleteLobby}>
-            Delete Lobby
-          </button>
           <button className={styles.regularButton} onClick={handleOpenLobby}>
             Open Lobby
           </button>

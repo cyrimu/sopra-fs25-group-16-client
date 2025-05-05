@@ -3,23 +3,24 @@ import "@ant-design/v5-patch-for-react-19";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
 import {
-  selectHost,
   selectLobby,
   selectLobbyId,
   selectLobbyStatus,
+  selectPlayersReady,
 } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import GetReady from "@/components/getReady";
+import GetReady from "@/components/GetReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
-import { getLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
+import { deleteLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { selectGameId, selectGameStatus } from "@/lib/features/game";
 import { isProduction } from "../../../utils/environment";
+import { selectIsHost } from "../../../utils/helpers";
 
 export default function Lobby() {
   const router = useRouter();
@@ -27,49 +28,54 @@ export default function Lobby() {
 
   const lobbyId = useSelector(selectLobbyId);
   const lobby = useSelector(selectLobby);
-  const playerName = useSelector(selectPlayerName);
-  const hostName = useSelector(selectHost);
-  const isHost = playerName === hostName;
-  const nonNullPlayers =
-    lobby?.players?.filter((player) => player !== null).length || 0;
 
-  const [isConfigurationPanelOpen, setConfigurationPanelOpen] = useState(false);
+  const playerName = useSelector(selectPlayerName);
+  const isHost = useSelector(selectIsHost);
+
+  const playersReady = useSelector(selectPlayersReady);
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
 
   const lobbyStatus = useSelector(selectLobbyStatus);
   const gameStatus = useSelector(selectGameStatus);
   const gameId = useSelector(selectGameId);
 
-  const handleConfigPanel = () => {
-    if (lobbyId && playerName && lobby) {
-      dispatch(
-        updateLobby({ lobbyId: lobbyId, username: playerName, lobby: lobby })
-      );
-      setConfigurationPanelOpen((state) => !state);
-    }
-  };
-
+  // Connect to the lobby websocket
   useEffect(() => {
-    if (lobby?.players) {
-      const nonNullPlayers = lobby.players.filter((player) => player !== null);
-      console.log("Non-null players:", nonNullPlayers.length);
+    if (lobbyId) {
+      dispatch({
+        type: "lobby/connect",
+        payload: { lobbyID: lobbyId },
+      });
     }
-  }, [lobby]);
+  }, [dispatch, lobbyId]);
 
-  const handleStartGame = () => {
-    if (gameStatus === "idle" && lobby && playerName) {
-      dispatch(createGame({ lobby: lobby, username: playerName }));
-    }
-  };
-
+  // Once fetched the gameId redirect to the game screen
   useEffect(() => {
     if (gameStatus === "succeeded") {
       setGameStarting(true);
       setTimeout(() => {
+        disconnectLobby();
         router.push(`/game/${gameId}`);
       }, 3000);
     }
   }, [gameId, router, gameStatus]);
+
+  // Lobby object does not exist anymore
+  useEffect(() => {
+    if (lobbyStatus === "idle") {
+      disconnectLobby();
+      router.back();
+    }
+  }, [lobbyStatus, router]);
+
+  function disconnectLobby() {
+    // Disconnect websocket
+    dispatch({
+      type: "lobby/disconnect",
+    });
+  }
 
   function handleLeaveLobby() {
     if (lobbyId && playerName) {
@@ -77,39 +83,31 @@ export default function Lobby() {
     }
   }
 
-  useEffect(() => {
-    if (lobbyStatus === "succeeded" && !isHost) {
-      setInterval(() => {
-        if (playerName && lobbyId) {
-          dispatch(getLobby({ lobbyId: lobbyId, username: playerName }));
-        }
-      }, 1000);
+  const handleConfigPanel = () => {
+    if (lobbyId && playerName && lobby) {
+      dispatch(
+        updateLobby({ lobbyId: lobbyId, username: playerName, lobby: lobby })
+      );
+      setIsPanelOpen((state) => !state);
     }
-  }, [dispatch, isHost, lobbyId, lobbyStatus, playerName]);
-
-  useEffect(() => {
-    if (lobbyStatus === "succeeded" && gameId) {
-      setGameStarting(true);
-      setTimeout(() => {
-        router.push(`/game/${gameId}`);
-      }, 3000);
-    }
-  }, [lobbyStatus, gameId, router]);
-
-  useEffect(() => {
-    if (lobbyStatus === "idle") {
-      // After the lobby is removed go back
-      router.back();
-    }
-  }, [lobbyStatus, router]);
-
-  const confirmDeleteLobby = () => {
-    router.replace("/create");
   };
 
-  const cancelDeleteLobby = () => {
-    router.back();
+  const handleStartGame = () => {
+    if (gameStatus === "idle" && lobby && playerName) {
+      dispatch(createGame({ lobby: lobby, username: playerName }));
+    }
   };
+
+  function confirmDeleteLobby() {
+    if (lobbyId && playerName) {
+      dispatch(
+        deleteLobby({
+          lobbyId: lobbyId,
+          username: playerName,
+        })
+      );
+    }
+  }
 
   if (isGameStarting) {
     return <GetReady />;
@@ -117,12 +115,28 @@ export default function Lobby() {
 
   return (
     <div className={styles.centered}>
-      <div className={styles.redBlueOverlay}></div>
+      <div className={styles.redBlueOverlay} />
+      <Modal
+        styles={modalStyles}
+        title={<span style={{ color: "white" }}>Configuration Panel</span>}
+        open={isPanelOpen}
+        onOk={handleConfigPanel}
+        okButtonProps={{
+          style: { fontFamily: "Gabarito", fontSize: "20px" },
+        }}
+        okText="Save"
+        onCancel={() => setIsPanelOpen((state) => !state)}
+        cancelButtonProps={{
+          style: { fontFamily: "Gabarito", fontSize: "20px" },
+        }}
+        cancelText="Cancel"
+      >
+        <ConfigurationPanel />
+      </Modal>
       <div className={styles.messageContainer}>
-        {!isConfigurationPanelOpen && (
-          <div className={styles.lobbyTitle}>Game Lobby</div>
-        )}
-        {!isConfigurationPanelOpen && <PlayerTable />}
+        <div className={styles.lobbyTitle}>Game Lobby</div>
+        <PlayerTable />
+
         {!isHost && (
           <div className={styles.regularButtonContainer}>
             <button className={styles.regularButton} onClick={handleLeaveLobby}>
@@ -138,35 +152,16 @@ export default function Lobby() {
             >
               Change Setup
             </button>
-            <Modal
-              styles={modalStyles}
-              title={
-                <span style={{ color: "white" }}>Configuration Panel</span>
-              }
-              open={isConfigurationPanelOpen}
-              onOk={handleConfigPanel}
-              okButtonProps={{
-                style: { fontFamily: "Gabarito", fontSize: "20px" },
-              }}
-              okText="Save"
-              onCancel={handleConfigPanel}
-              cancelButtonProps={{
-                style: { fontFamily: "Gabarito", fontSize: "20px" },
-              }}
-              cancelText="Cancel"
-            >
-              <ConfigurationPanel />
-            </Modal>
             <button
               className={`${styles.regularButton} ${
-                nonNullPlayers !== 4 ? styles.disabledButton : ""
+                playersReady?.length !== 4 ? styles.disabledButton : ""
               }`}
               onClick={handleStartGame}
-              disabled={isProduction() && nonNullPlayers !== 4}
+              disabled={isProduction() && playersReady?.length !== 4}
             >
               <Tooltip
                 title={
-                  nonNullPlayers !== 4
+                  playersReady?.length !== 4
                     ? "You need exactly 4 players to start the game"
                     : ""
                 }
@@ -181,7 +176,7 @@ export default function Lobby() {
                 </span>
               }
               onConfirm={confirmDeleteLobby}
-              onCancel={cancelDeleteLobby}
+              // onCancel={cancelDeleteLobby}
               okText="Yes"
               cancelText="No"
               icon={false}

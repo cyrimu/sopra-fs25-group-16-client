@@ -2,16 +2,15 @@ import { CARD_COLOR } from "@/lib/features/game/card.types";
 import styles from "./Scoreboard.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCards } from "@/lib/features/game";
-import { selectPlayers } from "@/lib/features/game";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { selectPlayerName, setPlayerName } from "@/lib/features/player";
 import { isProduction } from "../../utils/environment";
+import { selectPlayerFromGameByRole } from "../../utils/helpers";
 
 const Scoreboard: React.FC = () => {
   const dispatch = useDispatch();
 
   const cards = useSelector(selectCards);
-  const players = useSelector(selectPlayers);
   const playerName = useSelector(selectPlayerName);
 
   const production = isProduction();
@@ -24,17 +23,17 @@ const Scoreboard: React.FC = () => {
   const redCardsNumber = calculateTeamCardsLeft(CARD_COLOR.RED);
   const blueCardsNumber = calculateTeamCardsLeft(CARD_COLOR.BLUE);
 
-  const blueOperative = players?.find(
-    (e) => e.role === PLAYER_ROLES.BLUE_OPERATIVE
+  const blueOperative = useSelector(
+    selectPlayerFromGameByRole(PLAYER_ROLES.BLUE_OPERATIVE)
   );
-  const blueSpymaster = players?.find(
-    (e) => e.role === PLAYER_ROLES.BLUE_SPYMASTER
+  const blueSpymaster = useSelector(
+    selectPlayerFromGameByRole(PLAYER_ROLES.BLUE_SPYMASTER)
   );
-  const redOperative = players?.find(
-    (e) => e.role === PLAYER_ROLES.RED_OPERATIVE
+  const redOperative = useSelector(
+    selectPlayerFromGameByRole(PLAYER_ROLES.RED_OPERATIVE)
   );
-  const redSpymaster = players?.find(
-    (e) => e.role === PLAYER_ROLES.RED_SPYMASTER
+  const redSpymaster = useSelector(
+    selectPlayerFromGameByRole(PLAYER_ROLES.RED_SPYMASTER)
   );
 
   function changeTeam(playerName: string | undefined) {
