@@ -1,0 +1,28 @@
+.historyField {
+  border-radius: 20px;
+  background-color: #2f2f2f;
+  font-family: "Gabarito";
+  color: white;
+  font-size: 20px;
+  outline: 1px dashed white;
+  outline-offset: -5px;
+  padding: 5px;
+  width: 100%;
+}
+
+.historyField > tbody > tr > td {
+  text-align: center;
+}
+
+.historyField > tbody > tr > td,
+.historyField > thead > tr > th {
+  padding: 10px 10px;
+}
+
+.historyField > tbody > tr {
+  cursor: pointer;
+}
+
+.historyField > tbody > tr:hover {
+  background-color: #1a1a1a;
+}
