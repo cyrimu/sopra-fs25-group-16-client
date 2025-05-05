@@ -139,7 +139,7 @@ export class ApiService {
    * @param endpoint - The API endpoint (e.g. "/users/123").
    * @returns JSON data of type T.
    */
-  public async delete<T>(endpoint: string, data: unknown): Promise<void> {
+  public async delete(endpoint: string, data: unknown): Promise<void> {
     const url = `${this.baseURL}${endpoint}`;
     await fetch(url, {
       method: "DELETE",

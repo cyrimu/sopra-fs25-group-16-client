@@ -20,7 +20,7 @@ export const PlayerReadyStatus = ({
   function sendPlayerReady() {
     if (playerName)
       dispatch({
-        type: "socket/ready",
+        type: "lobby/ready",
         payload: playerName,
       });
   }

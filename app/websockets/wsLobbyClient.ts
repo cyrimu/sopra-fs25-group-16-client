@@ -6,7 +6,7 @@ import { getApiDomain } from "../../utils/domain";
 import {
   lobbyBeenDeleted,
   setLobby,
-  setPlayerReady,
+  setPlayersReady,
 } from "@/lib/features/lobby";
 import { getGame } from "@/lib/features/game/api";
 import { AppDispatch } from "@/lib/store";
@@ -46,7 +46,7 @@ export const createLobbySocketMiddleware = (): Middleware => {
                   return;
                 } else if (data.type === "ready") {
                   console.log("Received ready", data);
-                  storeAPI.dispatch(setPlayerReady(data.readyPlayers));
+                  storeAPI.dispatch(setPlayersReady(data.readyPlayers));
                   return;
                 } else if (data.type === "game") {
                   console.log("Received game", data);
@@ -69,7 +69,7 @@ export const createLobbySocketMiddleware = (): Middleware => {
         client = newClient;
         break;
 
-      case "socket/ready":
+      case "lobby/ready":
         if (client?.connected && client) {
           console.log("Ready sent", action.payload);
           client.publish({
@@ -78,26 +78,6 @@ export const createLobbySocketMiddleware = (): Middleware => {
           });
         }
         break;
-
-      // case "socket/guess":
-      //   if (client?.connected && client) {
-      //     console.log("Guess sent", action.payload);
-      //     client.publish({
-      //       destination: `/app/game/${lobbyID}/guess`,
-      //       body: JSON.stringify(action.payload),
-      //     });
-      //   }
-      //   break;
-
-      // case "socket/skipGuess":
-      //   if (client?.connected && client) {
-      //     console.log("Skip guess sent", action.payload);
-      //     client.publish({
-      //       destination: `/app/game/${lobbyID}/skipGuess`,
-      //       body: action.payload,
-      //     });
-      //   }
-      //   break;
 
       case "lobby/disconnect": {
         client?.deactivate();

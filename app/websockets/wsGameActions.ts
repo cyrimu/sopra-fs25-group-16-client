@@ -20,21 +20,21 @@ interface SocketDisconnectAction {
 }
 
 interface SocketSendClueAction {
-  type: "socket/sendClue";
+  type: "game/sendClue";
   payload: {
     clue: Clue;
   };
 }
 
 interface SocketGuessAction {
-  type: "socket/guess";
+  type: "game/guess";
   payload: {
     guess: Guess;
   };
 }
 
 interface SocketSkipGuessAction {
-  type: "socket/skipGuess";
+  type: "game/skipGuess";
   payload: string;
 }
 
@@ -46,9 +46,9 @@ export const isSocketAction = (action: unknown): action is SocketActions => {
   const socketActionTypes = [
     "game/connect",
     "game/disconnect",
-    "socket/sendClue",
-    "socket/guess",
-    "socket/skipGuess",
+    "game/sendClue",
+    "game/guess",
+    "game/skipGuess",
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

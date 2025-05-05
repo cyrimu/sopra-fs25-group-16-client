@@ -26,7 +26,7 @@ const ClueForm: React.FC = () => {
     };
 
     dispatch({
-      type: "socket/sendClue",
+      type: "game/sendClue",
       payload: clue,
     });
   }

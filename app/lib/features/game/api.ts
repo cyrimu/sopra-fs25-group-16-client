@@ -41,8 +41,7 @@ export const createGame = createAsyncThunk(
 
     const response = await apiService.post<Game>(
       `/game/${lobby.lobbyID}?username=${username}`,
-      // production ? lobby : updatedLobby
-      lobby
+      production ? lobby : updatedLobby
     );
     return response;
   }

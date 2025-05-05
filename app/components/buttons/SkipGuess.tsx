@@ -9,7 +9,7 @@ const SkipGuess: React.FC = () => {
 
   function submitSelectionHandle() {
     dispatch({
-      type: "socket/skipGuess",
+      type: "game/skipGuess",
       payload: username,
     });
   }

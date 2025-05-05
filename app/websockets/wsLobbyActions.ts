@@ -15,7 +15,7 @@ interface SocketDisconnectAction {
 }
 
 interface SocketReadyAction {
-  type: "socket/ready";
+  type: "lobby/ready";
   payload: string;
 }
 
@@ -27,7 +27,7 @@ export const isSocketAction = (action: unknown): action is SocketActions => {
   const socketActionTypes = [
     "lobby/connect",
     "lobby/disconnect",
-    "socket/ready",
+    "lobby/ready",
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

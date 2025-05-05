@@ -57,10 +57,16 @@ const gameSlice = createSlice({
     // Update the selected card state
     setSelectedCard(state, action: PayloadAction<number>) {
       const id = action.payload;
+
       if (state.game) {
-        state.game.cards = state.game.cards.map((e) =>
-          e.id === id ? { ...e, isSelected: !e.isSelected } : e
-        );
+        const selectedCards = state.game?.cards.filter((e) => e.isSelected);
+        const isSelected = selectedCards?.some((e) => e.id === id);
+
+        if (selectCards.length < 1 && isSelected) {
+          state.game.cards = state.game.cards.map((e) =>
+            e.id === id ? { ...e, isSelected: !e.isSelected } : e
+          );
+        }
       }
     },
     // Insert a new log entry
@@ -81,6 +87,8 @@ const gameSlice = createSlice({
     selectCards: (state) => state.game?.cards,
     selectSelectedCards: (state) =>
       state.game?.cards.filter(({ isSelected }) => isSelected),
+    selectLastClue: (state) =>
+      state.game?.log?.findLast((e) => e.includes("provided the Clue")),
   },
   extraReducers(builder) {
     builder
@@ -127,6 +135,7 @@ export const {
   selectCards,
   selectSelectedCards,
   selectPlayers,
+  selectLastClue,
 } = gameSlice.selectors;
 
 export default gameSlice.reducer;

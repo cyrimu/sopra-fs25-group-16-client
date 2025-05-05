@@ -3,9 +3,7 @@ import "@ant-design/v5-patch-for-react-19";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
 import {
-  selectHost,
   selectLobby,
-  selectLobbyCurrentGameId,
   selectLobbyId,
   selectLobbyStatus,
   selectPlayersReady,
@@ -22,6 +20,7 @@ import { deleteLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { selectGameId, selectGameStatus } from "@/lib/features/game";
 import { isProduction } from "../../../utils/environment";
+import { selectIsHost } from "../../../utils/helpers";
 
 export default function Lobby() {
   const router = useRouter();
@@ -29,11 +28,9 @@ export default function Lobby() {
 
   const lobbyId = useSelector(selectLobbyId);
   const lobby = useSelector(selectLobby);
-  const lobbyCurrentGameId = useSelector(selectLobbyCurrentGameId);
 
   const playerName = useSelector(selectPlayerName);
-  const hostName = useSelector(selectHost);
-  const isHost = playerName === hostName;
+  const isHost = useSelector(selectIsHost);
 
   const playersReady = useSelector(selectPlayersReady);
 
@@ -54,36 +51,31 @@ export default function Lobby() {
     }
   }, [dispatch, lobbyId]);
 
-  // HOST ONLY: redirect to the game after creating it
+  // Once fetched the gameId redirect to the game screen
   useEffect(() => {
     if (gameStatus === "succeeded") {
       setGameStarting(true);
       setTimeout(() => {
+        disconnectLobby();
         router.push(`/game/${gameId}`);
       }, 3000);
     }
   }, [gameId, router, gameStatus]);
 
-  // PLAYERS ONLY: redirect to the game once the game object exists inside the lobby
-  useEffect(() => {
-    if (lobbyStatus === "succeeded" && lobbyCurrentGameId) {
-      setGameStarting(true);
-      setTimeout(() => {
-        router.push(`/game/${lobbyCurrentGameId}`);
-      }, 3000);
-    }
-  }, [lobbyStatus, lobbyCurrentGameId, router]);
-
   // Lobby object does not exist anymore
   useEffect(() => {
     if (lobbyStatus === "idle") {
-      // Disconnect websocket
-      dispatch({
-        type: "lobby/disconnect",
-      });
+      disconnectLobby();
       router.back();
     }
   }, [lobbyStatus, router]);
+
+  function disconnectLobby() {
+    // Disconnect websocket
+    dispatch({
+      type: "lobby/disconnect",
+    });
+  }
 
   function handleLeaveLobby() {
     if (lobbyId && playerName) {

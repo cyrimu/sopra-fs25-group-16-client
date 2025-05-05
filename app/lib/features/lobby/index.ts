@@ -69,8 +69,8 @@ const lobbySlice = createSlice({
     lobbyBeenDeleted() {
       return initialState;
     },
-    // Set player ready
-    setPlayerReady(state, action: PayloadAction<string[]>) {
+    // Set players ready
+    setPlayersReady(state, action: PayloadAction<string[]>) {
       if (state.lobby) {
         state.lobby.playersReady = action.payload;
       }
@@ -125,37 +125,31 @@ const lobbySlice = createSlice({
     selectLobby: (state) => state.lobby,
     selectLobbyId: (state) => state.lobby?.lobbyID,
     selectLobbyStatus: (state) => state.status,
-    selectHost: (state) => state.lobby?.host,
     selectPlayers: (state) => state.lobby?.players,
     selectGameType: (state) => state.lobby?.gameType,
     selectLanguage: (state) => state.lobby?.language,
-    selectPlayerCount: (state) => state.lobby?.playerCount,
-    selectLobbyCurrentGameId: (state) => state.lobby?.currentGame?.gameID,
     selectPlayersReady: (state) => state.lobby?.playersReady,
   },
 });
 
 export const {
-  restartCurrentGame,
-  lobbyBeenDeleted,
   setLobby,
   setLobbyId,
-  setPlayer,
   setGameType,
   setLanguage,
-  updateConnections,
-  setPlayerReady,
+  setPlayer,
+  setPlayersReady,
+  restartCurrentGame,
+  lobbyBeenDeleted,
 } = lobbySlice.actions;
 
 export const {
   selectLobby,
   selectLobbyId,
   selectLobbyStatus,
-  selectHost,
   selectPlayers,
   selectGameType,
   selectLanguage,
-  selectLobbyCurrentGameId,
   selectPlayersReady,
 } = lobbySlice.selectors;
 

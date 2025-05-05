@@ -45,7 +45,7 @@ export const createGameSocketMiddleware = (): Middleware => {
         client = newClient;
         break;
 
-      case "socket/sendClue":
+      case "game/sendClue":
         if (client?.connected && client) {
           console.log("Clue sent", action.payload);
           client.publish({
@@ -54,7 +54,7 @@ export const createGameSocketMiddleware = (): Middleware => {
           });
         }
         break;
-      case "socket/guess":
+      case "game/guess":
         if (client?.connected && client) {
           console.log("Guess sent", action.payload);
           client.publish({
@@ -64,7 +64,7 @@ export const createGameSocketMiddleware = (): Middleware => {
         }
         break;
 
-      case "socket/skipGuess":
+      case "game/skipGuess":
         if (client?.connected && client) {
           console.log("Skip guess sent", action.payload);
           client.publish({

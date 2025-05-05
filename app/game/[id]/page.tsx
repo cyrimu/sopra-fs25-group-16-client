@@ -7,8 +7,7 @@ import styles from "@/styles/game.module.css";
 import Board from "@/components/Board";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPlayerName } from "@/lib/features/player";
-import { selectLogs, selectPlayers, selectWinner } from "@/lib/features/game";
+import { selectLogs, selectWinner } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
@@ -20,6 +19,7 @@ import { useRouter } from "next/navigation";
 import Modal from "antd/es/modal/Modal";
 import { CloseOutlined } from "@ant-design/icons";
 import FullScreenPopup from "@/components/FullScreenPopup";
+import { selectMyPlayerInGame } from "../../../utils/helpers";
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -32,23 +32,19 @@ export default function Game() {
   const winner = useSelector(selectWinner);
 
   const [isLog, setIsLog] = useState(false);
-  const playerName = useSelector(selectPlayerName);
-  const players = useSelector(selectPlayers);
   const turn = useSelector(selectTurn);
 
-  const player = players?.find((e) => e.playerName === playerName);
-  const role = player!.role;
-  const team = player!.team;
+  const myPlayerInGame = useSelector(selectMyPlayerInGame);
 
   useEffect(() => {
     if (winner) {
-      if (winner == player?.team) {
+      if (winner == myPlayerInGame?.team) {
         router.push(`/game/${gameID}/results/winner`);
       } else {
         router.push(`/game/${gameID}/results/looser`);
       }
     }
-  }, [router, turn, winner, gameID, player?.team]);
+  }, [router, turn, winner, gameID, myPlayerInGame?.team]);
 
   useEffect(() => {
     dispatch({
@@ -94,25 +90,35 @@ export default function Game() {
   );
 
   function ActionElement() {
-    const color = playerRoleToTeamColor(turn!);
+    if (!myPlayerInGame) {
+      throw new Error("The player is undefined");
+    } else if (!turn) {
+      throw new Error("The turn is undefined");
+    } else if (!myPlayerInGame.role) {
+      throw new Error("The role is undefined");
+    } else if (!myPlayerInGame.team) {
+      throw new Error("The role is undefined");
+    }
 
-    if (color != team) {
+    const color = playerRoleToTeamColor(turn);
+
+    if (color != myPlayerInGame.team) {
       return waitNextTurn;
-    } else if (color === team && role !== turn) {
+    } else if (color === myPlayerInGame.team && myPlayerInGame.role !== turn) {
       if (
-        role == PLAYER_ROLES.RED_OPERATIVE ||
-        role == PLAYER_ROLES.BLUE_OPERATIVE
+        myPlayerInGame.role === PLAYER_ROLES.RED_OPERATIVE ||
+        myPlayerInGame.role === PLAYER_ROLES.BLUE_OPERATIVE
       ) {
         return waitClue;
       } else if (
-        role == PLAYER_ROLES.RED_SPYMASTER ||
-        role == PLAYER_ROLES.BLUE_SPYMASTER
+        myPlayerInGame.role === PLAYER_ROLES.RED_SPYMASTER ||
+        myPlayerInGame.role === PLAYER_ROLES.BLUE_SPYMASTER
       ) {
         return waitGuess;
       }
     }
 
-    switch (role) {
+    switch (myPlayerInGame.role) {
       case PLAYER_ROLES.BLUE_OPERATIVE:
       case PLAYER_ROLES.RED_OPERATIVE:
         return (

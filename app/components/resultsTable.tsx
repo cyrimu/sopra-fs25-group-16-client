@@ -3,9 +3,9 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Popconfirm } from "antd";
 import { selectPlayers } from "@/lib/features/game";
-import { selectLobbyId, selectHost } from "@/lib/features/lobby";
-import { selectPlayerName } from "@/lib/features/player";
+import { selectLobbyId } from "@/lib/features/lobby";
 import { useSelector } from "react-redux";
+import { selectIsHost } from "../../utils/helpers";
 
 const ResultsTable: React.FC = () => {
   const router = useRouter();
@@ -13,9 +13,7 @@ const ResultsTable: React.FC = () => {
   const lobbyId = useSelector(selectLobbyId);
   // const gameId = useSelector(selectGameId);
 
-  const playerName = useSelector(selectPlayerName);
-  const hostName = useSelector(selectHost);
-  const isHost = playerName === hostName;
+  const isHost = useSelector(selectIsHost);
 
   const players = useSelector(selectPlayers);
 
