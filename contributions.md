@@ -118,13 +118,13 @@ reason).
 
 ---
 
-## Contributions Week 6 - [Begin Date] to [End Date]
+## Contributions Week 6 - [05.05.2025] to [11.05.2025]
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@sgm17]** | [05.05.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/7d690c7589fba2e59d51c163ccfef11257ee2635) | [Created the history button, the history modal and the old game feature that retrieves old games from the local storage.] | [The host can access old saved games, delete them or resume them. It will be very helpful in the future to keep the persistance of a non-finished game.] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
