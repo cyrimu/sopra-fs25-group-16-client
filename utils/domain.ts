@@ -4,7 +4,6 @@
  * In development, it returns "http://localhost:8080".
  */
 export function getApiDomain(): string {
-  return "http://localhost:8080";
   const url = process.env.NEXT_PUBLIC_PROD_API_URL || "http://localhost:8080"; // TODO: update with your production URL as needed.
   return url;
 }
