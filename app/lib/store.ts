@@ -4,6 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import player from "./features/player/index";
 import lobby from "./features/lobby/index";
 import game from "./features/game/index";
+import old from "./features/old";
 
 export const makeStore = () => {
   return configureStore({
@@ -11,6 +12,7 @@ export const makeStore = () => {
       player,
       lobby,
       game,
+      old,
     },
     middleware: (gDM) =>
       gDM().concat(createGameSocketMiddleware(), createLobbySocketMiddleware()),
