@@ -116,6 +116,9 @@ reason).
 | **[@sgm17]** | [04.05.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/b61a5d0e4ad220b504fe132c8e70ba5b68a173e0) | [Implemented WS in the Lobby. The users can join, leave and delete a lobby in real time. They can set its state to ready inside the lobby. The configuration of the lobby is updated in real time as well. When the Host starts the game, the other players start it as well.] | [There is more action in the lobby. Therefore all the users can see who is in there, the configuration and so. Finally it is possible to start a game and play with 4 real users] |
 |                    | [04.05.2025]   | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-server/pull/107/files) | [I have created a LobbyDTO that parses the entire lobby. Then a LobbyControler that handle the users that are ready to start a game. I have created a delete Lobby method to delete the lobby. Now everytime a user deletes a lobby, creates a game or updates the lobby notifies the other users] | [After deleting or updating a lobby is necessary to notify the other users to update their components. Also, after creating a game is important to send them the gameId to join it] |
 
+| **[@rashmidindgur]** | [05.05.2025]   | [n/a] | [Contributions Joker] | [n/a] |
+
+
 ---
 
 ## Contributions Week 6 - [Begin Date] to [End Date]
