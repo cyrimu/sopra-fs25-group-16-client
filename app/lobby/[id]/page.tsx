@@ -21,6 +21,7 @@ import { createGame } from "@/lib/features/game/api";
 import { selectGameId, selectGameStatus } from "@/lib/features/game";
 import { isProduction } from "../../../utils/environment";
 import { selectIsHost } from "../../../utils/helpers";
+import HistoryButton from "@/components/buttons/HistoryButton";
 
 export default function Lobby() {
   const router = useRouter();
@@ -115,6 +116,7 @@ export default function Lobby() {
 
   return (
     <div className={styles.centered}>
+      {isHost && <HistoryButton type="primary" />}
       <div className={styles.redBlueOverlay} />
       <Modal
         styles={modalStyles}

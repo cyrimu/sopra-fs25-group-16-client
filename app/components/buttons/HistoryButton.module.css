@@ -1,0 +1,12 @@
+.rulesButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+}
+
+.rulesIcon {
+  font-size: 50px;
+  font-family: "Gabarito";
+  font-weight: bold;
+}
