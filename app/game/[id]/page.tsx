@@ -141,8 +141,7 @@ export default function Game() {
         title={
           <span
             style={{
-              color: "white",
-              fontFamily: "Special Elite",
+              fontFamily: "Gabarito",
               fontSize: "20px",
               textDecoration: "underline",
             }}
@@ -185,18 +184,14 @@ export default function Game() {
 
 const modalStyles = {
   content: {
-    backgroundColor: "#000000cc",
-    fontFamily: "Special Elite",
+    fontFamily: "Gabarito",
   },
   header: {
-    backgroundColor: "#000000cc",
-    fontFamily: "Special Elite",
+    fontFamily: "Gabarito",
     borderRadius: "20px",
     padding: "20px",
   },
   body: {
-    backgroundColor: "#000000cc",
-    color: "white",
     padding: "20px",
   },
 };
