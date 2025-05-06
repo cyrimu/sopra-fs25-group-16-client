@@ -26,10 +26,6 @@ const lobbySlice = createSlice({
     setLobby(state, action: PayloadAction<Lobby>) {
       state.lobby = action.payload;
     },
-    // Update the state with the new lobby ID
-    setLobbyId(state, action: PayloadAction<string>) {
-      if (state.lobby) state.lobby.lobbyID = action.payload;
-    },
     // Insert a new player into the state
     setPlayer(state, action: PayloadAction<Player>) {
       if (state.lobby) {
@@ -56,10 +52,6 @@ const lobbySlice = createSlice({
     // Set the language
     setLanguage(state, action: PayloadAction<LANGUAGES>) {
       if (state.lobby) state.lobby.language = action.payload;
-    },
-    // Update the number of connected players
-    updateConnections(state, action: PayloadAction<number>) {
-      if (state.lobby) state.lobby.playerCount = action.payload;
     },
     // Delete lobby
     lobbyBeenDeleted() {
@@ -130,7 +122,6 @@ const lobbySlice = createSlice({
 
 export const {
   setLobby,
-  setLobbyId,
   setGameType,
   setLanguage,
   setPlayer,
