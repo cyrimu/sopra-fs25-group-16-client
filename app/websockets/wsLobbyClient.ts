@@ -51,6 +51,7 @@ export const createLobbySocketMiddleware = (): Middleware => {
                 } else if (data.type === "game") {
                   console.log("Received game", data);
                   const dispatch: AppDispatch = storeAPI.dispatch;
+
                   dispatch(
                     getGame({
                       username: data.username,
@@ -82,6 +83,17 @@ export const createLobbySocketMiddleware = (): Middleware => {
       case "lobby/disconnect": {
         client?.deactivate();
         client = null;
+        break;
+      }
+
+      case "lobby/oldGame": {
+        if (client?.connected && client) {
+          console.log("Ready sent", action.payload);
+          client.publish({
+            destination: `/app/lobby/${lobbyID}/oldGame`,
+            body: JSON.stringify(action.payload),
+          });
+        }
         break;
       }
 

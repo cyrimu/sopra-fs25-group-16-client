@@ -1,13 +1,12 @@
 type SocketActions =
   | SocketConnectAction
   | SocketReadyAction
-  | SocketDisconnectAction;
+  | SocketDisconnectAction
+  | SocketOldGameAction;
 
 interface SocketConnectAction {
   type: "lobby/connect";
-  payload: {
-    lobbyID: string;
-  };
+  payload: { lobbyID: string };
 }
 
 interface SocketDisconnectAction {
@@ -19,6 +18,11 @@ interface SocketReadyAction {
   payload: string;
 }
 
+interface SocketOldGameAction {
+  type: "lobby/oldGame";
+  payload: { username: string; gameId: string };
+}
+
 export const isSocketAction = (action: unknown): action is SocketActions => {
   if (typeof action !== "object" || action === null || !("type" in action)) {
     return false;
@@ -28,6 +32,7 @@ export const isSocketAction = (action: unknown): action is SocketActions => {
     "lobby/connect",
     "lobby/disconnect",
     "lobby/ready",
+    "lobby/oldGame",
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
