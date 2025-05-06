@@ -116,7 +116,7 @@ export default function Lobby() {
 
   return (
     <div className={styles.centered}>
-      {isHost && <HistoryButton type="primary" />}
+      {isHost && <HistoryButton />}
       <div className={styles.redBlueOverlay} />
       <Modal
         styles={modalStyles}

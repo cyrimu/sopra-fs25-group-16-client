@@ -5,9 +5,9 @@ import MakeGuess from "@/components/buttons/MakeGuess";
 import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
 import Board from "@/components/Board";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLogs, selectWinner } from "@/lib/features/game";
+import { selectWinner } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
@@ -16,22 +16,18 @@ import { selectGameId, selectTurn } from "@/lib/features/game";
 import HintForm from "@/components/ClueForm";
 import SkipGuess from "@/components/buttons/SkipGuess";
 import { useRouter } from "next/navigation";
-import Modal from "antd/es/modal/Modal";
-import { CloseOutlined } from "@ant-design/icons";
 import FullScreenPopup from "@/components/FullScreenPopup";
 import { selectMyPlayerInGame } from "../../../utils/helpers";
+import SaveButton from "@/components/buttons/SaveButton";
 
 export default function Game() {
   const dispatch = useDispatch();
 
   const router = useRouter();
 
-  const logs = useSelector(selectLogs);
-
   const gameID = useSelector(selectGameId);
   const winner = useSelector(selectWinner);
 
-  const [isLog, setIsLog] = useState(false);
   const turn = useSelector(selectTurn);
 
   const myPlayerInGame = useSelector(selectMyPlayerInGame);
@@ -137,41 +133,13 @@ export default function Game() {
   return (
     <div className={styles.centered}>
       <FullScreenPopup />
-      <Modal
-        title={
-          <span
-            style={{
-              fontFamily: "Gabarito",
-              fontSize: "20px",
-              textDecoration: "underline",
-            }}
-          >
-            Logs
-          </span>
-        }
-        open={isLog}
-        onCancel={() => setIsLog(false)}
-        footer={null}
-        closeIcon={<CloseOutlined style={{ fontSize: 20 }} />}
-        styles={modalStyles}
-      >
-        <ul
-          style={{
-            paddingTop: "10px",
-            fontSize: 16,
-            textAlign: "center",
-            listStyleType: "none",
-            margin: 0,
-            padding: 0,
-          }}
-        >
-          {logs?.map((log, index) => (
-            <li key={index}>{log}</li>
-          ))}
-        </ul>
-      </Modal>
       <div className={styles.gameBackground}>
-        <LogButton callback={() => setIsLog(true)} />
+        <div className={styles.gameLogController}>
+          <LogButton />
+        </div>
+        <div className={styles.gameSaveController}>
+          <SaveButton />
+        </div>
         <div className={styles.gameContainer}>
           <Board />
           <ActionElement />
@@ -181,17 +149,3 @@ export default function Game() {
     </div>
   );
 }
-
-const modalStyles = {
-  content: {
-    fontFamily: "Gabarito",
-  },
-  header: {
-    fontFamily: "Gabarito",
-    borderRadius: "20px",
-    padding: "20px",
-  },
-  body: {
-    padding: "20px",
-  },
-};
