@@ -62,8 +62,8 @@ const PlayerTable: React.FC = () => {
               return (
                 <tr key={index}>
                   <td>{playerName}</td>
-                  <td>{!team ? "N/A" : teamString}</td>
-                  <td>{!role ? "N/A" : roleString}</td>
+                  <td>{team ? teamString : "N/A"}</td>
+                  <td>{role ? roleString : "N/A"}</td>
                   <td>
                     <PlayerReadyStatus
                       isReady={isReady(playerName)}

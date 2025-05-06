@@ -19,22 +19,25 @@ export default function Join() {
 
   const lobbyStatus = useSelector(selectLobbyStatus);
 
-  function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-
-    if (lobbyStatus === "idle" && username && id) {
-      // Store the username
-      dispatch(setPlayerName(username));
-      // Try to join the lobby and thhere fore get it
-      dispatch(joinLobby({ lobbyId: id, username: username }));
-    }
-  }
-
   useEffect(() => {
     if (lobbyStatus === "succeeded") {
       if (id) router.push(`/lobby/${id}`);
     }
   }, [id, lobbyStatus, router]);
+
+  function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+
+    if (!username) throw new Error("A username must be provided");
+    if (!id) throw new Error("An id must be provided");
+
+    if (lobbyStatus === "idle") {
+      // Store the username
+      dispatch(setPlayerName(username));
+      // Try to join the lobby and set it inside the provider
+      dispatch(joinLobby({ lobbyId: id, username: username }));
+    }
+  }
 
   return (
     <div className={styles.centered}>

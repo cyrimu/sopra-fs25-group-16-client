@@ -17,12 +17,13 @@ const ClueForm: React.FC = () => {
   const validValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   function handleSendGuess() {
-    if (!number) return;
+    if (!number) throw new Error("A number must be provided");
+    if (!playerName) throw new Error("The playerName is undefined");
 
     const clue: Clue = {
       clueText: hint,
       clueNumber: number,
-      username: playerName!,
+      username: playerName,
     };
 
     dispatch({

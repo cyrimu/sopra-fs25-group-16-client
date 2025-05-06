@@ -27,9 +27,13 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   );
 
   function determineBackgroundImage(): CARD_COLOR {
+    const role = myPlayerInGame?.role;
+
+    if (!role) throw new Error("The role of the player in game is null");
+
     if (
-      (myPlayerInGame?.role === PLAYER_ROLES.BLUE_OPERATIVE ||
-        myPlayerInGame?.role === PLAYER_ROLES.RED_OPERATIVE) &&
+      (role === PLAYER_ROLES.BLUE_OPERATIVE ||
+        role === PLAYER_ROLES.RED_OPERATIVE) &&
       !isRevealed
     ) {
       // The only case where the card will be forced to grey
@@ -41,11 +45,13 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const cardColor = determineBackgroundImage();
 
   function handleSelectCard() {
-    if (!myPlayerInGame) return;
+    const role = myPlayerInGame?.role;
+
+    if (!role) throw new Error("The role of the player in game is null");
 
     if (
-      myPlayerInGame.role === PLAYER_ROLES.RED_SPYMASTER ||
-      myPlayerInGame.role === PLAYER_ROLES.BLUE_SPYMASTER
+      role === PLAYER_ROLES.RED_SPYMASTER ||
+      role === PLAYER_ROLES.BLUE_SPYMASTER
     )
       return;
 

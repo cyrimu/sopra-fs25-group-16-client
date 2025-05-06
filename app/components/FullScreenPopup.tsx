@@ -16,10 +16,10 @@ const FullScreenPopup = () => {
   const triggerValue = lastProvidedClue();
 
   function lastProvidedClue(): string | undefined {
-    const numArr = lastClue?.split(" : ")[0].split(": ");
-    if (!numArr) {
-      return undefined;
-    }
+    if (!lastClue) return undefined;
+
+    const numArr = lastClue.split(" : ")[0].split(": ");
+
     return numArr[numArr.length - 1];
   }
 
