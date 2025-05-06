@@ -49,14 +49,16 @@ const gameSlice = createSlice({
         });
       }
     },
+    // Notify users when a game is saved
+    setSavedGame(state) {
+      if (state.game) state.game.saved = true;
+    },
   },
   selectors: {
     selectLogs: (state) => state.game?.log,
     selectGameId: (state) => state.game?.gameID,
     selectGameStatus: (state) => state.status,
     selectPlayers: (state) => state.game?.players,
-    selectGameType: (state) => state.game?.type,
-    selectLanguage: (state) => state.game?.language,
     selectTurn: (state) => state.game?.turn,
     selectWinner: (state) => state.game?.winner,
     selectLog: (state) => state.game?.log,
@@ -65,6 +67,9 @@ const gameSlice = createSlice({
       state.game?.cards.filter(({ isSelected }) => isSelected),
     selectLastClue: (state) =>
       state.game?.log?.findLast((e) => e.includes("provided the Clue")),
+    selectSave: (state) => state.game?.saved ?? false,
+    selectGameTypeFromGame: (state) => state.game?.gameType,
+    selectLanguageFromGame: (state) => state.game?.language,
   },
   extraReducers(builder) {
     builder
@@ -82,6 +87,7 @@ const gameSlice = createSlice({
       })
       .addCase(createGame.rejected, (state, action) => {
         state.status = "failed";
+        console.error(action.error);
         state.error = action.error.message ?? "Unknown Error";
       })
       .addCase(getGame.pending, (state) => {
@@ -99,7 +105,8 @@ const gameSlice = createSlice({
   },
 });
 
-export const { restartGame, setSelectedCard, setGame } = gameSlice.actions;
+export const { restartGame, setSelectedCard, setGame, setSavedGame } =
+  gameSlice.actions;
 
 export const {
   selectGameId,
@@ -111,6 +118,9 @@ export const {
   selectSelectedCards,
   selectPlayers,
   selectLastClue,
+  selectSave,
+  selectGameTypeFromGame,
+  selectLanguageFromGame,
 } = gameSlice.selectors;
 
 export default gameSlice.reducer;
