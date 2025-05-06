@@ -1,4 +1,3 @@
-import { TEAM_COLOR } from "@/lib/features/game/team.types";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { RootState } from "@/lib/store";
 
@@ -15,8 +14,9 @@ export const selectIsHost = (state: RootState) => {
 };
 
 export const selectMyPlayerInGame = (state: RootState) => {
-  const { playerName } = state.player;
-  return state.game?.game?.players?.find(
+  const { playerName } = state.player;  
+
+  return  state.game?.game?.players.find(
     (player) => player.playerName === playerName
   );
 };
