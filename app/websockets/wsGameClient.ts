@@ -1,7 +1,7 @@
 import SockJS from "sockjs-client";
 import { Client, IMessage } from "@stomp/stompjs";
 import { Middleware } from "@reduxjs/toolkit";
-import { setGame } from "@/lib/features/game";
+import { setGame, setSavedGame } from "@/lib/features/game";
 import { isSocketAction } from "./wsGameActions";
 import { getApiDomain } from "../../utils/domain";
 
@@ -35,6 +35,12 @@ export const createGameSocketMiddleware = (): Middleware => {
                 const data = JSON.parse(message.body);
                 console.log("Received:", data);
 
+                if (data.type === "save") {
+                  console.log("Received save", data);
+                  storeAPI.dispatch(setSavedGame());
+                  return;
+                }
+
                 storeAPI.dispatch(setGame(data));
               }
             );
@@ -54,6 +60,7 @@ export const createGameSocketMiddleware = (): Middleware => {
           });
         }
         break;
+
       case "game/guess":
         if (client?.connected && client) {
           console.log("Guess sent", action.payload);
@@ -79,6 +86,15 @@ export const createGameSocketMiddleware = (): Middleware => {
         client = null;
         break;
       }
+
+      case "game/saveAction":
+        if (client?.connected && client) {
+          console.log("Save action sent");
+          client.publish({
+            destination: `/app/game/${gameID}/save`,
+          });
+        }
+        break;
 
       default:
         break;
