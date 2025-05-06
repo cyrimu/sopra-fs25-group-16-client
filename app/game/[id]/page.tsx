@@ -7,7 +7,7 @@ import styles from "@/styles/game.module.css";
 import Board from "@/components/Board";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectWinner } from "@/lib/features/game";
+import { restartGame, selectSave, selectWinner } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
@@ -17,7 +17,7 @@ import HintForm from "@/components/ClueForm";
 import SkipGuess from "@/components/buttons/SkipGuess";
 import { useRouter } from "next/navigation";
 import FullScreenPopup from "@/components/FullScreenPopup";
-import { selectMyPlayerInGame } from "../../../utils/helpers";
+import { selectIsHost, selectMyPlayerInGame } from "../../../utils/helpers";
 import SaveButton from "@/components/buttons/SaveButton";
 
 export default function Game() {
@@ -29,8 +29,19 @@ export default function Game() {
   const winner = useSelector(selectWinner);
 
   const turn = useSelector(selectTurn);
+  const gameIsSaved = useSelector(selectSave);
 
   const myPlayerInGame = useSelector(selectMyPlayerInGame);
+
+  const isHost = useSelector(selectIsHost);
+
+  useEffect(() => {
+    if (gameIsSaved) {
+      router.back();
+      // Delete everything inside the game feature
+      dispatch(restartGame());
+    }
+  }, [gameIsSaved]);
 
   useEffect(() => {
     if (winner) {
@@ -130,6 +141,15 @@ export default function Game() {
     }
   }
 
+  if (!gameID) {
+    // The case where the users return back to the lobby
+    return (
+      <div className={styles.centered}>
+        <div className={styles.gameBackground} />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.centered}>
       <FullScreenPopup />
@@ -137,9 +157,11 @@ export default function Game() {
         <div className={styles.gameLogController}>
           <LogButton />
         </div>
-        <div className={styles.gameSaveController}>
-          <SaveButton />
-        </div>
+        {isHost && (
+          <div className={styles.gameSaveController}>
+            <SaveButton />
+          </div>
+        )}
         <div className={styles.gameContainer}>
           <Board />
           <ActionElement />
