@@ -6,6 +6,7 @@ type SocketActions =
   | SocketSendClueAction
   | SocketGuessAction
   | SocketSkipGuessAction
+  | SocketSaveAction
   | SocketDisconnectAction;
 
 interface SocketConnectAction {
@@ -38,6 +39,10 @@ interface SocketSkipGuessAction {
   payload: string;
 }
 
+interface SocketSaveAction {
+  type: "game/saveAction";
+}
+
 export const isSocketAction = (action: unknown): action is SocketActions => {
   if (typeof action !== "object" || action === null || !("type" in action)) {
     return false;
@@ -49,6 +54,7 @@ export const isSocketAction = (action: unknown): action is SocketActions => {
     "game/sendClue",
     "game/guess",
     "game/skipGuess",
+    "game/saveAction",
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

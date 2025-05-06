@@ -19,3 +19,20 @@
   width: 100%;
   height: 100%;
 }
+
+.gameLogController {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+}
+
+.gameSaveController {
+  position: absolute;
+  top: 0;
+  left: 60;
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

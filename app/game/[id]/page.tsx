@@ -5,9 +5,9 @@ import MakeGuess from "@/components/buttons/MakeGuess";
 import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
 import Board from "@/components/Board";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLogs, selectWinner } from "@/lib/features/game";
+import { restartGame, selectSave, selectWinner } from "@/lib/features/game";
 import {
   PLAYER_ROLES,
   playerRoleToTeamColor,
@@ -16,25 +16,32 @@ import { selectGameId, selectTurn } from "@/lib/features/game";
 import HintForm from "@/components/ClueForm";
 import SkipGuess from "@/components/buttons/SkipGuess";
 import { useRouter } from "next/navigation";
-import Modal from "antd/es/modal/Modal";
-import { CloseOutlined } from "@ant-design/icons";
 import FullScreenPopup from "@/components/FullScreenPopup";
-import { selectMyPlayerInGame } from "../../../utils/helpers";
+import { selectIsHost, selectMyPlayerInGame } from "../../../utils/helpers";
+import SaveButton from "@/components/buttons/SaveButton";
 
 export default function Game() {
   const dispatch = useDispatch();
 
   const router = useRouter();
 
-  const logs = useSelector(selectLogs);
-
   const gameID = useSelector(selectGameId);
   const winner = useSelector(selectWinner);
 
-  const [isLog, setIsLog] = useState(false);
   const turn = useSelector(selectTurn);
+  const gameIsSaved = useSelector(selectSave);
 
   const myPlayerInGame = useSelector(selectMyPlayerInGame);
+
+  const isHost = useSelector(selectIsHost);
+
+  useEffect(() => {
+    if (gameIsSaved) {
+      router.back();
+      // Delete everything inside the game feature
+      dispatch(restartGame());
+    }
+  }, [gameIsSaved]);
 
   useEffect(() => {
     if (winner) {
@@ -134,45 +141,27 @@ export default function Game() {
     }
   }
 
+  if (!gameID) {
+    // The case where the users return back to the lobby
+    return (
+      <div className={styles.centered}>
+        <div className={styles.gameBackground} />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.centered}>
       <FullScreenPopup />
-      <Modal
-        title={
-          <span
-            style={{
-              color: "white",
-              fontFamily: "Special Elite",
-              fontSize: "20px",
-              textDecoration: "underline",
-            }}
-          >
-            Logs
-          </span>
-        }
-        open={isLog}
-        onCancel={() => setIsLog(false)}
-        footer={null}
-        closeIcon={<CloseOutlined style={{ fontSize: 20 }} />}
-        styles={modalStyles}
-      >
-        <ul
-          style={{
-            paddingTop: "10px",
-            fontSize: 16,
-            textAlign: "center",
-            listStyleType: "none",
-            margin: 0,
-            padding: 0,
-          }}
-        >
-          {logs?.map((log, index) => (
-            <li key={index}>{log}</li>
-          ))}
-        </ul>
-      </Modal>
       <div className={styles.gameBackground}>
-        <LogButton callback={() => setIsLog(true)} />
+        <div className={styles.gameLogController}>
+          <LogButton />
+        </div>
+        {isHost && (
+          <div className={styles.gameSaveController}>
+            <SaveButton />
+          </div>
+        )}
         <div className={styles.gameContainer}>
           <Board />
           <ActionElement />
@@ -182,21 +171,3 @@ export default function Game() {
     </div>
   );
 }
-
-const modalStyles = {
-  content: {
-    backgroundColor: "#000000cc",
-    fontFamily: "Special Elite",
-  },
-  header: {
-    backgroundColor: "#000000cc",
-    fontFamily: "Special Elite",
-    borderRadius: "20px",
-    padding: "20px",
-  },
-  body: {
-    backgroundColor: "#000000cc",
-    color: "white",
-    padding: "20px",
-  },
-};

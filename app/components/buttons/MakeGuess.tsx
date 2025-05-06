@@ -11,7 +11,7 @@ const MakeGuess: React.FC = () => {
   const username = useSelector(selectPlayerName);
 
   function submitSelectionHandle() {
-    if (!selectedCards) return;
+    if (!selectedCards) throw new Error("No selected cards have been provided")
 
     for (let i = 0; i < selectedCards.length; i++) {
       const card = selectedCards[i];

@@ -5,6 +5,9 @@ import styles from "./HistoryModal.module.css";
 import { DeleteOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOldGame, selectOldGames, setOldGame } from "@/lib/features/old";
+import { selectPlayers } from "@/lib/features/lobby";
+import { isProduction } from "../../utils/environment";
+import { selectPlayerName } from "@/lib/features/player";
 
 interface HistoryModalProps {
   visible: boolean;
@@ -12,11 +15,22 @@ interface HistoryModalProps {
 }
 
 const OLD_IDS_KEY = "OLD_IDS_KEY";
+const production = isProduction();
 
 const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
   const dispatch = useDispatch();
 
-  const oldGames = useSelector(selectOldGames);
+  let oldGames = useSelector(selectOldGames);
+
+  const playerName = useSelector(selectPlayerName);
+
+  // Select the players from the lobby
+  const players = useSelector(selectPlayers);
+
+  // Get distinct old games
+  oldGames = Array.from(
+    new Map(oldGames.map((game) => [game.gameID, game])).values()
+  );
 
   // Initial load of the stored old games
   useEffect(() => {
@@ -51,8 +65,39 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
     dispatch(deleteOldGame(gameID));
   }
 
-  function handleStartOldGame() {
-    throw new Error("Function not implemented.");
+  function handleStartOldGame(gameID: string) {
+    const oldGame = oldGames.find((e) => e.gameID === gameID);
+    if (!oldGame) throw new Error("The old game is not there");
+    // Check whether the old players match the ones inside the lobby
+    let playersMatch = true;
+    oldGame.players.forEach((player) => {
+      if (!players?.includes(player)) playersMatch = false;
+    });
+
+    if (!playersMatch && production)
+      throw new Error("Ensure that you resume the game with the same players");
+
+    // Send the old gameId via websockets
+    dispatch({
+      type: "lobby/oldGame",
+      payload: { gameId: gameID, username: playerName },
+    });
+  }
+
+  if (oldGames.length === 0) {
+    return (
+      <Modal
+        title={"Old Games"}
+        open={visible}
+        onCancel={onClose}
+        footer={null}
+      >
+        <p>
+          Unfortunately there are no saved games. After saving a game, you will
+          find it here
+        </p>
+      </Modal>
+    );
   }
 
   return (
@@ -110,7 +155,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
                           Are you sure if you want to resume this game?
                         </span>
                       }
-                      onConfirm={handleStartOldGame}
+                      onConfirm={() => handleStartOldGame(gameID)}
                       okText="Yes"
                       cancelText="No"
                       icon={false}

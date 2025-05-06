@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Game } from "./game.types";
-import { Card } from "./card.types";
-import { PLAYER_ROLES } from "../player/player.types";
-import { TEAM_COLOR } from "../game/team.types";
 import { createGame, getGame } from "./api";
 
 interface GameState {
@@ -34,44 +31,27 @@ const gameSlice = createSlice({
         cards: game.cards.map((e, i) => ({ ...e, id: i, isSelected: false })),
       };
     },
-    // Insert a new player into the state
-    setTurn(state, action: PayloadAction<PLAYER_ROLES>) {
-      if (state.game) state.game.turn = action.payload;
-    },
-    // Set the remaining guesses
-    setRemainingGuesses(state, action: PayloadAction<number>) {
-      if (state.game) state.game.remainingGuesses = action.payload;
-    },
-    // Set the winner
-    setWinner(state, action: PayloadAction<TEAM_COLOR>) {
-      if (state.game) state.game.winner = action.payload;
-    },
-    // Update an existing card in the state
-    setRevealedCard(state, action: PayloadAction<Card>) {
-      const { id } = action.payload;
-      if (state.game)
-        state.game.cards = state.game.cards.map((e) =>
-          e.id === id ? { ...e, isRevealed: true } : e
-        );
-    },
     // Update the selected card state
     setSelectedCard(state, action: PayloadAction<number>) {
       const id = action.payload;
 
       if (state.game) {
-        const selectedCards = state.game?.cards.filter((e) => e.isSelected);
-        const isSelected = selectedCards?.some((e) => e.id === id);
+        const isAlreadySelected = state.game.cards.some(
+          (e) => e.id === id && e.isSelected
+        );
 
-        if (selectCards.length < 1 && isSelected) {
-          state.game.cards = state.game.cards.map((e) =>
-            e.id === id ? { ...e, isSelected: !e.isSelected } : e
-          );
-        }
+        state.game.cards = state.game.cards.map((card) => {
+          if (card.id === id && !card.isRevealed) {
+            return { ...card, isSelected: !isAlreadySelected };
+          } else {
+            return { ...card, isSelected: false };
+          }
+        });
       }
     },
-    // Insert a new log entry
-    insertLog(state, action: PayloadAction<string>) {
-      if (state.game) state.game.log = [action.payload, ...state.game.log];
+    // Notify users when a game is saved
+    setSavedGame(state) {
+      if (state.game) state.game.saved = true;
     },
   },
   selectors: {
@@ -79,8 +59,6 @@ const gameSlice = createSlice({
     selectGameId: (state) => state.game?.gameID,
     selectGameStatus: (state) => state.status,
     selectPlayers: (state) => state.game?.players,
-    selectGameType: (state) => state.game?.type,
-    selectLanguage: (state) => state.game?.language,
     selectTurn: (state) => state.game?.turn,
     selectWinner: (state) => state.game?.winner,
     selectLog: (state) => state.game?.log,
@@ -89,6 +67,9 @@ const gameSlice = createSlice({
       state.game?.cards.filter(({ isSelected }) => isSelected),
     selectLastClue: (state) =>
       state.game?.log?.findLast((e) => e.includes("provided the Clue")),
+    selectSave: (state) => state.game?.saved ?? false,
+    selectGameTypeFromGame: (state) => state.game?.gameType,
+    selectLanguageFromGame: (state) => state.game?.language,
   },
   extraReducers(builder) {
     builder
@@ -106,6 +87,7 @@ const gameSlice = createSlice({
       })
       .addCase(createGame.rejected, (state, action) => {
         state.status = "failed";
+        console.error(action.error);
         state.error = action.error.message ?? "Unknown Error";
       })
       .addCase(getGame.pending, (state) => {
@@ -123,7 +105,7 @@ const gameSlice = createSlice({
   },
 });
 
-export const { restartGame, setRevealedCard, setSelectedCard, setGame } =
+export const { restartGame, setSelectedCard, setGame, setSavedGame } =
   gameSlice.actions;
 
 export const {
@@ -136,6 +118,9 @@ export const {
   selectSelectedCards,
   selectPlayers,
   selectLastClue,
+  selectSave,
+  selectGameTypeFromGame,
+  selectLanguageFromGame,
 } = gameSlice.selectors;
 
 export default gameSlice.reducer;

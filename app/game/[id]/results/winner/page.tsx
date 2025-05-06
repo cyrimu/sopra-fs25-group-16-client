@@ -2,7 +2,7 @@
 
 import { restartGame, selectGameId, selectWinner } from "@/lib/features/game";
 import { TEAM_COLOR } from "@/lib/features/game/team.types";
-import { restartCurrentGame, selectLobbyId } from "@/lib/features/lobby";
+import { selectLobbyId } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +22,6 @@ function Winner() {
 
   function handleExitLobby() {
     dispatch(restartGame());
-    dispatch(restartCurrentGame());
     router.push(`/lobby/${lobbyId}`);
   }
 

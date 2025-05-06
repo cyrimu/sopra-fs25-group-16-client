@@ -37,7 +37,8 @@ const Scoreboard: React.FC = () => {
   );
 
   function changeTeam(playerName: string | undefined) {
-    if (!playerName) return;
+    if (!playerName) throw new Error("The player name is not defined")
+      
     dispatch(setPlayerName(playerName));
   }
 

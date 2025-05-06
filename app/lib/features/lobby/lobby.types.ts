@@ -1,4 +1,4 @@
-import { Game, GAME_TYPE } from "../game/game.types";
+import { GAME_TYPE } from "../game/game.types";
 import { Player } from "../player/player.types";
 import { LANGUAGES } from "./languages.types";
 
@@ -8,7 +8,6 @@ export interface Lobby {
   gameType: GAME_TYPE;
   lobbyID: string;
   players: Player[];
-  currentGame: Game | null;
   playerCount: number;
   playersReady: string[];
 }

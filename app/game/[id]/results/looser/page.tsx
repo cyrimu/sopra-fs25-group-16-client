@@ -1,7 +1,7 @@
 "use client";
 
 import { restartGame, selectGameId } from "@/lib/features/game";
-import { selectLobbyId, restartCurrentGame } from "@/lib/features/lobby";
+import { selectLobbyId } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,6 @@ function Looser() {
 
   function handleExitLobby() {
     dispatch(restartGame());
-    dispatch(restartCurrentGame());
     router.push(`/lobby/${lobbyId}`);
   }
 

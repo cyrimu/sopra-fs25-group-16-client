@@ -4,16 +4,17 @@ import { Card } from "./card.types";
 import { TEAM_COLOR } from "./team.types";
 
 export interface Game {
-  gameID: number;
+  gameID: string;
   host: string;
   players: Player[];
   cards: Card[];
-  type: GAME_TYPE;
+  gameType: GAME_TYPE;
   language: LANGUAGES;
   turn: PLAYER_ROLES;
   remainingGuesses: number;
   winner: TEAM_COLOR | null;
   log: string[];
+  saved: boolean | undefined;
 }
 
 export enum GAME_TYPE {

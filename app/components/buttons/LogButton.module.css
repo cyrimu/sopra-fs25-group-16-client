@@ -1,6 +1,9 @@
-.logButton {
+.logWrapper {
   position: absolute;
   top: 0;
   left: 0;
   margin: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }

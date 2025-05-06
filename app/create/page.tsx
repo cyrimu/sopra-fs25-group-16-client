@@ -14,7 +14,7 @@ export default function Create() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState<string | undefined>();
 
   const lobbyStatus = useSelector(selectLobbyStatus);
   const id = useSelector(selectLobbyId);
@@ -22,7 +22,9 @@ export default function Create() {
   function handleNextButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (lobbyStatus === "idle" && username) {
+    if (!username) throw new Error("A username must be provided");
+
+    if (lobbyStatus === "idle") {
       // Store the username
       dispatch(setPlayerName(username));
       // Create a new lobby with a given username
