@@ -22,10 +22,6 @@ const lobbySlice = createSlice({
   name: "lobby",
   initialState,
   reducers: {
-    // Restart the game attribute of the lobby
-    restartCurrentGame(state) {
-      if (state.lobby) state.lobby.currentGame = null;
-    },
     // Set an updated lobby object
     setLobby(state, action: PayloadAction<Lobby>) {
       state.lobby = action.payload;
@@ -139,7 +135,6 @@ export const {
   setLanguage,
   setPlayer,
   setPlayersReady,
-  restartCurrentGame,
   lobbyBeenDeleted,
 } = lobbySlice.actions;
 

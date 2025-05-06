@@ -1,4 +1,4 @@
-import { Game, GAME_TYPE } from "../game/game.types";
+import { GAME_TYPE } from "../game/game.types";
 import { Player } from "../player/player.types";
 import { LANGUAGES } from "./languages.types";
 
