@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { Button as AntButton, ButtonProps } from "antd";
+import { Button as AntButton } from "antd";
 import styles from "./RulesButton.module.css";
 import RulesModal from "../RulesModal";
 
-const RulesButton: React.FC<ButtonProps> = ({ ...props }) => {
+const RulesButton: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => setIsModalVisible(true);
@@ -15,8 +15,8 @@ const RulesButton: React.FC<ButtonProps> = ({ ...props }) => {
   return (
     <div className={styles.rulesButton}>
       <AntButton
-        {...props}
         icon={icon}
+        type="primary"
         shape="circle"
         style={{ width: 50, height: 50 }}
         onClick={showModal}

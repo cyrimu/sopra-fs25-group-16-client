@@ -72,7 +72,7 @@ export default function RootLayout({
         >
           <AntdRegistry>
             <StoreProvider>{children}</StoreProvider>
-            <RulesButton type="primary" />
+            <RulesButton />
           </AntdRegistry>
         </ConfigProvider>
       </body>
