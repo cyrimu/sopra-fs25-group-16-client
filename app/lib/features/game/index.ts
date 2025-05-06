@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Game } from "./game.types";
-import { Card } from "./card.types";
-import { PLAYER_ROLES } from "../player/player.types";
-import { TEAM_COLOR } from "../game/team.types";
 import { createGame, getGame } from "./api";
 
 interface GameState {
