@@ -34,26 +34,6 @@ const gameSlice = createSlice({
         cards: game.cards.map((e, i) => ({ ...e, id: i, isSelected: false })),
       };
     },
-    // Insert a new player into the state
-    setTurn(state, action: PayloadAction<PLAYER_ROLES>) {
-      if (state.game) state.game.turn = action.payload;
-    },
-    // Set the remaining guesses
-    setRemainingGuesses(state, action: PayloadAction<number>) {
-      if (state.game) state.game.remainingGuesses = action.payload;
-    },
-    // Set the winner
-    setWinner(state, action: PayloadAction<TEAM_COLOR>) {
-      if (state.game) state.game.winner = action.payload;
-    },
-    // Update an existing card in the state
-    setRevealedCard(state, action: PayloadAction<Card>) {
-      const { id } = action.payload;
-      if (state.game)
-        state.game.cards = state.game.cards.map((e) =>
-          e.id === id ? { ...e, isRevealed: true } : e
-        );
-    },
     // Update the selected card state
     setSelectedCard(state, action: PayloadAction<number>) {
       const id = action.payload;
@@ -71,10 +51,6 @@ const gameSlice = createSlice({
           }
         });
       }
-    },
-    // Insert a new log entry
-    insertLog(state, action: PayloadAction<string>) {
-      if (state.game) state.game.log = [action.payload, ...state.game.log];
     },
   },
   selectors: {
@@ -126,8 +102,7 @@ const gameSlice = createSlice({
   },
 });
 
-export const { restartGame, setRevealedCard, setSelectedCard, setGame } =
-  gameSlice.actions;
+export const { restartGame, setSelectedCard, setGame } = gameSlice.actions;
 
 export const {
   selectGameId,
