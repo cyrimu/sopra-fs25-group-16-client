@@ -14,7 +14,7 @@ export default function Create() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState<string | undefined>();
 
   const lobbyStatus = useSelector(selectLobbyStatus);
   const id = useSelector(selectLobbyId);
