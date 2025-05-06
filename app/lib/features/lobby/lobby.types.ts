@@ -8,7 +8,6 @@ export interface Lobby {
   gameType: GAME_TYPE;
   lobbyID: string;
   players: Player[];
-  currentGame: Game | null;
   playerCount: number;
   playersReady: string[];
 }
