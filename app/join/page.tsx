@@ -14,8 +14,8 @@ export default function Join() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const [username, setUsername] = useState("");
-  const [id, setId] = useState("");
+  const [username, setUsername] = useState<string | undefined>();
+  const [id, setId] = useState<string | undefined>();
 
   const lobbyStatus = useSelector(selectLobbyStatus);
 

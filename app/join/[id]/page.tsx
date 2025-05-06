@@ -16,7 +16,7 @@ export default function JoinWithID() {
   const dispatch = useDispatch<AppDispatch>();
 
   const { id } = params;
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState<string | undefined>();
 
   const lobbyStatus = useSelector(selectLobbyStatus);
 
@@ -41,7 +41,7 @@ export default function JoinWithID() {
 
   function handleBackButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    router.back();
+    router.replace("/join");
   }
 
   return (

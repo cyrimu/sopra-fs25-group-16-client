@@ -11,13 +11,14 @@ const ClueForm: React.FC = () => {
 
   const playerName = useSelector(selectPlayerName);
 
-  const [hint, setHint] = useState("");
-  const [number, setNumber] = useState<number>();
+  const [hint, setHint] = useState<string | undefined>();
+  const [number, setNumber] = useState<number | undefined>();
 
   const validValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   function handleSendGuess() {
     if (!number) throw new Error("A number must be provided");
+    if (!hint) throw new Error("A hint must be provided");
     if (!playerName) throw new Error("The playerName is undefined");
 
     const clue: Clue = {
