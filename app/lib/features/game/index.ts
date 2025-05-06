@@ -59,14 +59,17 @@ const gameSlice = createSlice({
       const id = action.payload;
 
       if (state.game) {
-        const selectedCards = state.game?.cards.filter((e) => e.isSelected);
-        const isSelected = selectedCards?.some((e) => e.id === id);
+        const isAlreadySelected = state.game.cards.some(
+          (e) => e.id === id && e.isSelected
+        );
 
-        if (selectCards.length < 1 && isSelected) {
-          state.game.cards = state.game.cards.map((e) =>
-            e.id === id ? { ...e, isSelected: !e.isSelected } : e
-          );
-        }
+        state.game.cards = state.game.cards.map((card) => {
+          if (card.id === id && !card.isRevealed) {
+            return { ...card, isSelected: !isAlreadySelected };
+          } else {
+            return { ...card, isSelected: false };
+          }
+        });
       }
     },
     // Insert a new log entry
