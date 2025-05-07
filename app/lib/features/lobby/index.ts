@@ -24,7 +24,11 @@ const lobbySlice = createSlice({
   reducers: {
     // Set an updated lobby object
     setLobby(state, action: PayloadAction<Lobby>) {
-      state.lobby = action.payload;
+      const lobby = action.payload;
+
+      if (state.lobby)
+        // Preserve the state of players ready
+        state.lobby = { ...lobby, playersReady: state.lobby.playersReady };
     },
     // Insert a new player into the state
     setPlayer(state, action: PayloadAction<Player>) {
