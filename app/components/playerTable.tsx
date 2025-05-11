@@ -5,6 +5,7 @@ import {
   selectGameType,
   selectPlayers,
   selectPlayersReady,
+    selectLobbyId
 } from "@/lib/features/lobby";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
 import { PlayerReadyStatus } from "./PlayerReady";
@@ -15,7 +16,7 @@ const PlayerTable: React.FC = () => {
   const players = useSelector(selectPlayers);
   const username = useSelector(selectPlayerName);
   const playersReady = useSelector(selectPlayersReady);
-
+  const lobbyId = useSelector(selectLobbyId)
   function isReady(playerName: string): boolean {
     return playersReady?.some((e) => e === playerName) ?? false;
   }
@@ -49,7 +50,7 @@ const PlayerTable: React.FC = () => {
       fontSize: "20px",
     }}
   >
-    Lobby ID: {window.location.href.split("/").pop()}
+    Lobby ID: {lobbyId}
   </div>
 </div>
       <br />

@@ -73,6 +73,7 @@ export default function Lobby() {
     }
   }, [disconnectLobby, lobbyStatus, router]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function disconnectLobby() {
     // Disconnect websocket
     dispatch({
@@ -126,7 +127,7 @@ export default function Lobby() {
         open={isPanelOpen}
         onOk={handleConfigPanel}
         okButtonProps={{
-          style: { fontFamily: "Gabarito", fontSize: "20px" },
+          style: { fontFamily: "Gabarito", fontSize: "20px"},
         }}
         okText="Save"
         onCancel={() => setIsPanelOpen((state) => !state)}
@@ -218,7 +219,7 @@ const modalStyles = {
     padding: "20px",
   },
   footer: {
-    align: "center",
+    textAlign: "center" as const, // Explicitly cast to the expected type
     backgroundColor: "#2f2f2f",
     outline: "1px dashed white",
     outlineOffset: "-10px",
