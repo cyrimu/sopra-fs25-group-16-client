@@ -32,7 +32,7 @@ export default function JoinWithID() {
   async function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (!username) {
+    if (!username?.trim()) {
       setErrorMessage("Please provide a codename.");
       setIsModalVisible(true);
       return;
@@ -47,18 +47,7 @@ export default function JoinWithID() {
       await dispatch(joinLobby({lobbyId: id, username: username})).unwrap(); // Unwraps the promise to catch errors
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.message.includes("username is already in the lobby")) {
-        setErrorMessage("A player with this codename is already in the lobby. Please choose a different one.");
-      }
-      if (error.message.includes("Lobby not found with ID")) {
-        setErrorMessage(`Lobby not found with the provided id "${id}". Are you sure it's correct?.`);
-      }
-      if (error.message.includes("already full")) {
-        setErrorMessage("The lobby is already full. Please try again later or create/join a different one.");
-      }
-      else {
-        setErrorMessage("An error occurred while joining the lobby");
-      }
+      setErrorMessage(error.message);
       setIsModalVisible(true);
     }
   }

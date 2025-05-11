@@ -6,7 +6,7 @@ import { RightOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { selectLobbyId, selectLobbyStatus } from "@/lib/features/lobby";
-import { createLobby } from "@/lib/features/lobby/api";
+import {createLobby} from "@/lib/features/lobby/api";
 import { AppDispatch } from "@/lib/store";
 import { setPlayerName } from "@/lib/features/player";
 import ErrorModal from "@/components/errorModal";
@@ -22,19 +22,23 @@ export default function Create() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  function handleNextButton(e: React.MouseEvent<HTMLButtonElement>) {
+  async function handleNextButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (!username) {
+    if (!username?.trim()) {
       setErrorMessage("Please provide a codename.");
       setIsModalVisible(true);
       return;
     }
     if (lobbyStatus === "idle") {
-      // Store the username
-      dispatch(setPlayerName(username));
-      // Create a new lobby with a given username
-      dispatch(createLobby(username));
+      try {
+        dispatch(setPlayerName(username));
+        await dispatch(createLobby(username)).unwrap();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setIsModalVisible(true);
+      }
     }
   }
 
