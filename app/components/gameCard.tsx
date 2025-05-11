@@ -29,7 +29,7 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   function determineBackgroundImage(): CARD_COLOR {
     const role = myPlayerInGame?.role;
 
-    if (!role) throw new Error("The role of the player in game is null");
+    //if (!role) throw new Error("The role of the player in game is null");
 
     if (
       (role === PLAYER_ROLES.BLUE_OPERATIVE ||
@@ -66,10 +66,11 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
         transition={{ duration: 0.6, ease: "easeInOut" }}
       >
         <Image
-          src={
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zebra_%2824694097565%29.jpg/1200px-Zebra_%2824694097565%29.jpg"
-          }
-          alt=""
+          src="/test.jpg"
+          alt="Test Image"
+          width={300}
+          height={300}
+          style={{ objectFit: "cover", width: "100%", height: "100%" }}
         />
       </motion.div>
     );
