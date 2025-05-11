@@ -43,7 +43,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
         dispatch(setOldGame(oldGame));
       }
     });
-  }, []);
+  }, [dispatch]);
 
   function fetchOldIds() {
     return localStorage.getItem(OLD_IDS_KEY)?.split(",") ?? [];

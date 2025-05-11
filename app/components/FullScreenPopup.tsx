@@ -45,7 +45,7 @@ const FullScreenPopup = () => {
       }, 3000); // Show for 3 seconds
       return () => clearTimeout(timer);
     }
-  }, [turn]);
+  }, [clueNotificationMustDisplay, triggerValue, turn]);
 
   return visible ? (
     <div className={styles.fullscreenOverlay}>
