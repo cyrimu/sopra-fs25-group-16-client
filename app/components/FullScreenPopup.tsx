@@ -30,11 +30,9 @@ const FullScreenPopup = () => {
       return false;
     }
 
-    if (turn === myPlayerInGame?.role) {
-      return true;
-    }
+    return turn === myPlayerInGame?.role;
 
-    return false;
+
   }, [myPlayerInGame, turn]);
 
   useEffect(() => {
