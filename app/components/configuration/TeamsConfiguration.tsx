@@ -18,13 +18,13 @@ const TeamsConfiguration: React.FC = () => {
 
   return [
     [
-      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_SPYMASTER },
       { teamColor: TEAM_COLOR.BLUE, role: PLAYER_ROLES.BLUE_SPYMASTER },
+      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_SPYMASTER },
     ],
 
     [
-      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_OPERATIVE },
       { teamColor: TEAM_COLOR.BLUE, role: PLAYER_ROLES.BLUE_OPERATIVE },
+      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_OPERATIVE },
     ],
   ].map((colorAndRole, i) => (
     <Form.Item key={i}>
