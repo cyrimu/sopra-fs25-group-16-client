@@ -34,6 +34,10 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const shouldRenderText = shouldShowContent && !isImage;
 
   function determineBackgroundImage(): CARD_COLOR {
+    const role = myPlayerInGame?.role;
+
+    //if (!role) throw new Error("The role of the player in game is null");
+
     if (
       (role === PLAYER_ROLES.BLUE_OPERATIVE ||
         role === PLAYER_ROLES.RED_OPERATIVE) &&
@@ -55,6 +59,45 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
     dispatch(setSelectedCard(card.id));
   }
 
+  if (type !== GAME_TYPE.TEXT) {
+    return (
+      <motion.div
+        className={styles.card}
+        animate={{ rotateY: isRevealed ? 180 : 0 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+      >
+        <Image
+          src="/test.jpg"
+          alt="Test Image"
+          width={300}
+          height={300}
+          style={{ objectFit: "cover", width: "100%", height: "100%" }}
+        />
+      </motion.div>
+    );
+  } else {
+    return (
+      <motion.div
+        className={selected ? styles.cardSelected : styles.card}
+        style={
+          {
+            "--bg-image": `url("/${CARD_COLOR[
+              cardColor
+            ].toLowerCase()}_card.png")`,
+          } as React.CSSProperties
+        }
+        animate={animation}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+        onClick={handleSelectCard}
+      >
+        {!isRevealed && (
+          <div className={styles.cardTextContainer}>
+            <span>{content.toUpperCase()}</span>
+          </div>
+        )}
+      </motion.div>
+    );
+  }
   return (
     <motion.div
       className={selected ? styles.cardSelected : styles.card}
