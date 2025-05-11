@@ -64,7 +64,6 @@ const PlayerTable: React.FC = () => {
                     ?.filter((p) => p)
                     ?.map(({playerName, team, role}, index) => {
                         const roleSplit = role?.split("_")[1];
-                        console.log("roleSplit", roleSplit);
 
                         const teamString =
                             team?.toString()[0] +

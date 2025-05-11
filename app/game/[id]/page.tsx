@@ -41,7 +41,7 @@ export default function Game() {
       // Delete everything inside the game feature
       dispatch(restartGame());
     }
-  }, [gameIsSaved]);
+  }, [dispatch, gameIsSaved, router]);
 
   useEffect(() => {
     if (winner) {
