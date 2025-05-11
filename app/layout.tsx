@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ConfigProvider, theme } from "antd";
+import {ConfigProvider, theme} from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "@/styles/globals.css";
 import RulesButton from "@/components/buttons/RulesButton";
@@ -67,6 +67,18 @@ export default function RootLayout({
                 optionSelectedBg: "#2f2f2f",
                 optionSelectedColor: "white",
               },
+              InputNumber:{
+                colorBorder: "gray",
+                colorTextPlaceholder: "#888888",
+                algorithm: true,
+                filledHandleBg: "white",
+                addonBg: "white",
+                colorText: "black",
+                colorTextDescription: "black",
+                colorTextHeading: "black",
+                colorTextLabel: "black",
+
+              }
             },
           }}
         >
