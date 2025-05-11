@@ -57,7 +57,7 @@ export default function RootLayout({
               },
               Form: {
                 labelColor: "#fff",
-                algorithm: theme.defaultAlgorithm, // specify a specifc algorithm instead of true/false
+                algorithm: theme.defaultAlgorithm,
               },
               Card: {},
               Select: {

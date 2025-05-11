@@ -43,6 +43,7 @@ export default function Lobby() {
   const gameStatus = useSelector(selectGameStatus);
   const gameId = useSelector(selectGameId);
 
+
   // Connect to the lobby websocket
   useEffect(() => {
     if (lobbyId) {

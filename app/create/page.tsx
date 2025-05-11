@@ -9,6 +9,7 @@ import { selectLobbyId, selectLobbyStatus } from "@/lib/features/lobby";
 import { createLobby } from "@/lib/features/lobby/api";
 import { AppDispatch } from "@/lib/store";
 import { setPlayerName } from "@/lib/features/player";
+import ErrorModal from "@/components/errorModal";
 
 export default function Create() {
   const router = useRouter();
@@ -18,12 +19,17 @@ export default function Create() {
 
   const lobbyStatus = useSelector(selectLobbyStatus);
   const id = useSelector(selectLobbyId);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   function handleNextButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (!username) throw new Error("A username must be provided");
-
+    if (!username) {
+      setErrorMessage("Please provide a codename.");
+      setIsModalVisible(true);
+      return;
+    }
     if (lobbyStatus === "idle") {
       // Store the username
       dispatch(setPlayerName(username));
@@ -58,6 +64,11 @@ export default function Create() {
           <button className={styles.regularButton} onClick={handleNextButton}>
             Next <RightOutlined />
           </button>
+          <ErrorModal
+              visible={isModalVisible}
+              onClose={() => setIsModalVisible(false)}
+              message={errorMessage}
+          />
         </div>
       </div>
     </div>

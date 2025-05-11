@@ -9,11 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectLobbyStatus } from "@/lib/features/lobby";
 import { joinLobby } from "@/lib/features/lobby/api";
 import { AppDispatch } from "@/lib/store";
+import ErrorModal from "@/components/errorModal";
 
 export default function JoinWithID() {
   const router = useRouter();
   const params = useParams();
   const dispatch = useDispatch<AppDispatch>();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { id } = params;
   const [username, setUsername] = useState<string | undefined>();
@@ -26,17 +29,31 @@ export default function JoinWithID() {
     }
   }, [id, lobbyStatus, router]);
 
-  function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
+  async function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (!username) throw new Error("A username must be provided");
-    if (typeof id !== "string" || id.trim() === "") {
-      throw new Error("A valid lobby ID must be provided");
+    if (!username) {
+      setErrorMessage("Please provide a codename.");
+      setIsModalVisible(true);
+      return;
     }
-
-    dispatch(setPlayerName(username));
-    // Try to join the lobby and set it inside the provider
-    dispatch(joinLobby({ lobbyId: id, username: username }));
+    if (typeof id !== "string" || id.trim() === "") {
+      setErrorMessage("Please provide a valid lobby ID.");
+      setIsModalVisible(true);
+      return;
+    }
+    try {
+      dispatch(setPlayerName(username));
+      await dispatch(joinLobby({lobbyId: id, username: username})).unwrap(); // Unwraps the promise to catch errors
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.message.includes("409")) {
+        setErrorMessage("A player with this codename is already in the lobby. Please choose a different one.");
+      } else {
+        setErrorMessage("An error occurred while joining the lobby");
+      }
+      setIsModalVisible(true);
+    }
   }
 
   function handleBackButton(e: React.MouseEvent<HTMLButtonElement>) {
@@ -45,34 +62,39 @@ export default function JoinWithID() {
   }
 
   return (
-    <div className={styles.centered}>
-      <div className={styles.blueOverlay}></div>
-      <div className={styles.messageContainer}>
-        <div className={styles.messageField}>
-          Choose a codename to enter the lobby
-          <br />
-          {id} <br />
-          <br />
-          Await further instructions.
-          <br />
-          <br />- CN
-        </div>
-        <div className={styles.inputContainer}>
-          <input
-            className={styles.inputField}
-            placeholder="Choose your codename ... "
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <div className={styles.regularButtonContainer}>
-            <button className={styles.regularButton} onClick={handleBackButton}>
-              <LeftOutlined /> Join different lobby
-            </button>
-            <button className={styles.regularButton} onClick={handleJoinButton}>
-              Join <RightOutlined />
-            </button>
+      <div className={styles.centered}>
+        <div className={styles.blueOverlay}></div>
+        <div className={styles.messageContainer}>
+          <div className={styles.messageField}>
+            Choose a codename to enter the lobby
+            <br />
+            {id} <br />
+            <br />
+            Await further instructions.
+            <br />
+            <br />- CN
+          </div>
+          <div className={styles.inputContainer}>
+            <input
+                className={styles.inputField}
+                placeholder="Choose your codename ... "
+                onChange={(e) => setUsername(e.target.value)}
+            />
+            <div className={styles.regularButtonContainer}>
+              <button className={styles.regularButton} onClick={handleBackButton}>
+                <LeftOutlined /> Join different lobby
+              </button>
+              <button className={styles.regularButton} onClick={handleJoinButton}>
+                Join <RightOutlined />
+              </button>
+            </div>
+            <ErrorModal
+                visible={isModalVisible}
+                onClose={() => setIsModalVisible(false)}
+                message={errorMessage}
+            />
           </div>
         </div>
       </div>
-    </div>
   );
 }

@@ -59,7 +59,7 @@ export class ApiService {
     });
     return this.processResponse<T>(
       res,
-      "An error occurred while fetching the data.\n"
+        "An error occurred while fetching the data.\n"
     );
   }
 
@@ -109,6 +109,7 @@ export class ApiService {
       },
       body: formBody.toString(),
     });
+    console.log("res", res)
     return this.processResponse<T>(
       res,
       "An error occurred while posting the data.\n"
@@ -137,6 +138,7 @@ export class ApiService {
   /**
    * DELETE request.
    * @param endpoint - The API endpoint (e.g. "/users/123").
+   * @param data
    * @returns JSON data of type T.
    */
   public async delete(endpoint: string, data: unknown): Promise<void> {
