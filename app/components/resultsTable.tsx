@@ -2,7 +2,7 @@ import React from "react";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Popconfirm } from "antd";
-import { selectPlayers } from "@/lib/features/game";
+import {selectGameId, selectPlayers} from "@/lib/features/game";
 import { selectLobbyId } from "@/lib/features/lobby";
 import { useSelector } from "react-redux";
 import { selectIsHost } from "../../utils/helpers";
@@ -11,11 +11,14 @@ const ResultsTable: React.FC = () => {
   const router = useRouter();
 
   const lobbyId = useSelector(selectLobbyId);
-  // const gameId = useSelector(selectGameId);
+  console.log("lobbyId", lobbyId);
 
+  const gameId = useSelector(selectGameId);
+    console.log("gameId", gameId);
   const isHost = useSelector(selectIsHost);
 
   const players = useSelector(selectPlayers);
+    console.log("players", players);
 
   const confirmDeleteLobby = () => {
     router.replace("/create");
@@ -90,12 +93,6 @@ const ResultsTable: React.FC = () => {
       <div className={styles.regularButtonContainer}>
         {isHost ? (
           <>
-            <button
-              className={styles.regularButton}
-              onClick={() => router.push(`/lobby/${lobbyId}`)}
-            >
-              Play Again
-            </button>
             <button
               className={styles.regularButton}
               onClick={() => router.push(`/lobby/${lobbyId}`)}

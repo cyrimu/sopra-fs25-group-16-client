@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectLobbyStatus } from "@/lib/features/lobby";
 import { joinLobby } from "@/lib/features/lobby/api";
 import { AppDispatch } from "@/lib/store";
+import ErrorModal from "@/components/errorModal";
 
 export default function Join() {
   const router = useRouter();
@@ -16,6 +17,8 @@ export default function Join() {
 
   const [username, setUsername] = useState<string | undefined>();
   const [id, setId] = useState<string | undefined>();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const lobbyStatus = useSelector(selectLobbyStatus);
 
@@ -25,17 +28,30 @@ export default function Join() {
     }
   }, [id, lobbyStatus, router]);
 
-  function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
+  async function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (!username) throw new Error("A username must be provided");
-    if (!id) throw new Error("An id must be provided");
+    if (!username?.trim()) {
+      setErrorMessage("Please provide a codename.");
+      setIsModalVisible(true);
+      return;
+    }
+
+    if (!id) {
+      setErrorMessage("Please provide a valid lobby ID.");
+      setIsModalVisible(true);
+      return;
+    }
 
     if (lobbyStatus === "idle") {
-      // Store the username
-      dispatch(setPlayerName(username));
-      // Try to join the lobby and set it inside the provider
-      dispatch(joinLobby({ lobbyId: id, username: username }));
+      try {
+        dispatch(setPlayerName(username));
+        await dispatch(joinLobby({lobbyId: id, username: username})).unwrap();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+          setErrorMessage(error.message);
+          setIsModalVisible(true);
+      }
     }
   }
 
@@ -64,6 +80,11 @@ export default function Join() {
           <button className={styles.regularButton} onClick={handleJoinButton}>
             Join <RightOutlined />
           </button>
+          <ErrorModal
+              visible={isModalVisible}
+              onClose={() => setIsModalVisible(false)}
+              message={errorMessage}
+          />
         </div>
       </div>
     </div>

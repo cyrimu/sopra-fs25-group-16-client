@@ -18,13 +18,13 @@ const TeamsConfiguration: React.FC = () => {
 
   return [
     [
-      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_SPYMASTER },
       { teamColor: TEAM_COLOR.BLUE, role: PLAYER_ROLES.BLUE_SPYMASTER },
+      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_SPYMASTER },
     ],
 
     [
-      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_OPERATIVE },
       { teamColor: TEAM_COLOR.BLUE, role: PLAYER_ROLES.BLUE_OPERATIVE },
+      { teamColor: TEAM_COLOR.RED, role: PLAYER_ROLES.RED_OPERATIVE },
     ],
   ].map((colorAndRole, i) => (
     <Form.Item key={i}>
@@ -61,7 +61,7 @@ const TeamsConfiguration: React.FC = () => {
                 style={{ color: "white" }}
               >
                 {players
-                  ?.filter((player) => player) // Filter out null or undefined players
+                  ?.filter((player) => player)
                   .map((player) => (
                     <Select.Option
                       key={player.playerName}

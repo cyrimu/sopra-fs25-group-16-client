@@ -12,7 +12,7 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import GetReady from "@/components/GetReady";
+import GetReady from "@/components/getReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
@@ -22,6 +22,7 @@ import { selectGameId, selectGameStatus } from "@/lib/features/game";
 import { isProduction } from "../../../utils/environment";
 import { selectIsHost } from "../../../utils/helpers";
 import HistoryButton from "@/components/buttons/HistoryButton";
+
 
 export default function Lobby() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function Lobby() {
   const gameStatus = useSelector(selectGameStatus);
   const gameId = useSelector(selectGameId);
 
+
   // Connect to the lobby websocket
   useEffect(() => {
     if (lobbyId) {
@@ -61,7 +63,7 @@ export default function Lobby() {
         router.push(`/game/${gameId}`);
       }, 3000);
     }
-  }, [gameId, router, gameStatus]);
+  }, [gameId, router, gameStatus, disconnectLobby]);
 
   // Lobby object does not exist anymore
   useEffect(() => {
@@ -69,8 +71,9 @@ export default function Lobby() {
       disconnectLobby();
       router.back();
     }
-  }, [lobbyStatus, router]);
+  }, [disconnectLobby, lobbyStatus, router]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function disconnectLobby() {
     // Disconnect websocket
     dispatch({
@@ -124,7 +127,7 @@ export default function Lobby() {
         open={isPanelOpen}
         onOk={handleConfigPanel}
         okButtonProps={{
-          style: { fontFamily: "Gabarito", fontSize: "20px" },
+          style: { fontFamily: "Gabarito", fontSize: "20px"},
         }}
         okText="Save"
         onCancel={() => setIsPanelOpen((state) => !state)}
@@ -164,7 +167,7 @@ export default function Lobby() {
               <Tooltip
                 title={
                   playersReady?.length !== 4
-                    ? "You need exactly 4 players to start the game"
+                    ? "You need all 4 players to be ready to start the game"
                     : ""
                 }
               >
@@ -216,7 +219,7 @@ const modalStyles = {
     padding: "20px",
   },
   footer: {
-    align: "center",
+    textAlign: "center" as const, // Explicitly cast to the expected type
     backgroundColor: "#2f2f2f",
     outline: "1px dashed white",
     outlineOffset: "-10px",
