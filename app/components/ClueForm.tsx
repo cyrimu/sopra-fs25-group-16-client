@@ -1,7 +1,7 @@
-import { RightOutlined } from "@ant-design/icons";
+import { CheckOutlined } from "@ant-design/icons";
 import styles from "./ClueForm.module.css";
-import { Select } from "antd";
-import { useState } from "react";
+import { InputNumber } from "antd";
+import React, { useState } from "react";
 import { Clue } from "@/lib/features/game/clue.types";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPlayerName } from "@/lib/features/player";
@@ -13,8 +13,6 @@ const ClueForm: React.FC = () => {
 
   const [hint, setHint] = useState<string | undefined>();
   const [number, setNumber] = useState<number | undefined>();
-
-  const validValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   function handleSendGuess() {
     if (!number) throw new Error("A number must be provided");
@@ -40,24 +38,19 @@ const ClueForm: React.FC = () => {
         placeholder="Provide a hint ... "
         onChange={(e) => setHint(e.target.value)}
       />
-      <Select
-        className={styles.selector}
-        value={number}
-        onChange={(p) => {
-          setNumber(p);
-        }}
-        style={{ color: "white" }}
-      >
-        {validValues?.map((number, i) => {
-          return (
-            <Select.Option key={i} value={number}>
-              {number}
-            </Select.Option>
-          );
-        })}
-      </Select>
+        <InputNumber
+            className={styles.numberInputField}
+            size={"large"}
+            value={number}
+            onChange={(p) => {
+                setNumber(p ?? undefined);
+            }}
+            style={{ backgroundColor: "white"}}
+            min={1}
+            max={9}
+        />
       <button className={styles.regularButton} onClick={handleSendGuess}>
-        <RightOutlined />
+        <CheckOutlined />
       </button>
     </div>
   );
