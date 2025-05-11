@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from "./FullScreenPopup.module.css";
 import { useSelector } from "react-redux";
 import { selectLastClue, selectTurn } from "@/lib/features/game";
@@ -22,10 +22,10 @@ const FullScreenPopup = () => {
     return numArr[numArr.length - 1];
   }
 
-  function clueNotificationMustDisplay(): boolean {
+  const clueNotificationMustDisplay = useCallback((): boolean => {
     if (
-      myPlayerInGame?.role == PLAYER_ROLES.RED_SPYMASTER ||
-      myPlayerInGame?.role == PLAYER_ROLES.BLUE_SPYMASTER
+        myPlayerInGame?.role === PLAYER_ROLES.RED_SPYMASTER ||
+        myPlayerInGame?.role === PLAYER_ROLES.BLUE_SPYMASTER
     ) {
       return false;
     }
@@ -35,7 +35,7 @@ const FullScreenPopup = () => {
     }
 
     return false;
-  }
+  }, [myPlayerInGame, turn]);
 
   useEffect(() => {
     if (triggerValue && clueNotificationMustDisplay()) {
@@ -45,12 +45,12 @@ const FullScreenPopup = () => {
       }, 3000); // Show for 3 seconds
       return () => clearTimeout(timer);
     }
-  }, [clueNotificationMustDisplay, triggerValue, turn]);
+  }, [triggerValue, clueNotificationMustDisplay]);
 
   return visible ? (
-    <div className={styles.fullscreenOverlay}>
-      <div className={styles.popupText}>{triggerValue}</div>
-    </div>
+      <div className={styles.fullscreenOverlay}>
+        <div className={styles.popupText}>{triggerValue}</div>
+      </div>
   ) : null;
 };
 
