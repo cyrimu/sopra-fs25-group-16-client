@@ -22,17 +22,36 @@ const PlayerTable: React.FC = () => {
 
   return (
     <>
-      <div
-        className={styles.messageField}
-        style={{
-          width: "100%",
-          padding: "30px",
-          height: "auto",
-          fontSize: "20px",
-        }}
-      >
-        Mode: {gameType === GAME_TYPE.TEXT ? "Word" : "Picture"}
-      </div>
+<div
+    style={{
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+  }}
+>
+  <div
+    className={styles.messageField}
+    style={{
+      width: "50%",
+      padding: "30px",
+      height: "auto",
+      fontSize: "20px",
+    }}
+  >
+    Mode: {gameType === GAME_TYPE.TEXT ? "Word" : "Picture"}
+  </div>
+  <div
+    className={styles.messageField}
+    style={{
+      width: "50%",
+      padding: "30px",
+      height: "auto",
+      fontSize: "20px",
+    }}
+  >
+    Lobby ID: {window.location.href.split("/").pop()}
+  </div>
+</div>
       <br />
       <table className={styles.tableField}>
         <thead>

@@ -12,7 +12,7 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Modal, Popconfirm, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import GetReady from "@/components/GetReady";
+import GetReady from "@/components/getReady";
 import PlayerTable from "@/components/playerTable";
 import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
@@ -22,6 +22,7 @@ import { selectGameId, selectGameStatus } from "@/lib/features/game";
 import { isProduction } from "../../../utils/environment";
 import { selectIsHost } from "../../../utils/helpers";
 import HistoryButton from "@/components/buttons/HistoryButton";
+
 
 export default function Lobby() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function Lobby() {
         router.push(`/game/${gameId}`);
       }, 3000);
     }
-  }, [gameId, router, gameStatus]);
+  }, [gameId, router, gameStatus, disconnectLobby]);
 
   // Lobby object does not exist anymore
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function Lobby() {
       disconnectLobby();
       router.back();
     }
-  }, [lobbyStatus, router]);
+  }, [disconnectLobby, lobbyStatus, router]);
 
   function disconnectLobby() {
     // Disconnect websocket
