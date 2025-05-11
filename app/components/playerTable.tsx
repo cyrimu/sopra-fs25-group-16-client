@@ -17,53 +17,53 @@ const PlayerTable: React.FC = () => {
         return playersReady?.some((e) => e === playerName) ?? false;
     }
 
-    return (
-        <>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                }}
-            >
-                <div
-                    className={styles.messageField}
-                    style={{
-                        width: "50%",
-                        padding: "30px",
-                        height: "auto",
-                        fontSize: "20px",
-                    }}
-                >
-                    Mode: {gameType === GAME_TYPE.TEXT ? "Word" : "Picture"}
-                </div>
-                <div
-                    className={styles.messageField}
-                    style={{
-                        width: "50%",
-                        padding: "30px",
-                        height: "auto",
-                        fontSize: "20px",
-                    }}
-                >
-                    Lobby ID: {lobbyId}
-                </div>
-            </div>
-            <br/>
-            <table className={styles.tableField}>
-                <thead>
-                <tr>
-                    <th>codename</th>
-                    <th>team</th>
-                    <th>role</th>
-                    <th>ready</th>
-                </tr>
-                </thead>
-                <tbody>
-                {players
-                    ?.filter((p) => p)
-                    ?.map(({playerName, team, role}, index) => {
-                        const roleSplit = role?.split("_")[1];
+  return (
+    <>
+<div
+    style={{
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+  }}
+>
+  <div
+    className={styles.messageField}
+    style={{
+      width: "50%",
+      padding: "30px",
+      height: "auto",
+      fontSize: "20px",
+    }}
+  >
+    Mode: {gameType === GAME_TYPE.TEXT ? "Word" : "Picture"}
+  </div>
+  <div
+    className={styles.messageField}
+    style={{
+      width: "50%",
+      padding: "30px",
+      height: "auto",
+      fontSize: "20px",
+    }}
+  >
+    Lobby ID: {window.location.href.split("/").pop()}
+  </div>
+</div>
+      <br />
+      <table className={styles.tableField}>
+        <thead>
+          <tr>
+            <th>codename</th>
+            <th>team</th>
+            <th>role</th>
+            <th>ready</th>
+          </tr>
+        </thead>
+        <tbody>
+          {players
+            ?.filter((p) => p)
+            ?.map(({ playerName, team, role }, index) => {
+              const roleSplit = role?.split("_")[1];
 
                         const teamString =
                             team?.toString()[0] +
