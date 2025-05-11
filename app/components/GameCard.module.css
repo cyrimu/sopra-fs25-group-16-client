@@ -38,6 +38,16 @@
   animation: glowPulse 1.5s infinite ease-in-out;
 }
 
+.imageWrapper {
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @keyframes glowPulse {
   0% {
     box-shadow: 0 0 6px 1px yellow;

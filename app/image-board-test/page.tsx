@@ -13,24 +13,35 @@ import { TEAM_COLOR } from "@/lib/features/game/team.types";
 import { LANGUAGES } from "@/lib/features/lobby/languages.types";
 
 const dummyCards = Array.from({ length: 20 }, (_, i) => {
-  let isRevealed = true;
-  let color = CARD_COLOR.WHITE;
-
-  if (i < 5) color = CARD_COLOR.BLUE;
-  else if (i < 10) color = CARD_COLOR.RED;
-  else if (i < 15) color = CARD_COLOR.BLACK;
-  else isRevealed = false;
-
-  return {
-    id: i,
-    type: GAME_TYPE.PICTURE,
-    content: "",
-    isRevealed,
-    isSelected: false,
-    image: "/test.jpg", // shown only if not revealed
-    color,
-  };
-});
+    let isRevealed = true;
+    let color = CARD_COLOR.WHITE;
+  
+    // Make last row unrevealed
+    if (i >= 15) {
+      isRevealed = false;
+    }
+  
+    // Set color based on row
+    if (i < 5) color = CARD_COLOR.BLUE;
+    else if (i < 10) color = CARD_COLOR.RED;
+    else if (i < 15) color = CARD_COLOR.BLACK;
+  
+    // Override specific cards to be neutral + revealed
+    if (i % 5 === 4 && i < 15) {
+      color = CARD_COLOR.WHITE;
+      isRevealed = true;
+    }
+  
+    return {
+      id: i,
+      type: GAME_TYPE.PICTURE,
+      content: "",
+      isRevealed,
+      isSelected: false,
+      image: "/test.jpg",
+      color,
+    };
+  });
 
 export default function ImageBoardTestPage() {
   const dispatch = useDispatch();

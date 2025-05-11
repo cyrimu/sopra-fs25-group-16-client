@@ -59,22 +59,41 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   }
 
   if (type !== GAME_TYPE.TEXT) {
+    const showImage = !isRevealed;
+  
     return (
       <motion.div
         className={styles.card}
+        style={
+          {
+            "--bg-image": showImage
+              ? `url("/white_card.png")` // unrevealed gets white card back
+              : `url("/${CARD_COLOR[cardColor].toLowerCase()}_card.png")`,
+            aspectRatio: "1 / 1", // enforce square shape
+          } as React.CSSProperties
+        }
         animate={{ rotateY: isRevealed ? 180 : 0 }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
       >
-        <Image
-          src="/test.jpg"
-          alt="Test Image"
-          width={300}
-          height={300}
-          style={{ objectFit: "cover", width: "100%", height: "100%" }}
-        />
+        {showImage && (
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/test.jpg"
+              alt="Card Image"
+              width={999}
+              height={999}
+              style={{
+                objectFit: "cover",
+                width: "100%",
+                height: "100%",
+                borderRadius: "3px",
+              }}
+            />
+          </div>
+        )}
       </motion.div>
     );
-  } else {
+  }else {
     return (
       <motion.div
         className={selected ? styles.cardSelected : styles.card}
