@@ -167,7 +167,7 @@ export default function Lobby() {
               <Tooltip
                 title={
                   playersReady?.length !== 4
-                    ? "You need exactly 4 players to start the game"
+                    ? "You need all 4 players to be ready to start the game"
                     : ""
                 }
               >

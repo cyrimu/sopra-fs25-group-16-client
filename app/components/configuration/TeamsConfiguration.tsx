@@ -61,7 +61,7 @@ const TeamsConfiguration: React.FC = () => {
                 style={{ color: "white" }}
               >
                 {players
-                  ?.filter((player) => player) // Filter out null or undefined players
+                  ?.filter((player) => player)
                   .map((player) => (
                     <Select.Option
                       key={player.playerName}
