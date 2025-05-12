@@ -5,7 +5,7 @@ import MakeGuess from "@/components/buttons/MakeGuess";
 import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
 import Board from "@/components/Board";
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { restartGame, selectSave, selectWinner } from "@/lib/features/game";
 import {
@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import FullScreenPopup from "@/components/FullScreenPopup";
 import { selectIsHost, selectMyPlayerInGame } from "../../../utils/helpers";
 import SaveButton from "@/components/buttons/SaveButton";
+
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -34,6 +35,9 @@ export default function Game() {
   const myPlayerInGame = useSelector(selectMyPlayerInGame);
 
   const isHost = useSelector(selectIsHost);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (gameIsSaved) {
