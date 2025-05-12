@@ -5,6 +5,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "@/styles/globals.css";
 import RulesButton from "@/components/buttons/RulesButton";
 import StoreProvider from "./providers/StoreProvider";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
