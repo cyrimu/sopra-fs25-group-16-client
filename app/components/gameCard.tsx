@@ -4,7 +4,7 @@ import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import styles from "./GameCard.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { setSelectedCard } from "@/lib/features/game";
 import Image from "next/image";
 import { selectMyPlayerInGame } from "../../utils/helpers";
