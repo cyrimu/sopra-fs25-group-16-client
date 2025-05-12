@@ -1,59 +1,76 @@
-import { CheckOutlined } from "@ant-design/icons";
-import styles from "./ClueForm.module.css";
-import { InputNumber } from "antd";
 import React, { useState } from "react";
-import { Clue } from "@/lib/features/game/clue.types";
 import { useDispatch, useSelector } from "react-redux";
+import { CheckOutlined } from "@ant-design/icons";
+import { InputNumber } from "antd";
+import styles from "./ClueForm.module.css";
+import { Clue } from "@/lib/features/game/clue.types";
 import { selectPlayerName } from "@/lib/features/player";
+import ErrorModal from "@/components/errorModal";
 
 const ClueForm: React.FC = () => {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const playerName = useSelector(selectPlayerName);
 
-  const playerName = useSelector(selectPlayerName);
+    const [hint, setHint] = useState<string>("");
+    const [number, setNumber] = useState<number | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-  const [hint, setHint] = useState<string | undefined>();
-  const [number, setNumber] = useState<number | undefined>();
+    const handleSendClue = () => {
 
-  function handleSendGuess() {
-    if (!number) throw new Error("A number must be provided");
-    if (!hint) throw new Error("A hint must be provided");
-    if (!playerName) throw new Error("The playerName is undefined");
+        if (!hint.trim()) {
+            setErrorMessage("A hint must be provided");
+            setIsModalVisible(true);
+            return;
+        }
+        if (!number) {
+            setErrorMessage("A number must be provided");
+            setIsModalVisible(true);
+            return;
+        }
+        if (!playerName) {
+            setErrorMessage("The playerName is undefined");
+            setIsModalVisible(true);
+            return;
+        }
 
-    const clue: Clue = {
-      clueText: hint,
-      clueNumber: number,
-      username: playerName,
+        const clue: Clue = {
+            clueText: hint,
+            clueNumber: number,
+            username: playerName,
+        };
+
+        dispatch({ type: "game/sendClue", payload: clue });
     };
 
-    dispatch({
-      type: "game/sendClue",
-      payload: clue,
-    });
-  }
-
-  return (
-    <div className={styles.inputContainer}>
-      <input
-        className={styles.inputField}
-        placeholder="Provide a hint ... "
-        onChange={(e) => setHint(e.target.value)}
-      />
-        <InputNumber
-            className={styles.numberInputField}
-            size={"large"}
-            value={number}
-            onChange={(p) => {
-                setNumber(p ?? undefined);
-            }}
-            style={{ backgroundColor: "white"}}
-            min={1}
-            max={9}
-        />
-      <button className={styles.regularButton} onClick={handleSendGuess}>
-        <CheckOutlined />
-      </button>
-    </div>
-  );
+    return (
+        <div className={styles.inputContainer}>
+            <input
+                type="text"
+                className={styles.inputField}
+                placeholder="Provide a hint..."
+                value={hint}
+                onChange={(e) => setHint(e.target.value)}
+            />
+            <InputNumber
+                className={styles.numberInputField}
+                size="large"
+                value={number}
+                onChange={(value) => setNumber(value)}
+                min={1}
+                max={9}
+                style={{ backgroundColor: "white" }}
+            />
+            <button className={styles.regularButton} onClick={handleSendClue}>
+                <CheckOutlined />
+            </button>
+            <ErrorModal
+                visible={isModalVisible}
+                onClose={() => setIsModalVisible(false)}
+                message={errorMessage}
+            />
+        </div>
+    );
 };
 
 export default ClueForm;
