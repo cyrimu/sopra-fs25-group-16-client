@@ -64,7 +64,6 @@ export default function ImageBoardTestPage() {
 
   return (
     <main style={{ padding: "2rem" }}>
-      <h1 style={{ textAlign: "center" }}>Image Board Test</h1>
       <div className={styles.boardWrapper}>
         <div className={styles.boardContainer}>
           <div className={styles.boardGrid}>
