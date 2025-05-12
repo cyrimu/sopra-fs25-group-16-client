@@ -47,7 +47,7 @@ export default function Game() {
       if (winner === myPlayerInGame?.team) {
         router.push(`/game/${gameID}/results/winner`);
       } else {
-        router.push(`/game/${gameID}/results/looser`);
+        router.push(`/game/${gameID}/results/loser`);
       }
     }
   }, [router, turn, winner, gameID, myPlayerInGame?.team]);
@@ -96,57 +96,58 @@ export default function Game() {
   );
 
     function ActionElement() {
-        try {
-            if (!myPlayerInGame) {
-                throw new Error("The player is undefined");
-            }
-            if (!turn) {
-                throw new Error("The turn is undefined");
-            }
-            if (!myPlayerInGame.role) {
-                throw new Error("The role is undefined");
-            }
-            if (!myPlayerInGame.team) {
-                throw new Error("The team is undefined");
-            }
-
-            const color = playerRoleToTeamColor(turn);
-
-            if (color !== myPlayerInGame.team) {
-                return waitNextTurn;
-            } else if (color === myPlayerInGame.team && myPlayerInGame.role !== turn) {
-                if (
-                    myPlayerInGame.role === PLAYER_ROLES.RED_OPERATIVE ||
-                    myPlayerInGame.role === PLAYER_ROLES.BLUE_OPERATIVE
-                ) {
-                    return waitClue;
-                } else if (
-                    myPlayerInGame.role === PLAYER_ROLES.RED_SPYMASTER ||
-                    myPlayerInGame.role === PLAYER_ROLES.BLUE_SPYMASTER
-                ) {
-                    return waitGuess;
-                }
-            }
-
-            switch (myPlayerInGame.role) {
-                case PLAYER_ROLES.BLUE_OPERATIVE:
-                case PLAYER_ROLES.RED_OPERATIVE:
-                    return (
-                        <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
-                            <MakeGuess /> <SkipGuess />
-                        </div>
-                    );
-                case PLAYER_ROLES.BLUE_SPYMASTER:
-                case PLAYER_ROLES.RED_SPYMASTER:
-                    return <HintForm />;
-                default:
-                    break;
-            }
-            //eslint-disable-next-line
-        } catch (error: any) {
-            setErrorMessage(error.message);
+        if (!myPlayerInGame) {
+            setErrorMessage("The player is undefined");
             setIsModalVisible(true);
-            return null; // Prevent further rendering
+            return null;
+        }
+        if (!turn) {
+            setErrorMessage("The turn is undefined");
+            setIsModalVisible(true);
+            return null;
+        }
+        if (!myPlayerInGame.role) {
+            setErrorMessage("The role is undefined");
+            setIsModalVisible(true);
+            return null;
+        }
+        if (!myPlayerInGame.team) {
+            setErrorMessage("The team is undefined");
+            setIsModalVisible(true);
+            return null;
+        }
+
+        const color = playerRoleToTeamColor(turn);
+
+        if (color !== myPlayerInGame.team) {
+            return waitNextTurn;
+        } else if (color === myPlayerInGame.team && myPlayerInGame.role !== turn) {
+            if (
+                myPlayerInGame.role === PLAYER_ROLES.RED_OPERATIVE ||
+                myPlayerInGame.role === PLAYER_ROLES.BLUE_OPERATIVE
+            ) {
+                return waitClue;
+            } else if (
+                myPlayerInGame.role === PLAYER_ROLES.RED_SPYMASTER ||
+                myPlayerInGame.role === PLAYER_ROLES.BLUE_SPYMASTER
+            ) {
+                return waitGuess;
+            }
+        }
+
+        switch (myPlayerInGame.role) {
+            case PLAYER_ROLES.BLUE_OPERATIVE:
+            case PLAYER_ROLES.RED_OPERATIVE:
+                return (
+                    <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
+                        <MakeGuess /> <SkipGuess />
+                    </div>
+                );
+            case PLAYER_ROLES.BLUE_SPYMASTER:
+            case PLAYER_ROLES.RED_SPYMASTER:
+                return <HintForm />;
+            default:
+                return null;
         }
     }
 
