@@ -177,14 +177,15 @@ export default function Lobby() {
             <Popconfirm
               title={
                 <span style={{ color: "black" }}>
-                  Are you sure if you want to delete the lobby?
+                  Are you sure you want to delete the lobby?
                 </span>
               }
               onConfirm={confirmDeleteLobby}
-              // onCancel={cancelDeleteLobby}
-              okText="Yes"
               cancelText="No"
-              icon={false}
+              okText="Yes"
+              cancelButtonProps={{ style: { backgroundColor: "#2f2f2f", color: "white", border: "1px solid #2f2f2f" } }}
+              okButtonProps={{ style: { backgroundColor: "white", color: "black", border: "1px solid black" } }}
+              icon={true}
             >
               <button className={styles.regularButton}>Delete Lobby</button>
             </Popconfirm>
