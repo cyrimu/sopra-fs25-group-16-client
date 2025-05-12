@@ -4,7 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { setPlayerName } from "@/lib/features/player";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLobbyStatus } from "@/lib/features/lobby";
 import { joinLobby } from "@/lib/features/lobby/api";
