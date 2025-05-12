@@ -2,7 +2,7 @@ import React from "react";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Popconfirm } from "antd";
-import {selectGameId, selectPlayers} from "@/lib/features/game";
+import {selectGameId, selectPlayers, selectWinner} from "@/lib/features/game";
 import { selectLobbyId } from "@/lib/features/lobby";
 import { useSelector } from "react-redux";
 import { selectIsHost } from "../../utils/helpers";
@@ -10,7 +10,12 @@ import { selectIsHost } from "../../utils/helpers";
 const ResultsTable: React.FC = () => {
   const router = useRouter();
 
-  const lobbyId = useSelector(selectLobbyId);
+    const winner = useSelector(selectWinner);
+    console.log("winner", winner);
+    const loser = winner === "RED" ? "blue" : "red";
+
+
+    const lobbyId = useSelector(selectLobbyId);
   console.log("lobbyId", lobbyId);
 
   const gameId = useSelector(selectGameId);
@@ -49,7 +54,7 @@ const ResultsTable: React.FC = () => {
             marginRight: "30px",
           }}
         >
-          Winner: Red
+          Winner: {winner}
         </div>
         <div
           className={styles.messageField}
@@ -61,7 +66,7 @@ const ResultsTable: React.FC = () => {
             textAlign: "center",
           }}
         >
-          Loser: Blue
+          Loser: {loser}
         </div>
       </div>
 

@@ -2,6 +2,7 @@ import styles from "./Board.module.css";
 import GameCard from "./gameCard";
 import { useSelector } from "react-redux";
 import { selectCards } from "@/lib/features/game";
+import React from "react";
 
 const Board: React.FC = () => {
   const cards = useSelector(selectCards);

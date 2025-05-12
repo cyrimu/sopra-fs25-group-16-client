@@ -13,7 +13,7 @@
   color: black;
   font-size: 16px;
   border-radius: 10px;
-  border: 2px solid white;
+  border: 0.5px solid black;
   width: 300px;
   padding: 10px;
 }
@@ -24,11 +24,26 @@
   font-size: 16px;
 }
 
-.selector {
-  font-size: 16px;
+.numberInputField {
+  font-size: 14px;
   width: 100px;
 }
 
 .regularButton {
   font-size: 30px;
+  border-radius: 20px;
+  padding: 5px;
+    background-color: white;
+  outline: white;
+    border: 0.5px solid black;
+}
+
+.ant-input-number-handler {
+  color: white;
+}
+
+.ant-input-number-handler-up-inner,
+.ant-input-number-handler-down-inner {
+  color: white;
+
 }

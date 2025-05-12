@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsHost } from "../../../../../utils/helpers";
 
-function Looser() {
+function Loser() {
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -80,4 +80,4 @@ function Looser() {
   );
 }
 
-export default Looser;
+export default Loser;
