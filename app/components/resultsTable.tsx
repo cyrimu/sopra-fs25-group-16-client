@@ -24,7 +24,7 @@ const ResultsTable: React.FC = () => {
   const gameId = useSelector(selectGameId);
 
   const playerName = useSelector(selectPlayerName);
-  const isHost = selectIsHost;
+  const isHost = useSelector(selectIsHost);
 
   const players = useSelector(selectPlayers);
 
@@ -97,8 +97,8 @@ const ResultsTable: React.FC = () => {
               return (
                 <tr key={i}>
                   <td>{playerName}</td>
-                  <td>{capitalize(team)}</td>
-                  <td>{capitalize(roleString)}</td>
+                  <td>{capitalize(team ?? "")}</td>
+                  <td>{capitalize(roleString ?? "")}</td>
                 </tr>
               );
             })}
