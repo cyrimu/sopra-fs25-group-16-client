@@ -16,7 +16,7 @@ function Winner() {
   const lobbyId = useSelector(selectLobbyId);
   const gameId = useSelector(selectGameId);
 
-  const isHost = useSelector(selectIsHost);
+  const isHost = true;
 
   const team = useSelector(selectWinner);
 
