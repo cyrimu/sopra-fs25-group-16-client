@@ -2,28 +2,34 @@ import React from "react";
 import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { Popconfirm } from "antd";
-import {selectGameId, selectPlayers, selectWinner} from "@/lib/features/game";
-import { selectLobbyId } from "@/lib/features/lobby";
-import { useSelector } from "react-redux";
+import {
+  selectGameId,
+  selectPlayers,
+  selectWinner
+} from "@/lib/features/game";
+import { selectLobbyId} from "@/lib/features/lobby";
 import { selectIsHost } from "../../utils/helpers";
+import { selectPlayerName } from "@/lib/features/player";
+import { useSelector } from "react-redux";
 
 const ResultsTable: React.FC = () => {
   const router = useRouter();
 
-    const winner = useSelector(selectWinner);
-    console.log("winner", winner);
-    const loser = winner === "RED" ? "blue" : "red";
+  const winner = useSelector(selectWinner);
+  const loser = winner === "RED" ? "BLUE" : "RED";
+  const winnerTeam = winner === "RED" ? "RED" : "BLUE";
+  const loserTeam = winner === "RED" ? "BLUE" : "RED";
 
-
-    const lobbyId = useSelector(selectLobbyId);
-  console.log("lobbyId", lobbyId);
-
+  const lobbyId = useSelector(selectLobbyId);
   const gameId = useSelector(selectGameId);
-    console.log("gameId", gameId);
-  const isHost = useSelector(selectIsHost);
+
+  const playerName = useSelector(selectPlayerName);
+  const isHost = selectIsHost;
 
   const players = useSelector(selectPlayers);
-    console.log("players", players);
+
+  const capitalize = (s: string) =>
+    s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 
   const confirmDeleteLobby = () => {
     router.replace("/create");
@@ -54,7 +60,7 @@ const ResultsTable: React.FC = () => {
             marginRight: "30px",
           }}
         >
-          Winner: {winner}
+          Winner: {capitalize(winnerTeam)}
         </div>
         <div
           className={styles.messageField}
@@ -66,7 +72,7 @@ const ResultsTable: React.FC = () => {
             textAlign: "center",
           }}
         >
-          Loser: {loser}
+          Loser: {capitalize(loserTeam)}
         </div>
       </div>
 
@@ -75,29 +81,39 @@ const ResultsTable: React.FC = () => {
           <tr>
             <th>codename</th>
             <th>team</th>
-            <th>points</th>
+            <th>role</th>
           </tr>
         </thead>
         <tbody>
-          {players?.map(({ playerName, role, team }, i) => {
-            const roleString = role?.split("_")[1];
-
-            return (
-              <tr key={i}>
-                <td>{playerName}</td>
-                <td>{team}</td>
-                {roleString && (
-                  <td>{`${roleString[0]} ${roleString.substring(1)}`}</td>
-                )}
-              </tr>
-            );
-          })}
+          {players
+            ?.slice()
+            .sort((a, b) => {
+              if (a.team === winner && b.team !== winner) return -1;
+              if (a.team !== winner && b.team === winner) return 1;
+              return 0;
+            })
+            .map(({ playerName, team, role }, i) => {
+              const roleString = role?.split("_")[1];
+              return (
+                <tr key={i}>
+                  <td>{playerName}</td>
+                  <td>{capitalize(team)}</td>
+                  <td>{capitalize(roleString)}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
 
       <div className={styles.regularButtonContainer}>
         {isHost ? (
           <>
+            <button
+              className={styles.regularButton}
+              onClick={() => router.push(`/lobby/${lobbyId}`)}
+            >
+              Play Again
+            </button>
             <button
               className={styles.regularButton}
               onClick={() => router.push(`/lobby/${lobbyId}`)}
