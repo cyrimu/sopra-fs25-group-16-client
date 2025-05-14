@@ -69,7 +69,20 @@ const SaveButton: React.FC = () => {
         okText="Yes"
         cancelText="No"
         icon={false}
-
+        cancelButtonProps={{
+          style: {
+            backgroundColor: "#2f2f2f",
+            color: "white",
+            border: "1px solid #2f2f2f"
+          }
+        }}
+        okButtonProps={{
+          style: {
+            backgroundColor: "white",
+            color: "black",
+            border: "1px solid black"
+          }
+        }}
       >
         <AntButton
           icon={
