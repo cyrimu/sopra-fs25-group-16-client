@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button as AntButton, Popconfirm } from "antd";
+import {Button as AntButton, Popconfirm, Tooltip} from "antd";
 import styles from "./SaveButton.module.css";
 import { SaveOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -69,21 +69,9 @@ const SaveButton: React.FC = () => {
         okText="Yes"
         cancelText="No"
         icon={false}
-        cancelButtonProps={{
-          style: {
-            backgroundColor: "#2f2f2f",
-            color: "white",
-            border: "1px solid #2f2f2f"
-          }
-        }}
-        okButtonProps={{
-          style: {
-            backgroundColor: "white",
-            color: "black",
-            border: "1px solid black"
-          }
-        }}
+
       >
+        <Tooltip title={"Save and quit the game"}>
         <AntButton
           icon={
             <div style={{ fontSize: "30px" }}>
@@ -94,6 +82,7 @@ const SaveButton: React.FC = () => {
           shape="circle"
           style={{ width: 50, height: 50 }}
         />
+        </Tooltip>
       </Popconfirm>
     </div>
   );

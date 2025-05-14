@@ -27,7 +27,15 @@
 .numberInputField {
   font-size: 14px;
   width: 100px;
+  font-family: "Special Elite", serif;
 }
+
+.custom-placeholder input::placeholder {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: gray;
+}
+
 
 .regularButton {
   font-size: 30px;

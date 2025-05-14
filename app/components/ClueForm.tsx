@@ -59,7 +59,8 @@ const ClueForm: React.FC = () => {
                 onChange={(value) => setNumber(value)}
                 min={1}
                 max={9}
-                style={{ backgroundColor: "white" }}
+                style={{ backgroundColor: "white", fontFamily: "Special Elite" }}
+                placeholder="# cards"
             />
             <button className={styles.regularButton} onClick={handleSendClue}>
                 <CheckOutlined />

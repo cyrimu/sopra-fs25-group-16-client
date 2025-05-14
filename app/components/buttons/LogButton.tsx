@@ -1,27 +1,28 @@
 import BookOutlined from "@ant-design/icons/lib/icons/BookOutlined";
-import { Button as AntButton } from "antd";
+import {Button as AntButton, Tooltip} from "antd";
 import styles from "./LogButton.module.css";
 import React, { useState } from "react";
 import { LogModal } from "../LogModal";
 
 const LogButton: React.FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modal, setModal] = useState(false);
 
-  const showModal = () => setIsModalVisible(true);
-  const hideModal = () => setIsModalVisible(false);
-
-
+  const showModal = () => setModal(true);
+  const hideModal = () => setModal(false);
 
   return (
     <div className={styles.logWrapper}>
-      <AntButton
-          icon={<BookOutlined style={{ fontSize: "30px" }} />}
+      <div onClick={showModal}>
+        <Tooltip title={"View Game Log"}>
+        <AntButton
           type="primary"
+          icon={<BookOutlined style={{ fontSize: "30px" }} />}
           shape="circle"
           style={{ width: 50, height: 50 }}
-          onClick={showModal}
-      />
-      <LogModal visible={isModalVisible} onClose={hideModal} />
+        />
+        </Tooltip>
+        <LogModal visible={modal} onClose={hideModal} />
+      </div>
     </div>
   );
 };
