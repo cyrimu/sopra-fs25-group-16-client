@@ -101,7 +101,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
   }
 
   return (
-    <Modal title={"Old Games"} open={visible} onCancel={onClose} footer={null}>
+    <Modal title={"Old Games"} open={visible} onCancel={onClose} footer={null} width={'1000px'} height={'2000px'}>
       <p>
         Select the old game you want to start. The players must be the same as
         in the lobby.

@@ -2,7 +2,7 @@
 import "@ant-design/v5-patch-for-react-19";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
-import { RightOutlined } from "@ant-design/icons";
+import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 import { setPlayerName } from "@/lib/features/player";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -55,6 +55,10 @@ export default function Join() {
     }
   }
 
+  function handleBackButton() {
+    router.back();
+  }
+
   return (
     <div className={styles.centered}>
       <div className={styles.blueOverlay}></div>
@@ -77,9 +81,14 @@ export default function Join() {
             placeholder="Enter Lobby ID ... "
             onChange={(e) => setId(e.target.value)}
           />
-          <button className={styles.regularButton} onClick={handleJoinButton}>
-            Join <RightOutlined />
-          </button>
+          <div style={{ display: "flex", gap: "50px" }}>
+            <button className={styles.regularButton} onClick={handleBackButton}>
+              <LeftOutlined /> Back
+            </button>
+            <button className={styles.regularButton} onClick={handleJoinButton}>
+              Join <RightOutlined />
+            </button>
+          </div>
           <ErrorModal
               visible={isModalVisible}
               onClose={() => setIsModalVisible(false)}

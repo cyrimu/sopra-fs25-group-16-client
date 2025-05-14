@@ -2,7 +2,7 @@
 import "@ant-design/v5-patch-for-react-19";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
-import { RightOutlined } from "@ant-design/icons";
+import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { selectLobbyId, selectLobbyStatus } from "@/lib/features/lobby";
@@ -42,6 +42,10 @@ export default function Create() {
     }
   }
 
+  function handleBackButton() {
+    router.back();
+  }
+
   useEffect(() => {
     if (lobbyStatus === "succeeded") {
       if (id) router.push(`/create/${id}`);
@@ -65,9 +69,14 @@ export default function Create() {
             placeholder="Choose your codename ... "
             onChange={(e) => setUsername(e.target.value)}
           />
-          <button className={styles.regularButton} onClick={handleNextButton}>
-            Next <RightOutlined />
-          </button>
+          <div style={{ display: "flex", gap: "50px" }}>
+            <button className={styles.regularButton} onClick={handleBackButton}>
+              <LeftOutlined /> Back
+            </button>
+            <button className={styles.regularButton} onClick={handleNextButton}>
+              Create <RightOutlined />
+            </button>
+          </div>
           <ErrorModal
               visible={isModalVisible}
               onClose={() => setIsModalVisible(false)}

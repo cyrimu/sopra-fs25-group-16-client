@@ -12,21 +12,25 @@ const HistoryButton: React.FC = () => {
   const hideModal = () => setIsModalVisible(false);
 
   return (
-    <div className={styles.rulesButton}>
-      <AntButton
-        icon={
-          <div style={{ fontSize: "30px" }}>
-            <HistoryOutlined />
-          </div>
-        }
-        type="primary"
-        shape="circle"
-        style={{ width: 50, height: 50 }}
-        onClick={showModal}
-      />
-      <HistoryModal visible={isModalVisible} onClose={hideModal} />
-    </div>
-  );
+<div>
+  <div className={styles.rulesButton}>
+    <AntButton
+      icon={
+        <div style={{ fontSize: "30px" }}>
+          <HistoryOutlined />
+        </div>
+      }
+      type="primary"
+      shape="circle"
+      style={{ width: 50, height: 50 }}
+      onClick={showModal}
+    />
+  </div>
+  <div style={{ display: "flex", justifyContent: "center"}}>
+    <HistoryModal visible={isModalVisible} onClose={hideModal} />
+  </div>
+</div>
+);
 };
 
 export default HistoryButton;

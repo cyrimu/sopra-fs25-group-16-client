@@ -1,12 +1,14 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 import styles from "@/styles/page.module.css";
-import { CopyOutlined } from "@ant-design/icons";
-import { selectLobbyId } from "@/lib/features/lobby";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { AppDispatch } from "@/lib/store";
+import {CopyOutlined, LeftOutlined, RightOutlined} from "@ant-design/icons";
+import {selectLobbyId} from "@/lib/features/lobby";
+import {useDispatch, useSelector} from "react-redux";
+import React, {useEffect} from "react";
+import {AppDispatch} from "@/lib/store";
+import {deleteLobby} from "@/lib/features/lobby/api";
+import {selectPlayerName} from "@/lib/features/player";
 
 export default function Create() {
   const router = useRouter();
@@ -14,6 +16,8 @@ export default function Create() {
   const dispatch = useDispatch<AppDispatch>();
 
   const id = useSelector(selectLobbyId);
+  const playerName = useSelector(selectPlayerName);
+
 
   const url = `${globalThis.location.origin}/join/${id}`;
 
@@ -30,6 +34,15 @@ export default function Create() {
       });
     }
   }, [dispatch, id]);
+
+  function handleDeleteLobby() {
+    if (id && playerName) {
+      dispatch(deleteLobby({username: playerName, lobbyId: id}));
+      router.replace("/");
+    } else {
+      router.replace("/");
+    }
+  }
 
   if (!id) {
     return (
@@ -104,8 +117,11 @@ export default function Create() {
           </button>
         </div>
         <div className={styles.regularButtonContainer}>
+          <button className={styles.regularButton} onClick={handleDeleteLobby}>
+            <LeftOutlined/> Delete Lobby
+          </button>
           <button className={styles.regularButton} onClick={handleOpenLobby}>
-            Open Lobby
+            Open Lobby <RightOutlined/>
           </button>
         </div>
       </div>

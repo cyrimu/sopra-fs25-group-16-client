@@ -4,7 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { setPlayerName } from "@/lib/features/player";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLobbyStatus } from "@/lib/features/lobby";
 import { joinLobby } from "@/lib/features/lobby/api";
@@ -52,10 +52,10 @@ export default function JoinWithID() {
     }
   }
 
-  function handleBackButton(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    router.replace("/join");
+  function handleBackButton() {
+    router.back();
   }
+
 
   return (
       <div className={styles.centered}>
@@ -76,9 +76,9 @@ export default function JoinWithID() {
                 placeholder="Choose your codename ... "
                 onChange={(e) => setUsername(e.target.value)}
             />
-            <div className={styles.regularButtonContainer}>
+            <div style={{ display: "flex", gap: "50px" }}>
               <button className={styles.regularButton} onClick={handleBackButton}>
-                <LeftOutlined /> Join different lobby
+                <LeftOutlined /> Back
               </button>
               <button className={styles.regularButton} onClick={handleJoinButton}>
                 Join <RightOutlined />

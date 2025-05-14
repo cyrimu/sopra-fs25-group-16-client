@@ -62,13 +62,14 @@ const SaveButton: React.FC = () => {
       <Popconfirm
         title={
           <span style={{ color: "black" }}>
-            Do you want to quit and save the lobby?
+            Do you want to save and quit the game?
           </span>
         }
         onConfirm={handleSaveGame}
         okText="Yes"
         cancelText="No"
         icon={false}
+
       >
         <AntButton
           icon={
