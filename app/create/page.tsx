@@ -43,7 +43,7 @@ export default function Create() {
   }
 
   function handleBackButton() {
-    router.back();
+    router.push("/");
   }
 
   useEffect(() => {

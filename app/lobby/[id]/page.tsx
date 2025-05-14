@@ -23,7 +23,6 @@ import { isProduction } from "../../../utils/environment";
 import { selectIsHost } from "../../../utils/helpers";
 import HistoryButton from "@/components/buttons/HistoryButton";
 
-
 export default function Lobby() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -38,11 +37,11 @@ export default function Lobby() {
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isGameStarting, setGameStarting] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
 
   const lobbyStatus = useSelector(selectLobbyStatus);
   const gameStatus = useSelector(selectGameStatus);
   const gameId = useSelector(selectGameId);
-
 
   // Connect to the lobby websocket
   useEffect(() => {
@@ -67,11 +66,11 @@ export default function Lobby() {
 
   // Lobby object does not exist anymore
   useEffect(() => {
-    if (lobbyStatus === "idle") {
+    if (lobbyStatus === "idle" && !isLeaving) {
       disconnectLobby();
       router.back();
     }
-  }, [disconnectLobby, lobbyStatus, router]);
+  }, [disconnectLobby, lobbyStatus, router, isLeaving]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function disconnectLobby() {
@@ -81,16 +80,19 @@ export default function Lobby() {
     });
   }
 
-  function handleLeaveLobby() {
+  async function handleLeaveLobby() {
+    setIsLeaving(true);
     if (lobbyId && playerName) {
-      dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
+      await dispatch(leaveLobby({ lobbyId: lobbyId, username: playerName }));
     }
+    console.log("Redirecting to /");
+    router.push("/");
   }
 
   const handleConfigPanel = () => {
     if (lobbyId && playerName && lobby) {
       dispatch(
-        updateLobby({ lobbyId: lobbyId, username: playerName, lobby: lobby })
+          updateLobby({ lobbyId: lobbyId, username: playerName, lobby: lobby })
       );
       setIsPanelOpen((state) => !state);
     }
@@ -105,10 +107,10 @@ export default function Lobby() {
   function confirmDeleteLobby() {
     if (lobbyId && playerName) {
       dispatch(
-        deleteLobby({
-          lobbyId: lobbyId,
-          username: playerName,
-        })
+          deleteLobby({
+            lobbyId: lobbyId,
+            username: playerName,
+          })
       );
     }
   }
@@ -118,81 +120,93 @@ export default function Lobby() {
   }
 
   return (
-    <div className={styles.centered}>
-      {isHost && <HistoryButton />}
-      <div className={styles.redBlueOverlay} />
-      <Modal
-        styles={modalStyles}
-        title={<span style={{ color: "white" }}>Configuration Panel</span>}
-        open={isPanelOpen}
-        onOk={handleConfigPanel}
-        okButtonProps={{
-          style: { fontFamily: "Gabarito", fontSize: "20px"},
-        }}
-        okText="Save"
-        onCancel={() => setIsPanelOpen((state) => !state)}
-        cancelButtonProps={{
-          style: { fontFamily: "Gabarito", fontSize: "20px" },
-        }}
-        cancelText="Cancel"
-      >
-        <ConfigurationPanel />
-      </Modal>
-      <div className={styles.messageContainer}>
-        <div className={styles.lobbyTitle}>Game Lobby</div>
-        <PlayerTable />
+      <div className={styles.centered}>
+        {isHost && <HistoryButton />}
+        <div className={styles.redBlueOverlay} />
+        <Modal
+            styles={modalStyles}
+            title={<span style={{ color: "white" }}>Configuration Panel</span>}
+            open={isPanelOpen}
+            onOk={handleConfigPanel}
+            okButtonProps={{
+              style: { fontFamily: "Gabarito", fontSize: "20px" },
+            }}
+            okText="Save"
+            onCancel={() => setIsPanelOpen((state) => !state)}
+            cancelButtonProps={{
+              style: { fontFamily: "Gabarito", fontSize: "20px" },
+            }}
+            cancelText="Cancel"
+        >
+          <ConfigurationPanel />
+        </Modal>
+        <div className={styles.messageContainer}>
+          <div className={styles.lobbyTitle}>Game Lobby</div>
+          <PlayerTable />
 
-        {!isHost && (
-          <div className={styles.regularButtonContainer}>
-            <button className={styles.regularButton} onClick={handleLeaveLobby}>
-              Leave Lobby
-            </button>
-          </div>
-        )}
-        {isHost && (
-          <div className={styles.regularButtonContainer}>
-            <button
-              className={styles.regularButton}
-              onClick={handleConfigPanel}
-            >
-              Change Setup
-            </button>
-            <button
-              className={`${styles.regularButton} ${
-                playersReady?.length !== 4 ? styles.disabledButton : ""
-              }`}
-              onClick={handleStartGame}
-              disabled={isProduction() && playersReady?.length !== 4}
-            >
-              <Tooltip
-                title={
-                  playersReady?.length !== 4
-                    ? "You need all 4 players to be ready to start the game"
-                    : ""
-                }
-              >
-                Start Game
-              </Tooltip>
-            </button>
-            <Popconfirm
-              title={
-                <span style={{ color: "black" }}>
+          {!isHost && (
+              <div className={styles.regularButtonContainer}>
+                <button className={styles.regularButton} onClick={handleLeaveLobby}>
+                  Leave Lobby
+                </button>
+              </div>
+          )}
+          {isHost && (
+              <div className={styles.regularButtonContainer}>
+                <button
+                    className={styles.regularButton}
+                    onClick={handleConfigPanel}
+                >
+                  Change Setup
+                </button>
+                <button
+                    className={`${styles.regularButton} ${
+                        playersReady?.length !== 4 ? styles.disabledButton : ""
+                    }`}
+                    onClick={handleStartGame}
+                    disabled={isProduction() && playersReady?.length !== 4}
+                >
+                  <Tooltip
+                      title={
+                        playersReady?.length !== 4
+                            ? "You need all 4 players to be ready to start the game"
+                            : ""
+                      }
+                  >
+                    Start Game
+                  </Tooltip>
+                </button>
+                <Popconfirm
+                    title={
+                      <span style={{ color: "black" }}>
                   Are you sure you want to delete the lobby?
                 </span>
-              }
-              onConfirm={confirmDeleteLobby}
-              cancelText="No"
-              okText="Yes"
-              cancelButtonProps={{ style: { backgroundColor: "#2f2f2f", color: "white", border: "1px solid #2f2f2f" } }}
-              okButtonProps={{ style: { backgroundColor: "white", color: "black", border: "1px solid black" } }}
-              icon={true}
-            >
-              <button className={styles.regularButton}>Delete Lobby</button>
-            </Popconfirm>
-          </div>
-        )}
+                    }
+                    onConfirm={confirmDeleteLobby}
+                    cancelText="No"
+                    okText="Yes"
+                    cancelButtonProps={{
+                      style: {
+                        backgroundColor: "#2f2f2f",
+                        color: "white",
+                        border: "1px solid #2f2f2f",
+                      },
+                    }}
+                    okButtonProps={{
+                      style: {
+                        backgroundColor: "white",
+                        color: "black",
+                        border: "1px solid black",
+                      },
+                    }}
+                    icon={true}
+                >
+                  <button className={styles.regularButton}>Delete Lobby</button>
+                </Popconfirm>
+              </div>
+          )}
+        </div>
       </div>
-    </div>
   );
 }
 

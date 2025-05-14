@@ -19,7 +19,7 @@ export default function Create() {
   const playerName = useSelector(selectPlayerName);
 
 
-  const url = `${globalThis.location.origin}/join/${id}`;
+  const url = typeof globalThis.location !== "undefined" ? `${globalThis.location.origin}/join/${id}` : "";
 
   function handleOpenLobby() {
     router.push(`/lobby/${id}`);

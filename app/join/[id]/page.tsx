@@ -53,7 +53,7 @@ export default function JoinWithID() {
   }
 
   function handleBackButton() {
-    router.back();
+    router.push("/");
   }
 
 
