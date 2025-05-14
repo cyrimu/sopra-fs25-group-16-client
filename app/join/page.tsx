@@ -56,7 +56,7 @@ export default function Join() {
   }
 
   function handleBackButton() {
-    router.back();
+    router.push("/");
   }
 
   return (

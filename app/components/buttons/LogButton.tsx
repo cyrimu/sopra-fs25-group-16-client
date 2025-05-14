@@ -5,22 +5,23 @@ import React, { useState } from "react";
 import { LogModal } from "../LogModal";
 
 const LogButton: React.FC = () => {
-  const [modal, setModal] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const showModal = () => setModal(true);
-  const hideModal = () => setModal(false);
+  const showModal = () => setIsModalVisible(true);
+  const hideModal = () => setIsModalVisible(false);
+
+
 
   return (
     <div className={styles.logWrapper}>
-      <div onClick={showModal}>
-        <AntButton
-          type="primary"
+      <AntButton
           icon={<BookOutlined style={{ fontSize: "30px" }} />}
+          type="primary"
           shape="circle"
           style={{ width: 50, height: 50 }}
-        />
-        <LogModal visible={modal} onClose={hideModal} />
-      </div>
+          onClick={showModal}
+      />
+      <LogModal visible={isModalVisible} onClose={hideModal} />
     </div>
   );
 };
