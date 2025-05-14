@@ -135,11 +135,11 @@ reason).
 
 ---
 
-## Contributions Week 7 - [Begin Date] to [End Date]
+## Contributions Week 7 - [12.05.2025] to [18.05.2025]
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@rashmidindgur]** | [14.05.2025]   | [Link to Commits 1](https://github.com/cyrimu/sopra-fs25-group-16-client/pull/81/commits) [Link to Comits 2](https://github.com/cyrimu/sopra-fs25-group-16-client/pull/82/commits)  | [Fixes after testing the game] | [Issues e.g. the log not closing made the game not playable] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
