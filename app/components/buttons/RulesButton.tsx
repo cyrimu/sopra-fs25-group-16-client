@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Button as AntButton } from "antd";
+import {Button as AntButton, Tooltip} from "antd";
 import styles from "./RulesButton.module.css";
 import RulesModal from "../rulesModal";
 
@@ -14,13 +14,16 @@ const RulesButton: React.FC = () => {
 
   return (
     <div className={styles.rulesButton}>
-      <AntButton
-        icon={icon}
-        type="primary"
-        shape="circle"
-        style={{ width: 50, height: 50 }}
-        onClick={showModal}
-      />
+        <Tooltip title="View Codenames rules">
+            <AntButton
+                icon={icon}
+                type="primary"
+                shape="circle"
+                style={{ width: 50, height: 50 }}
+                onClick={showModal}
+            />
+        </Tooltip>
+
       <RulesModal visible={isModalVisible} onClose={hideModal} />
     </div>
   );

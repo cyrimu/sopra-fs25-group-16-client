@@ -153,12 +153,14 @@ export default function Lobby() {
           )}
           {isHost && (
               <div className={styles.regularButtonContainer}>
-                <button
-                    className={styles.regularButton}
-                    onClick={handleConfigPanel}
-                >
-                  Change Setup
-                </button>
+                <Tooltip  title="Configure game mode, language, teams, and roles" >
+                  <button
+                      className={styles.regularButton}
+                      onClick={handleConfigPanel}
+                  >
+                    Change Setup
+                  </button>
+                </Tooltip>
                 <button
                     className={`${styles.regularButton} ${
                         playersReady?.length !== 4 ? styles.disabledButton : ""
@@ -201,7 +203,9 @@ export default function Lobby() {
                     }}
                     icon={true}
                 >
+                  <Tooltip  title="Delete lobby" >
                   <button className={styles.regularButton}>Delete Lobby</button>
+                    </Tooltip>
                 </Popconfirm>
               </div>
           )}
