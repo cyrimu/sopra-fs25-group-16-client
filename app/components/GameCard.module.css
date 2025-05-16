@@ -41,11 +41,27 @@
 .imageWrapper {
   width: 100%;
   height: 100%;
-  padding: 15px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.imageCanvas {
+  width: 80%;
+  height: 80%;
+  background-color: white;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.imageCanvas img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
 }
 
 @keyframes glowPulse {

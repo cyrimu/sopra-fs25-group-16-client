@@ -149,4 +149,19 @@ export class ApiService {
       body: JSON.stringify(data),
     });
   }
+  /**
+ * GET base64 image from internal Next.js API.
+ * @param imageId - The ID of the image (e.g., "39bd1ced-...").
+ * @returns Base64 data URL string.
+ */
+  public async getBase64Image(imageId: string): Promise<string> {
+    const remoteBaseUrl = "https://sopra-fs25-group-16-server.oa.r.appspot.com";
+    const url = `${remoteBaseUrl}/image/${imageId}`;
+  
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch base64 image (${res.status})`);
+    }
+    return await res.text(); // base64 string
+  }
 }
