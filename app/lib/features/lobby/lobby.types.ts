@@ -10,4 +10,7 @@ export interface Lobby {
   players: Player[];
   playerCount: number;
   playersReady: string[];
+  deleted: boolean;
 }
+
+export const LOBBY_KEY = "LOBBY_KEY";
