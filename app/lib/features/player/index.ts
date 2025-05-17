@@ -2,28 +2,28 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface PlayerState {
-  playerName: string | undefined;
+  username: string;
 }
 
 const initialState: PlayerState = {
-  playerName: undefined,
+  username: "",
 };
 
 const playerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
-    setPlayerName(state, action: PayloadAction<string>) {
-      state.playerName = action.payload;
+    setUsername(state, action: PayloadAction<string>) {
+      state.username = action.payload.trim();
     },
   },
   selectors: {
-    selectPlayerName: ({ playerName }) => playerName,
+    selectUsername: ({ username }) => username,
   },
 });
 
-export const { setPlayerName } = playerSlice.actions;
+export const { setUsername } = playerSlice.actions;
 
-export const { selectPlayerName } = playerSlice.selectors;
+export const { selectUsername } = playerSlice.selectors;
 
 export default playerSlice.reducer;

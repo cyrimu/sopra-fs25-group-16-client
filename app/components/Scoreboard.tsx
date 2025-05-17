@@ -3,7 +3,7 @@ import styles from "./Scoreboard.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCards } from "@/lib/features/game";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
-import { selectPlayerName, setPlayerName } from "@/lib/features/player";
+import { selectUsername, setUsername } from "@/lib/features/player";
 import { isProduction } from "../../utils/environment";
 import { selectPlayerFromGameByRole } from "../../utils/helpers";
 
@@ -11,7 +11,7 @@ const Scoreboard: React.FC = () => {
   const dispatch = useDispatch();
 
   const cards = useSelector(selectCards);
-  const playerName = useSelector(selectPlayerName);
+  const username = useSelector(selectUsername);
 
   const production = isProduction();
 
@@ -36,10 +36,10 @@ const Scoreboard: React.FC = () => {
     selectPlayerFromGameByRole(PLAYER_ROLES.RED_SPYMASTER)
   );
 
-  function changeTeam(playerName: string | undefined) {
-    if (!playerName) throw new Error("The player name is not defined")
-      
-    dispatch(setPlayerName(playerName));
+  function changeTeam(username: string | undefined) {
+    // We don't care if this exception occurs in development
+    if (!username) throw new Error("The username is undefined");
+    dispatch(setUsername(username));
   }
 
   return (
@@ -54,7 +54,7 @@ const Scoreboard: React.FC = () => {
             <div className={styles.scoreboardPlayersContainer}>
               <div
                 className={
-                  redOperative?.playerName === playerName
+                  redOperative?.playerName === username
                     ? styles.scoreboardMyPlayer
                     : styles.scoreboardPlayer
                 }
@@ -71,7 +71,7 @@ const Scoreboard: React.FC = () => {
             <div className={styles.scoreboardPlayersContainer}>
               <div
                 className={
-                  redSpymaster?.playerName === playerName
+                  redSpymaster?.playerName === username
                     ? styles.scoreboardMyPlayer
                     : styles.scoreboardPlayer
                 }
@@ -102,7 +102,7 @@ const Scoreboard: React.FC = () => {
             <div className={styles.scoreboardPlayersContainer}>
               <div
                 className={
-                  blueOperative?.playerName === playerName
+                  blueOperative?.playerName === username
                     ? styles.scoreboardMyPlayer
                     : styles.scoreboardPlayer
                 }
@@ -119,7 +119,7 @@ const Scoreboard: React.FC = () => {
             <div className={styles.scoreboardPlayersContainer}>
               <div
                 className={
-                  blueSpymaster?.playerName === playerName
+                  blueSpymaster?.playerName === username
                     ? styles.scoreboardMyPlayer
                     : styles.scoreboardPlayer
                 }

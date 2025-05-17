@@ -191,6 +191,9 @@
   margin: 40px 0;
   text-align: center;
   background-color: transparent;
+  font-size: "100px";
+  text-align: "center";
+  min-width: "900px";
 }
 
 .disabledButton {

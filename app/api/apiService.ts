@@ -59,7 +59,7 @@ export class ApiService {
     });
     return this.processResponse<T>(
       res,
-        "An error occurred while fetching the data.\n"
+      "An error occurred while fetching the data.\n"
     );
   }
 
@@ -109,7 +109,7 @@ export class ApiService {
       },
       body: formBody.toString(),
     });
-    console.log("res", res)
+
     return this.processResponse<T>(
       res,
       "An error occurred while posting the data.\n"

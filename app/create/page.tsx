@@ -2,55 +2,42 @@
 import "@ant-design/v5-patch-for-react-19";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
-import {LeftOutlined, RightOutlined} from "@ant-design/icons";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { selectLobbyId, selectLobbyStatus } from "@/lib/features/lobby";
-import {createLobby} from "@/lib/features/lobby/api";
+import { createLobby } from "@/lib/features/lobby/api";
 import { AppDispatch } from "@/lib/store";
-import { setPlayerName } from "@/lib/features/player";
-import ErrorModal from "@/components/errorModal";
+import { selectUsername, setUsername } from "@/lib/features/player";
+import { useErrorModal } from "@/context/ErrorModalContext";
+import { useLobbyErrorHandler } from "@/hooks/lobby/useLobbyErrorHandler";
+import { useLobbySuccessHandler } from "@/hooks/lobby/useLobbySuccessHandler";
+import { USERNAME_KEY } from "@/lib/features/player/player.types";
 
 export default function Create() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const { showError } = useErrorModal();
 
-  const [username, setUsername] = useState<string | undefined>();
-
-  const lobbyStatus = useSelector(selectLobbyStatus);
-  const id = useSelector(selectLobbyId);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const username = useSelector(selectUsername);
 
   async function handleNextButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (!username?.trim()) {
-      setErrorMessage("Please provide a codename.");
-      setIsModalVisible(true);
+    if (!username) {
+      showError("Please provide a codename.");
       return;
     }
-    if (lobbyStatus === "idle") {
-      try {
-        dispatch(setPlayerName(username));
-        await dispatch(createLobby(username)).unwrap();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setErrorMessage(error.message);
-        setIsModalVisible(true);
-      }
-    }
+
+    // Store the username inside the localStorage
+    localStorage.setItem(USERNAME_KEY, username);
+    // Create the lobby and change the status to successfull/failed
+    dispatch(createLobby(username));
   }
 
-  function handleBackButton() {
-    router.push("/");
-  }
+  // Listen for errors inside the lobby provider
+  useLobbyErrorHandler();
 
-  useEffect(() => {
-    if (lobbyStatus === "succeeded") {
-      if (id) router.push(`/create/${id}`);
-    }
-  }, [id, lobbyStatus, router]);
+  // Listen for success status inside the lobby
+  useLobbySuccessHandler("/create");
 
   return (
     <div className={styles.centered}>
@@ -65,23 +52,22 @@ export default function Create() {
         </div>
         <div className={styles.inputContainer}>
           <input
+            value={username}
             className={styles.inputField}
             placeholder="Choose your codename ... "
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => dispatch(setUsername(e.target.value))}
           />
           <div style={{ display: "flex", gap: "50px" }}>
-            <button className={styles.regularButton} onClick={handleBackButton}>
+            <button
+              className={styles.regularButton}
+              onClick={() => router.push("/")}
+            >
               <LeftOutlined /> Back
             </button>
             <button className={styles.regularButton} onClick={handleNextButton}>
               Create <RightOutlined />
             </button>
           </div>
-          <ErrorModal
-              visible={isModalVisible}
-              onClose={() => setIsModalVisible(false)}
-              message={errorMessage}
-          />
         </div>
       </div>
     </div>

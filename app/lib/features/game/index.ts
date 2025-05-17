@@ -87,7 +87,6 @@ const gameSlice = createSlice({
       })
       .addCase(createGame.rejected, (state, action) => {
         state.status = "failed";
-        console.error(action.error);
         state.error = action.error.message ?? "Unknown Error";
       })
       .addCase(getGame.pending, (state) => {
@@ -95,11 +94,15 @@ const gameSlice = createSlice({
       })
       .addCase(getGame.fulfilled, (state, action: PayloadAction<Game>) => {
         state.status = "succeeded";
-        state.game = action.payload;
+        const game = action.payload;
+
+        state.game = {
+          ...game,
+          cards: game.cards.map((e, i) => ({ ...e, id: i, isSelected: false })),
+        };
       })
       .addCase(getGame.rejected, (state, action) => {
         state.status = "failed";
-        console.error(action.error);
         state.error = action.error.message ?? "Unknown Error";
       });
   },

@@ -6,7 +6,7 @@ type SocketActions =
 
 interface SocketConnectAction {
   type: "lobby/connect";
-  payload: { lobbyID: string };
+  payload: string;
 }
 
 interface SocketDisconnectAction {

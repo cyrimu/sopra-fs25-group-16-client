@@ -1,19 +1,19 @@
-import SockJS from "sockjs-client";
-import { Client, IMessage } from "@stomp/stompjs";
-import { Middleware } from "@reduxjs/toolkit";
-import { isSocketAction } from "./wsLobbyActions";
-import { getApiDomain } from "../../utils/domain";
 import {
-  lobbyBeenDeleted,
+  setDeletedLobby,
   setLobby,
   setPlayersReady,
 } from "@/lib/features/lobby";
+import { Client, IMessage } from "@stomp/stompjs";
+import { isSocketAction } from "./wsLobbyActions";
+import { getApiDomain } from "../../utils/domain";
 import { getGame } from "@/lib/features/game/api";
+import { Middleware } from "@reduxjs/toolkit";
 import { AppDispatch } from "@/lib/store";
+import SockJS from "sockjs-client";
 
 export const createLobbySocketMiddleware = (): Middleware => {
   let client: Client | null = null;
-  let lobbyID: string;
+  let lobbyId: string;
 
   return (storeAPI) => (next) => (action) => {
     if (!isSocketAction(action)) {
@@ -26,23 +26,21 @@ export const createLobbySocketMiddleware = (): Middleware => {
 
         const url = getApiDomain();
 
-        const socket = new SockJS(`${url}/live`);
-
-        lobbyID = action.payload.lobbyID;
+        lobbyId = action.payload;
 
         const newClient = new Client({
-          webSocketFactory: () => socket,
+          webSocketFactory: () => new SockJS(`${url}/live`),
           reconnectDelay: 5000,
           debug: (str) => console.log("[STOMP]", str),
           onConnect: () => {
             newClient.subscribe(
-              `/topic/lobby/${lobbyID}`,
+              `/topic/lobby/${lobbyId}`,
               (message: IMessage) => {
                 const data = JSON.parse(message.body);
 
                 if (data.type === "delete") {
                   console.log("Received delete", data);
-                  storeAPI.dispatch(lobbyBeenDeleted());
+                  storeAPI.dispatch(setDeletedLobby());
                   return;
                 } else if (data.type === "ready") {
                   console.log("Received ready", data);
@@ -74,31 +72,29 @@ export const createLobbySocketMiddleware = (): Middleware => {
         if (client?.connected && client) {
           console.log("Ready sent", action.payload);
           client.publish({
-            destination: `/app/lobby/${lobbyID}/ready`,
+            destination: `/app/lobby/${lobbyId}/ready`,
             body: action.payload,
           });
         }
         break;
 
-      case "lobby/disconnect": {
-        client?.deactivate();
-        client = null;
-        break;
-      }
-
       case "lobby/oldGame": {
         if (client?.connected && client) {
           console.log("Ready sent", action.payload);
           client.publish({
-            destination: `/app/lobby/${lobbyID}/oldGame`,
+            destination: `/app/lobby/${lobbyId}/oldGame`,
             body: JSON.stringify(action.payload),
           });
         }
         break;
       }
 
-      default:
+      case "lobby/disconnect": {
+        console.log("Disconnect from the lobby websocket");
+        client?.deactivate();
+        client = null;
         break;
+      }
     }
 
     return next(action);

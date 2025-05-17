@@ -25,6 +25,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
     "sockjs-client": "^1.6.1"
   },
   "devDependencies": {
