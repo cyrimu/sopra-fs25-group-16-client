@@ -1,5 +1,4 @@
 import {
-  restartLobby,
   setDeletedLobby,
   setLobby,
   setPlayersReady,
