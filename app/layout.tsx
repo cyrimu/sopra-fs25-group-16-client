@@ -36,6 +36,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <StoreProvider>
+          <GlobalLoader />
           <ConfigProvider
             theme={{
               algorithm: theme.defaultAlgorithm,
@@ -94,7 +95,7 @@ export default function RootLayout({
                   <LoaderProvider>{children}</LoaderProvider>
                 </GameStartingProvider>
               </ErrorModalProvider>
-              <GlobalLoader />
+
               <RulesButton />
             </AntdRegistry>
           </ConfigProvider>
