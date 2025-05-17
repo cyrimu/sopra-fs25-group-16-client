@@ -1,20 +1,17 @@
-import {ApiService} from "@/api/apiService";
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {Lobby} from "./lobby.types";
+import { ApiService } from "@/api/apiService";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { Lobby } from "./lobby.types";
 
-export const getLobby = async ({
-  lobbyId,
-  username,
-}: {
-  lobbyId: string;
-  username: string;
-}) => {
-  const apiService = new ApiService();
+export const getLobby = createAsyncThunk(
+  "lobby/getLobby",
+  async ({ lobbyId, username }: { lobbyId: string; username: string }) => {
+    const apiService = new ApiService();
 
-  return await apiService.get<Lobby>(
+    return await apiService.get<Lobby>(
       `/lobby/${lobbyId}?username=${username}`
-  );
-};
+    );
+  }
+);
 
 export const createLobby = createAsyncThunk(
   "lobby/createLobby",
@@ -22,7 +19,7 @@ export const createLobby = createAsyncThunk(
     const apiService = new ApiService();
 
     return await apiService.postForm<Lobby>("/lobby", {
-        username: username,
+      username: username,
     });
   }
 );
@@ -41,8 +38,8 @@ export const updateLobby = createAsyncThunk(
     const apiService = new ApiService();
 
     return await apiService.put<Lobby>(
-        `/lobby/${lobbyId}?username=${username}`,
-        lobby
+      `/lobby/${lobbyId}?username=${username}`,
+      lobby
     );
   }
 );
@@ -53,10 +50,10 @@ export const deleteLobby = createAsyncThunk(
     const apiService = new ApiService();
 
     return await apiService.delete(
-        `/lobby/${lobbyId}/delete?username=${username}`,
-        {
-            username: username,
-        }
+      `/lobby/${lobbyId}/delete?username=${username}`,
+      {
+        username: username,
+      }
     );
   }
 );
@@ -66,12 +63,9 @@ export const joinLobby = createAsyncThunk(
   async ({ lobbyId, username }: { lobbyId: string; username: string }) => {
     const apiService = new ApiService();
 
-    return await apiService.postForm<Lobby>(
-        `/lobby/${lobbyId}/join`,
-        {
-            username: username,
-        }
-    );
+    return await apiService.postForm<Lobby>(`/lobby/${lobbyId}/join`, {
+      username: username,
+    });
   }
 );
 
@@ -80,8 +74,8 @@ export const leaveLobby = createAsyncThunk(
   async ({ lobbyId, username }: { lobbyId: string; username: string }) => {
     const apiService = new ApiService();
 
-    return await apiService.postForm(`/lobby/${lobbyId}/leave`, {
-        username: username,
+    return await apiService.postForm<string>(`/lobby/${lobbyId}/leave`, {
+      username: username,
     });
   }
 );
