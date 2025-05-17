@@ -39,11 +39,10 @@ export const createGame = createAsyncThunk(
 
     const apiService = new ApiService();
 
-    const response = await apiService.post<Game>(
+    return await apiService.post<Game>(
       `/game/${lobby.lobbyID}?username=${username}`,
       production ? lobby : updatedLobby
     );
-    return response;
   }
 );
 
@@ -52,9 +51,6 @@ export const getGame = createAsyncThunk(
   async ({ gameId, username }: { gameId: string; username: string }) => {
     const apiService = new ApiService();
 
-    const response = await apiService.get<Game>(
-      `/game/${gameId}?username=${username}`
-    );
-    return response;
+    return await apiService.get<Game>(`/game/${gameId}?username=${username}`);
   }
 );
