@@ -28,3 +28,4 @@ export enum TURN_ORDER {
 }
 
 export const GAME_KEY = "GAME_KEY";
+export const WIN_KEY = "WIN_KEY";
