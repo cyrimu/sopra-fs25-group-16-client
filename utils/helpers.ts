@@ -8,10 +8,15 @@ export const selectMyPlayerInLobby = (state: RootState) => {
   );
 };
 
-export const selectIsHost = (state: RootState) => {
+export const selectIsHostInLobby = (state: RootState) => {
   const { username } = state.player;
   return state.lobby.lobby?.host === username;
 };
+
+export const selectIsHostInGame = (state: RootState) => {
+  const {username} = state.player
+  return state.game.game?.host === username
+}
 
 export const selectMyPlayerInGame = (state: RootState) => {
   const { username } = state.player;
