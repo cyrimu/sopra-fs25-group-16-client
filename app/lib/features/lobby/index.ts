@@ -4,7 +4,13 @@ import { Lobby } from "./lobby.types";
 import { Player } from "../player/player.types";
 import { GAME_TYPE } from "../game/game.types";
 import { LANGUAGES } from "./languages.types";
-import { createLobby, deleteLobby, joinLobby, leaveLobby } from "./api";
+import {
+  createLobby,
+  deleteLobby,
+  getLobby,
+  joinLobby,
+  leaveLobby,
+} from "./api";
 
 interface LobbyState {
   lobby: Lobby | undefined;
@@ -58,7 +64,7 @@ const lobbySlice = createSlice({
       if (state.lobby) state.lobby.language = action.payload;
     },
     // Delete lobby
-    lobbyBeenDeleted() {
+    restartLobby() {
       return initialState;
     },
     // Set players ready
@@ -66,6 +72,10 @@ const lobbySlice = createSlice({
       if (state.lobby) {
         state.lobby.playersReady = action.payload;
       }
+    },
+    // The host deleted the lobby
+    setDeletedLobby(state) {
+      if (state.lobby) state.lobby.deleted = true;
     },
   },
   extraReducers(builder) {
@@ -82,6 +92,18 @@ const lobbySlice = createSlice({
         state.error = action.error.message ?? "Unknown Error";
       });
     builder
+      .addCase(getLobby.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(getLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
+        state.status = "succeeded";
+        state.lobby = action.payload;
+      })
+      .addCase(getLobby.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Unknown Error";
+      });
+    builder
       .addCase(joinLobby.pending, (state) => {
         state.status = "pending";
       })
@@ -91,7 +113,6 @@ const lobbySlice = createSlice({
       })
       .addCase(joinLobby.rejected, (state, action) => {
         state.status = "failed";
-        console.error(action.error);
         state.error = action.error.message ?? "Unknown Error";
       });
     builder
@@ -115,31 +136,36 @@ const lobbySlice = createSlice({
   },
   selectors: {
     selectLobby: (state) => state.lobby,
+    selectLobbyError: (state) => state.error,
     selectLobbyId: (state) => state.lobby?.lobbyID,
     selectLobbyStatus: (state) => state.status,
     selectPlayers: (state) => state.lobby?.players,
     selectGameType: (state) => state.lobby?.gameType,
     selectLanguage: (state) => state.lobby?.language,
+    selectLobbyDeleted: (state) => state.lobby?.deleted,
     selectPlayersReady: (state) => state.lobby?.playersReady,
   },
 });
 
 export const {
   setLobby,
+  setPlayer,
   setGameType,
   setLanguage,
-  setPlayer,
+  restartLobby,
   setPlayersReady,
-  lobbyBeenDeleted,
+  setDeletedLobby,
 } = lobbySlice.actions;
 
 export const {
   selectLobby,
   selectLobbyId,
+  selectLobbyError,
   selectLobbyStatus,
   selectPlayers,
   selectGameType,
   selectLanguage,
+  selectLobbyDeleted,
   selectPlayersReady,
 } = lobbySlice.selectors;
 
