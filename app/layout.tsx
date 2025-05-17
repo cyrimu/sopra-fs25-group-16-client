@@ -10,6 +10,7 @@ import React from "react";
 import { ErrorModalProvider } from "./context/ErrorModalContext";
 import { GameStartingProvider } from "./context/GameStartingContext";
 import { LoaderProvider } from "./context/LoaderContext";
+import GlobalLoader from "./components/GlobalLoader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -93,6 +94,7 @@ export default function RootLayout({
                   <LoaderProvider>{children}</LoaderProvider>
                 </GameStartingProvider>
               </ErrorModalProvider>
+              <GlobalLoader />
               <RulesButton />
             </AntdRegistry>
           </ConfigProvider>
