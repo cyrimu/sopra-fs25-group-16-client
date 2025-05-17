@@ -68,9 +68,19 @@ const lobbySlice = createSlice({
       return initialState;
     },
     // Set players ready
-    setPlayersReady(state, action: PayloadAction<string[]>) {
+    setPlayersReady(state, action: PayloadAction<string>) {
       if (state.lobby) {
-        state.lobby.playersReady = action.payload;
+        if (!Array.isArray(state.lobby.playersReady)) {
+          state.lobby.playersReady = [];
+        }
+
+        const index = state.lobby.playersReady.indexOf(action.payload);
+
+        if (index !== -1) {
+          state.lobby.playersReady.splice(index, 1);
+        } else {
+          state.lobby.playersReady.push(action.payload);
+        }
       }
     },
     // The host deleted the lobby
