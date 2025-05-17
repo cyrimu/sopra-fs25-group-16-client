@@ -150,11 +150,11 @@ reason).
 
 ---
 
-## Contributions Week 8 - [Begin Date] to [End Date]
+## Contributions Week 8 - [19.05.2025] to [25.05.2025]
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@sgm17]** | [17.05.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-client/pull/86) | [Subscribe to the game and the lobby globally independently of the screen. Now the playersReady array is stored on the backend. I have redesigned the results screen and now is possible to navigate back to the lobby to start a new game.] | [The playersReady array has more sense in the frontend because every time a message is received the array linked to the lobby is updated. The resultsTable has a more attractive design and is now possible to navigate back to the lobby to start a new game.] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
