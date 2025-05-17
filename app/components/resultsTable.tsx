@@ -1,9 +1,10 @@
-import { selectPlayers, selectWinner } from "@/lib/features/game";
+"use client";
+import { selectWinner, selectPlayers } from "@/lib/features/game";
+import { CrownOutlined, UserOutlined } from "@ant-design/icons";
 import { TEAM_COLOR } from "@/lib/features/game/team.types";
-import styles from "@/styles/page.module.css";
+import styles from "./resultsTable.module.css";
 import { useSelector } from "react-redux";
-import React from "react";
-import Modal from "antd/es/modal";
+import { Modal } from "antd";
 
 interface ResultsModalProps {
   visible: boolean;
@@ -17,44 +18,88 @@ const ResultsTable: React.FC<ResultsModalProps> = ({ visible, onClose }) => {
   const capitalize = (s: string | undefined) =>
     !s ? "" : s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 
-  return (
-    <Modal title="Results" open={visible} onCancel={onClose}>
-      <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            width: "100%",
-            marginBottom: "30px",
-          }}
-        >
-          <div className={styles.resultsTeam}>
-            Winner: {capitalize(winner ?? "")}
+  const loser = winner === TEAM_COLOR.RED ? TEAM_COLOR.BLUE : TEAM_COLOR.RED;
+
+  if (!winner)
+    return (
+      <Modal
+        title="🎉 Game Results"
+        open={visible}
+        onCancel={onClose}
+        footer={null}
+      >
+        <div className={styles.resultsContainer}>
+          <div className={styles.winnerSection}>
+            <h2>The game still has no winner</h2>
           </div>
-          <div className={styles.resultsTeam}>
-            Loser:{" "}
-            {capitalize(
-              winner === TEAM_COLOR.RED ? TEAM_COLOR.BLUE : TEAM_COLOR.RED
-            )}
+        </div>
+      </Modal>
+    );
+
+  return (
+    <Modal
+      title="🎉 Game Results"
+      open={visible}
+      onCancel={onClose}
+      footer={null}
+    >
+      <div className={styles.resultsContainer}>
+        <div className={styles.winnerSection}>
+          <h2>
+            <CrownOutlined style={{ color: "#facc15", marginRight: 8 }} />
+            {capitalize(winner)} Team Wins!
+          </h2>
+          <p>
+            Congratulations to all players on the {capitalize(winner)} team!
+          </p>
+        </div>
+
+        <div className={styles.teamInfo}>
+          <div className={`${styles.resultsTeam} ${styles[winner]}`}>
+            🏆 Winner: {capitalize(winner)}
+          </div>
+          <div className={`${styles.resultsTeam} ${styles[loser]}`}>
+            ❌ Loser: {capitalize(loser)}
           </div>
         </div>
 
-        <table className={styles.tableField} style={{ minWidth: "600px" }}>
+        <table className={styles.tableField}>
           <thead>
             <tr>
-              <th>codename</th>
-              <th>team</th>
-              <th>role</th>
+              <th>Codename</th>
+              <th>Team</th>
+              <th>Role</th>
             </tr>
           </thead>
           <tbody>
             {players?.map(({ playerName, team, role }, i) => {
-              const roleString = role?.split("_")[1];
+              const roleLabel = role?.split("_")[1];
+              const isWinner = team === winner;
               return (
-                <tr key={i}>
+                <tr key={i} className={isWinner ? styles.winningRow : ""}>
                   <td>{playerName}</td>
-                  <td>{capitalize(team)}</td>
-                  <td>{capitalize(roleString)}</td>
+                  <td>
+                    <span
+                      className={`${styles.badge} ${
+                        styles[team?.toLowerCase() ?? "black"]
+                      }`}
+                    >
+                      {capitalize(team)}
+                    </span>
+                  </td>
+                  <td>
+                    {roleLabel?.includes("SPYMASTER") ? (
+                      <>
+                        <CrownOutlined style={{ marginRight: 6 }} />
+                        Spymaster
+                      </>
+                    ) : (
+                      <>
+                        <UserOutlined style={{ marginRight: 6 }} />
+                        Operative
+                      </>
+                    )}
+                  </td>
                 </tr>
               );
             })}

@@ -1,8 +1,54 @@
-.resultsTeam {
-  width: 100%;
-  padding: 30px;
-  height: auto;
-  font-size: 26px;
+.resultsContainer {
+  padding: 16px;
+}
+
+.winnerSection {
   text-align: center;
-  margin-right: 30px;
+  margin-bottom: 24px;
+}
+
+.teamInfo {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+}
+
+.resultsTeam {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.tableField {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableField th,
+.tableField td {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+}
+
+.red {
+  background-color: #e63946;
+}
+
+.blue {
+  background-color: #1d3557;
+}
+
+.blue {
+  background-color: #000;
+}
+
+.winningRow {
+  background-color: #fef3c7;
 }
