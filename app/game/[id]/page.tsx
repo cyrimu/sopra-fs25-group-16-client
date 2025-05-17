@@ -5,7 +5,7 @@ import Scoreboard from "@/components/Scoreboard";
 import styles from "@/styles/game.module.css";
 import Board from "@/components/Board";
 import { useSelector } from "react-redux";
-import { selectIsHost } from "../../../utils/helpers";
+import { selectIsHostInGame } from "../../../utils/helpers";
 import SaveButton from "@/components/buttons/SaveButton";
 import { useGameStarting } from "@/context/GameStartingContext";
 import GetReady from "@/components/GetReady";
@@ -18,7 +18,7 @@ import { selectGameStatus } from "@/lib/features/game";
 
 export default function Game() {
   const { gameStarting } = useGameStarting();
-  const isHost = useSelector(selectIsHost);
+  const isHost = useSelector(selectIsHostInGame);
   const gameStatus = useSelector(selectGameStatus);
 
   // Listen until a team wins and redirects to its corresponent screen
