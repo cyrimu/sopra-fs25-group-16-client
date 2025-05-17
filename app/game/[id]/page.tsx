@@ -26,10 +26,13 @@ import FullScreenPopup from "@/components/FullScreenPopup";
 import { selectIsHost, selectMyPlayerInGame } from "../../../utils/helpers";
 import SaveButton from "@/components/buttons/SaveButton";
 import ErrorModal from "@/components/errorModal";
+import { useGameStarting } from "@/context/GameStartingContext";
+import GetReady from "@/components/GetReady";
 
 export default function Game() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { gameStarting } = useGameStarting();
 
   const gameID = useSelector(selectGameId);
   const winner = useSelector(selectWinner);
@@ -41,6 +44,8 @@ export default function Game() {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  if (gameStarting) return <GetReady />;
 
   useEffect(() => {
     if (gameIsSaved) {
@@ -209,7 +214,8 @@ export default function Game() {
                   boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
                 }}
               >
-                Clue: <strong>{displayedClue.word}</strong>  {displayedClue.number}
+                Clue: <strong>{displayedClue.word}</strong>{" "}
+                {displayedClue.number}
               </div>
             )}
 

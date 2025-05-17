@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteOldGame, selectOldGames, setOldGame } from "@/lib/features/old";
 import { selectPlayers } from "@/lib/features/lobby";
 import { isProduction } from "../../utils/environment";
-import { selectPlayerName } from "@/lib/features/player";
+import { selectUsername } from "@/lib/features/player";
 
 interface HistoryModalProps {
   visible: boolean;
@@ -22,7 +22,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
 
   let oldGames = useSelector(selectOldGames);
 
-  const playerName = useSelector(selectPlayerName);
+  const username = useSelector(selectUsername);
 
   // Select the players from the lobby
   const players = useSelector(selectPlayers);
@@ -80,7 +80,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
     // Send the old gameId via websockets
     dispatch({
       type: "lobby/oldGame",
-      payload: { gameId: gameID, username: playerName },
+      payload: { gameId: gameID, username: username },
     });
   }
 
@@ -101,7 +101,14 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
   }
 
   return (
-    <Modal title={"Old Games"} open={visible} onCancel={onClose} footer={null} width={'1000px'} height={'2000px'}>
+    <Modal
+      title={"Old Games"}
+      open={visible}
+      onCancel={onClose}
+      footer={null}
+      width={"1000px"}
+      height={"2000px"}
+    >
       <p>
         Select the old game you want to start. The players must be the same as
         in the lobby.

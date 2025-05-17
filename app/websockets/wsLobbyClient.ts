@@ -1,15 +1,16 @@
-import SockJS from "sockjs-client";
-import { Client, IMessage } from "@stomp/stompjs";
-import { Middleware } from "@reduxjs/toolkit";
-import { isSocketAction } from "./wsLobbyActions";
-import { getApiDomain } from "../../utils/domain";
 import {
-  lobbyBeenDeleted,
+  restartLobby,
+  setDeletedLobby,
   setLobby,
   setPlayersReady,
 } from "@/lib/features/lobby";
+import { Client, IMessage } from "@stomp/stompjs";
+import { isSocketAction } from "./wsLobbyActions";
+import { getApiDomain } from "../../utils/domain";
 import { getGame } from "@/lib/features/game/api";
+import { Middleware } from "@reduxjs/toolkit";
 import { AppDispatch } from "@/lib/store";
+import SockJS from "sockjs-client";
 
 export const createLobbySocketMiddleware = (): Middleware => {
   let client: Client | null = null;
@@ -42,7 +43,7 @@ export const createLobbySocketMiddleware = (): Middleware => {
 
                 if (data.type === "delete") {
                   console.log("Received delete", data);
-                  storeAPI.dispatch(lobbyBeenDeleted());
+                  storeAPI.dispatch(setDeletedLobby());
                   return;
                 } else if (data.type === "ready") {
                   console.log("Received ready", data);
