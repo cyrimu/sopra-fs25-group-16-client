@@ -17,7 +17,7 @@ import { AppDispatch } from "@/lib/store";
 import { deleteLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { isProduction } from "../../../utils/environment";
-import { selectIsHost } from "../../../utils/helpers";
+import { selectIsHostInLobby } from "../../../utils/helpers";
 import HistoryButton from "@/components/buttons/HistoryButton";
 import {
   cleanLobbyLocalStorage,
@@ -38,7 +38,7 @@ export default function Lobby() {
   const lobby = useSelector(selectLobby);
 
   const username = useSelector(selectUsername);
-  const isHost = useSelector(selectIsHost);
+  const isHost = useSelector(selectIsHostInLobby);
 
   const playersReady = useSelector(selectPlayersReady);
   const players = useSelector(selectPlayers);
@@ -62,7 +62,7 @@ export default function Lobby() {
     }
 
     dispatch(leaveLobby({ lobbyId: lobbyId, username: username }));
-    router.back();
+    router.replace("/");
   }
 
   const handleUpdateLobbyConfiguration = () => {
