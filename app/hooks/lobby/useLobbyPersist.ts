@@ -1,4 +1,4 @@
-import { selectLobbyId, selectLobby } from "@/lib/features/lobby";
+import { selectLobbyId } from "@/lib/features/lobby";
 import { getLobby } from "@/lib/features/lobby/api";
 import { LOBBY_KEY } from "@/lib/features/lobby/lobby.types";
 import { selectUsername, setUsername } from "@/lib/features/player";

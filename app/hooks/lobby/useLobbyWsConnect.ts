@@ -10,9 +10,10 @@ export const useLobbyWsConnect = () => {
 
   useEffect(() => {
     if (lobbyId) {
+      // Infinite loop until the connection is established
       dispatch({
         type: "lobby/connect",
-        payload: { lobbyID: lobbyId },
+        payload: lobbyId,
       });
     }
   }, [dispatch, lobbyId]);
