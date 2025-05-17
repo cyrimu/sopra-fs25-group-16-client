@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./SkipGuess.module.css";
-import { selectPlayerName } from "@/lib/features/player";
+import { selectUsername } from "@/lib/features/player";
 
 const SkipGuess: React.FC = () => {
   const dispatch = useDispatch();
 
-  const username = useSelector(selectPlayerName);
+  const username = useSelector(selectUsername);
 
   function submitSelectionHandle() {
     dispatch({
