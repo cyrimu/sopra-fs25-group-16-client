@@ -8,6 +8,7 @@ import React, { useMemo } from "react";
 import { setSelectedCard } from "@/lib/features/game";
 import Image from "next/image";
 import { selectMyPlayerInGame } from "../../utils/helpers";
+import { useErrorModal } from "@/context/ErrorModalContext";
 
 interface GameCardProps {
   card: Card;
@@ -16,6 +17,7 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const dispatch = useDispatch();
+  const { showError } = useErrorModal();
 
   const { color, type, content, isRevealed } = card;
 
@@ -29,7 +31,10 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   function determineBackgroundImage(): CARD_COLOR {
     const role = myPlayerInGame?.role;
 
-    if (!role) throw new Error("The role of the player in game is null");
+    if (!role) {
+      showError("The role of the player in game is null");
+      return CARD_COLOR.WHITE;
+    }
 
     if (
       (role === PLAYER_ROLES.BLUE_OPERATIVE ||
@@ -47,7 +52,10 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   function handleSelectCard() {
     const role = myPlayerInGame?.role;
 
-    if (!role) throw new Error("The role of the player in game is null");
+    if (!role) {
+      showError("The role of the player in game is null");
+      return;
+    }
 
     if (
       role === PLAYER_ROLES.RED_SPYMASTER ||
