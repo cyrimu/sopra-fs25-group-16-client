@@ -1,8 +1,8 @@
-import { restartGame, selectGameId, selectWinner } from "@/lib/features/game";
+import { selectGameId, selectWinner } from "@/lib/features/game";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { disconnectGame, cleanGameLocalStorage } from "./useGameWsConnect";
+import { disconnectGame } from "./useGameWsConnect";
 import { AppDispatch } from "@/lib/store";
 
 export const useGameWinner = () => {
@@ -13,12 +13,9 @@ export const useGameWinner = () => {
 
   useEffect(() => {
     if (winner) {
-      // Restart the game inside the provider
-      dispatch(restartGame());
       // Disconnect the game from the WS
       disconnectGame(dispatch);
-      // Clean the persisten game from the local storage
-      cleanGameLocalStorage(localStorage);
+      // Redirect to the results page
       router.push(`/results/${gameId}`);
     }
   }, [winner]);
