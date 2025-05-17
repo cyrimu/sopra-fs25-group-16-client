@@ -1,16 +1,17 @@
 // "use client";
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ConfigProvider, theme } from "antd";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
-import "@/styles/globals.css";
-import RulesButton from "@/components/buttons/RulesButton";
-import StoreProvider from "./providers/StoreProvider";
-import React from "react";
-import { ErrorModalProvider } from "./context/ErrorModalContext";
 import { GameStartingProvider } from "./context/GameStartingContext";
+import { ErrorModalProvider } from "./context/ErrorModalContext";
+import { WebSocketProvider } from "./context/WebsocketContext";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import RulesButton from "@/components/buttons/RulesButton";
 import { LoaderProvider } from "./context/LoaderContext";
+import StoreProvider from "./providers/StoreProvider";
+import { Geist, Geist_Mono } from "next/font/google";
 import GlobalLoader from "./components/GlobalLoader";
+import { ConfigProvider, theme } from "antd";
+import type { Metadata } from "next";
+import "@/styles/globals.css";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -92,7 +93,9 @@ export default function RootLayout({
             <AntdRegistry>
               <ErrorModalProvider>
                 <GameStartingProvider>
+                  <WebSocketProvider>
                   <LoaderProvider>{children}</LoaderProvider>
+                  </WebSocketProvider>
                 </GameStartingProvider>
               </ErrorModalProvider>
 

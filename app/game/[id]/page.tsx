@@ -9,7 +9,6 @@ import { selectIsHost } from "../../../utils/helpers";
 import SaveButton from "@/components/buttons/SaveButton";
 import { useGameStarting } from "@/context/GameStartingContext";
 import GetReady from "@/components/GetReady";
-import { useGameWsConnect } from "@/hooks/game/useGameWsConnect";
 import { useGameSaved } from "@/hooks/game/useGameSaved";
 import { useGameWinner } from "@/hooks/game/useGameWinner";
 import { ActionElement } from "@/components/ActionElement";
@@ -27,9 +26,6 @@ export default function Game() {
 
   // Handle case when host saves the game
   useGameSaved();
-
-  // Connect to the websocket
-  useGameWsConnect();
 
   // Fetch again the game when the user refreshes
   useGamePersist();

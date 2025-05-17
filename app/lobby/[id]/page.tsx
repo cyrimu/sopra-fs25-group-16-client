@@ -22,7 +22,6 @@ import HistoryButton from "@/components/buttons/HistoryButton";
 import {
   cleanLobbyLocalStorage,
   disconnectLobby,
-  useLobbyWsConnect,
 } from "@/hooks/lobby/useLobbyWsConnect";
 import { useErrorModal } from "@/context/ErrorModalContext";
 import { useGameSucessHandler } from "@/hooks/game/useGameSucessHandler";
@@ -46,9 +45,6 @@ export default function Lobby() {
   const nonNullPlayers = players?.filter((e) => e) ?? [];
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-
-  // Connect to the lobby websocket
-  useLobbyWsConnect();
 
   // Once fetched the gameId redirect to the game screen
   useGameSucessHandler();

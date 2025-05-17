@@ -13,7 +13,6 @@ import { useErrorModal } from "@/context/ErrorModalContext";
 import {
   cleanLobbyLocalStorage,
   disconnectLobby,
-  useLobbyWsConnect,
 } from "@/hooks/lobby/useLobbyWsConnect";
 import { useLobbyErrorHandler } from "@/hooks/lobby/useLobbyErrorHandler";
 
@@ -25,9 +24,6 @@ export default function Create() {
 
   const lobbyId = useSelector(selectLobbyId);
   const username = useSelector(selectUsername);
-
-  // Connect to the WS earlier for the host to already receive updates
-  useLobbyWsConnect();
 
   // Handle lobby errors and display them
   useLobbyErrorHandler();
