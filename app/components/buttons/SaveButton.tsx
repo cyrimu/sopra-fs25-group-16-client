@@ -2,7 +2,7 @@
 import React from "react";
 import { Button as AntButton, Popconfirm, Tooltip, message } from "antd"; // ✅ import message
 import styles from "./SaveButton.module.css";
-import {InfoCircleOutlined, SaveOutlined} from "@ant-design/icons";
+import { InfoCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/lib/store";
 import {
@@ -12,10 +12,12 @@ import {
   selectPlayers,
 } from "@/lib/features/game";
 import { Old } from "@/lib/features/old/old.types";
+import { useErrorModal } from "@/context/ErrorModalContext";
 
 const OLD_IDS_KEY = "OLD_IDS_KEY";
 
 const SaveButton: React.FC = () => {
+  const { showError } = useErrorModal();
   const dispatch = useDispatch<AppDispatch>();
 
   const gameId = useSelector(selectGameId);
@@ -38,10 +40,10 @@ const SaveButton: React.FC = () => {
   }
 
   function saveCurrentGame() {
-    if (!gameId) throw new Error("The gameId is undefined");
-    if (!players) throw new Error("The players are undefined");
-    if (!gameType) throw new Error("The gameType is undefined");
-    if (!language) throw new Error("The language is undefined");
+    if (!gameId || !players || !gameType || !language) {
+      showError("Something went wrong when saving the current game");
+      return;
+    }
 
     const oldIds = localStorage.getItem(OLD_IDS_KEY)?.split(",") ?? [];
     oldIds.push(gameId);
@@ -58,42 +60,46 @@ const SaveButton: React.FC = () => {
   }
 
   return (
-      <div className={styles.rulesButton}>
-        <Popconfirm
-            title={<span style={{ color: "black" }}>Do you want to save and quit the game?</span>}
-            onConfirm={handleSaveGame}
-            okText="Yes"
-            cancelText="No"
-            icon={false}
-            cancelButtonProps={{
-              style: {
-                backgroundColor: "#2f2f2f",
-                color: "white",
-                border: "1px solid #2f2f2f",
-              },
-            }}
-            okButtonProps={{
-              style: {
-                backgroundColor: "white",
-                color: "black",
-                border: "1px solid black",
-              },
-            }}
-        >
-          <Tooltip title={"Save and quit the game"}>
-            <AntButton
-                icon={
-                  <div style={{ fontSize: "30px" }}>
-                    <SaveOutlined />
-                  </div>
-                }
-                type="primary"
-                shape="circle"
-                style={{ width: 50, height: 50 }}
-            />
-          </Tooltip>
-        </Popconfirm>
-      </div>
+    <div className={styles.rulesButton}>
+      <Popconfirm
+        title={
+          <span style={{ color: "black" }}>
+            Do you want to save and quit the game?
+          </span>
+        }
+        onConfirm={handleSaveGame}
+        okText="Yes"
+        cancelText="No"
+        icon={false}
+        cancelButtonProps={{
+          style: {
+            backgroundColor: "#2f2f2f",
+            color: "white",
+            border: "1px solid #2f2f2f",
+          },
+        }}
+        okButtonProps={{
+          style: {
+            backgroundColor: "white",
+            color: "black",
+            border: "1px solid black",
+          },
+        }}
+      >
+        <Tooltip title={"Save and quit the game"}>
+          <AntButton
+            icon={
+              <div style={{ fontSize: "30px" }}>
+                <SaveOutlined />
+              </div>
+            }
+            type="primary"
+            shape="circle"
+            style={{ width: 50, height: 50 }}
+          />
+        </Tooltip>
+      </Popconfirm>
+    </div>
   );
 };
 
