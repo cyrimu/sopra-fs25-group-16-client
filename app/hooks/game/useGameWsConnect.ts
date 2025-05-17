@@ -13,7 +13,7 @@ export const useGameWsConnect = () => {
       // Infinite loop until the connection is established
       dispatch({
         type: "game/connect",
-        payload: { gameId: gameId },
+        payload: gameId,
       });
     }
   }, [dispatch, gameId]);
