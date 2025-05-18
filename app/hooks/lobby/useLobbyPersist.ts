@@ -30,5 +30,6 @@ export const useLobbyPersist = () => {
       // Fetch again the lobby
       dispatch(getLobby({ lobbyId: storedLobbyId, username: storedUsername }));
     }
-  }, [dispatch, lobbyId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };

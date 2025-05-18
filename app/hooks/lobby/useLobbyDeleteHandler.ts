@@ -17,5 +17,6 @@ export const useLobbyDeleteHandler = () => {
       cleanLobbyLocalStorage(localStorage);
       router.back();
     }
-  }, [deleted, dispatch, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deleted]);
 };

@@ -22,5 +22,6 @@ export const useLobbyErrorHandler = () => {
       // Restart the lobby and let the users try again
       dispatch(restartLobby());
     }
-  }, [dispatch, lobbyStatus, lobbyErrorString, showError]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, lobbyStatus, lobbyErrorString]);
 };
