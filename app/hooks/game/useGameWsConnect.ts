@@ -9,16 +9,12 @@ export const useGameWsConnect = () => {
   const gameId = useSelector(selectGameId);
 
   useEffect(() => {
-    if (!gameId) return;
-
-    dispatch({
-      type: "game/connect",
-      payload: gameId,
-    });
-
-    return () => {
-      dispatch({ type: "game/disconnect" });
-    };
+    if (gameId) {
+      dispatch({
+        type: "game/connect",
+        payload: gameId,
+      });
+    }
   }, [dispatch, gameId]);
 };
 
