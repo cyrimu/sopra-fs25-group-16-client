@@ -30,9 +30,9 @@ const getTeamColor = (log: any, players: any[] = []): string => {
     );
 
 return player?.team === "BLUE"
-        ? "rgba(5,130,201,0.5)"
+        ? "#294C61"
         : player?.team === "RED"
-        ? "rgba(133,72,76,0.5)"
+        ? "#651C25"
         : "#f9f9f9";
     };
 
@@ -97,6 +97,7 @@ export const LogModal: FC<LogModalProps> = ({ visible, onClose }) => {
                     padding: "10px",
                     fontFamily: "Gabarito, sans-serif",
                     lineHeight: "1.5",
+                    color: "white"
                 }}
             >
                 {processedLogs?.map((log, index) => (
