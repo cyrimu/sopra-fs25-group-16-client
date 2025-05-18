@@ -23,17 +23,25 @@
   border-collapse: collapse;
 }
 
-.tableField th,
+.tableField th{
+  padding: 16px;
+  font-weight: bolder;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  color: black;
+}
+
 .tableField td {
   padding: 12px;
   border-bottom: 1px solid #ccc;
   text-align: center;
+  color: white;
 }
 
 .badge {
   padding: 4px 10px;
   border-radius: 12px;
-  color: white;
+  color: black;
   font-weight: bold;
 }
 
@@ -50,5 +58,5 @@
 }
 
 .winningRow {
-  background-color: #fef3c7;
+  font-weight: bolder;
 }
