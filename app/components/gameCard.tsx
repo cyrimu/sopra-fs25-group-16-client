@@ -1,14 +1,14 @@
 import { Card, CARD_COLOR } from "@/lib/features/game/card.types";
-import { GAME_TYPE } from "@/lib/features/game/game.types";
 import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import styles from "./GameCard.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import React, { useMemo } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { setSelectedCard } from "@/lib/features/game";
-import Image from "next/image";
 import { selectMyPlayerInGame } from "../../utils/helpers";
 import { useErrorModal } from "@/context/ErrorModalContext";
+import { FlagFilled, FlagOutlined } from "@ant-design/icons";
+import { selectTurn } from "@/lib/features/game";
 
 interface GameCardProps {
   card: Card;
@@ -18,17 +18,23 @@ interface GameCardProps {
 const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const dispatch = useDispatch();
   const { showError } = useErrorModal();
+  const [isFlagged, setIsFlagged] = useState(false);
 
-  const { color, type, content, isRevealed } = card;
-
+  const { color, content, isRevealed } = card;
   const myPlayerInGame = useSelector(selectMyPlayerInGame);
+  const turn = useSelector(selectTurn);
+  const isMyTurn = myPlayerInGame?.role === turn;
+
+  useEffect(() => {
+    setIsFlagged(false);
+  }, [turn]);
 
   const animation = useMemo(
-    () => ({ rotateY: isRevealed ? 180 : 0 }),
-    [isRevealed]
+      () => ({ rotateY: isRevealed ? 180 : 0 }),
+      [isRevealed]
   );
 
-  function determineBackgroundImage(): CARD_COLOR {
+  const backgroundImage = useMemo(() => {
     const role = myPlayerInGame?.role;
 
     if (!role) {
@@ -37,17 +43,14 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
     }
 
     if (
-      (role === PLAYER_ROLES.BLUE_OPERATIVE ||
-        role === PLAYER_ROLES.RED_OPERATIVE) &&
-      !isRevealed
+        (role === PLAYER_ROLES.BLUE_OPERATIVE ||
+            role === PLAYER_ROLES.RED_OPERATIVE) &&
+        !isRevealed
     ) {
-      // The only case where the card will be forced to grey
       return CARD_COLOR.WHITE;
     }
     return color;
-  }
-
-  const cardColor = determineBackgroundImage();
+  }, [myPlayerInGame, isRevealed, color, showError]);
 
   function handleSelectCard() {
     const role = myPlayerInGame?.role;
@@ -58,52 +61,53 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
     }
 
     if (
-      role === PLAYER_ROLES.RED_SPYMASTER ||
-      role === PLAYER_ROLES.BLUE_SPYMASTER
+        role === PLAYER_ROLES.RED_SPYMASTER ||
+        role === PLAYER_ROLES.BLUE_SPYMASTER
     )
       return;
 
     dispatch(setSelectedCard(card.id));
   }
 
-  if (type !== GAME_TYPE.TEXT) {
-    return (
+  function toggleFlag() {
+    if (isMyTurn) {
+      setIsFlagged((prev) => !prev);
+    }
+  }
+
+  return (
       <motion.div
-        className={styles.card}
-        animate={{ rotateY: isRevealed ? 180 : 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-      >
-        <Image
-          src={
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Zebra_%2824694097565%29.jpg/1200px-Zebra_%2824694097565%29.jpg"
-          }
-          alt=""
-        />
-      </motion.div>
-    );
-  } else {
-    return (
-      <motion.div
-        className={selected ? styles.cardSelected : styles.card}
-        style={
-          {
-            "--bg-image": `url("/${CARD_COLOR[
-              cardColor
-            ].toLowerCase()}_card.png")`,
-          } as React.CSSProperties
-        }
-        animate={animation}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-        onClick={handleSelectCard}
+          className={selected ? styles.cardSelected : styles.card}
+          style={{
+            "--bg-image": `url("/${CARD_COLOR[backgroundImage].toLowerCase()}_card.png")`,
+          } as React.CSSProperties}
+          animate={animation}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          onClick={handleSelectCard}
       >
         {!isRevealed && (
-          <div className={styles.cardTextContainer}>
-            <span>{content.toUpperCase()}</span>
-          </div>
+            <div
+                className={styles.flagContainer}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFlag();
+                }}
+            >
+              {isFlagged ? (
+                  <FlagFilled style={{ fontSize: 20, color: "white" }} />
+              ) : (
+                  <FlagOutlined style={{ fontSize: 20, color: "white" }} />
+              )}
+            </div>
+        )}
+
+        {!isRevealed && (
+            <div className={styles.cardTextContainer}>
+              <span>{content.toUpperCase()}</span>
+            </div>
         )}
       </motion.div>
-    );
-  }
+  );
 };
 
 export default GameCard;
