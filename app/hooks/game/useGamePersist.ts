@@ -30,5 +30,5 @@ export const useGamePersist = () => {
       // Fetch again the game
       dispatch(getGame({ gameId: storedGameId, username: storedUsername }));
     }
-  }, []);
+  }, [dispatch, gameId]);
 };

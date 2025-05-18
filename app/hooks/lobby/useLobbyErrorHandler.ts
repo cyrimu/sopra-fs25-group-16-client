@@ -22,5 +22,5 @@ export const useLobbyErrorHandler = () => {
       // Restart the lobby and let the users try again
       dispatch(restartLobby());
     }
-  }, [dispatch, lobbyStatus, lobbyErrorString]);
+  }, [dispatch, lobbyStatus, lobbyErrorString, showError]);
 };

@@ -38,5 +38,5 @@ export const useGameSucessHandler = () => {
         setGameStarting(false);
       }, 3000);
     }
-  }, [gameId, gameStatus]);
+  }, [dispatch, gameId, gameStatus, lobbyId, router, setGameStarting]);
 };

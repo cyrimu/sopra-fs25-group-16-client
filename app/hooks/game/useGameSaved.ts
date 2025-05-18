@@ -12,12 +12,8 @@ export const useGameSaved = () => {
 
   useEffect(() => {
     if (gameIsSaved) {
-      // Restart the game inside the provider
       dispatch(restartGame());
-      // Disconnect the game from the WS
       disconnectGame(dispatch);
-      // Clean the persisten game from the local storage
-      // cleanGameLocalStorage(localStorage);
       router.back();
     }
   }, [dispatch, gameIsSaved, router]);

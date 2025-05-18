@@ -12,14 +12,10 @@ export const useLobbyDeleteHandler = () => {
 
   useEffect(() => {
     if (deleted === true) {
-      // Restart the lobby
       dispatch(restartLobby());
-      // Disconnect the WS from the lobby
       disconnectLobby(dispatch);
-      // Clean the lobby from the local storage
       cleanLobbyLocalStorage(localStorage);
-      // Navigate to the previous screen
       router.back();
     }
-  }, [deleted]);
+  }, [deleted, dispatch, router]);
 };

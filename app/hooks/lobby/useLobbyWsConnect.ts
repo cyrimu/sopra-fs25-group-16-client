@@ -10,7 +10,6 @@ export const useLobbyWsConnect = () => {
 
   useEffect(() => {
     if (lobbyId) {
-      // Infinite loop until the connection is established
       dispatch({
         type: "lobby/connect",
         payload: lobbyId,
@@ -19,7 +18,6 @@ export const useLobbyWsConnect = () => {
   }, [dispatch, lobbyId]);
 };
 
-// eslint-disable-next-line react-hooks/exhaustive-deps
 export function disconnectLobby(dispatch: AppDispatch) {
   // Disconnect websocket
   dispatch({
@@ -28,6 +26,5 @@ export function disconnectLobby(dispatch: AppDispatch) {
 }
 
 export function cleanLobbyLocalStorage(localStorage: Storage) {
-  // Clean the stored lobby
   localStorage.removeItem(LOBBY_KEY);
 }

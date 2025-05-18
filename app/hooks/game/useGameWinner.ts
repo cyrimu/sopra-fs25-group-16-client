@@ -18,5 +18,5 @@ export const useGameWinner = () => {
       // Redirect to the results page
       router.push(`/results/${gameId}`);
     }
-  }, [winner]);
+  }, [dispatch, gameId, router, winner]);
 };

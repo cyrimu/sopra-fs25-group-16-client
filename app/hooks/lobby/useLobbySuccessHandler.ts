@@ -12,5 +12,5 @@ export const useLobbySuccessHandler = (endpoint: string) => {
     if (lobbyStatus === "succeeded" && lobbyId)
       // Lobby status succeeded and redirect to the lobby
       router.push(`${endpoint}/${lobbyId}`);
-  }, [lobbyId, lobbyStatus]);
+  }, [endpoint, lobbyId, lobbyStatus, router]);
 };

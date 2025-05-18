@@ -10,7 +10,6 @@ export const useGameWsConnect = () => {
 
   useEffect(() => {
     if (gameId) {
-      // Infinite loop until the connection is established
       dispatch({
         type: "game/connect",
         payload: gameId,
@@ -19,15 +18,12 @@ export const useGameWsConnect = () => {
   }, [dispatch, gameId]);
 };
 
-// eslint-disable-next-line react-hooks/exhaustive-deps
 export function disconnectGame(dispatch: AppDispatch) {
-  // Disconnect websocket
   dispatch({
     type: "game/disconnect",
   });
 }
 
 export function cleanGameLocalStorage(localStorage: Storage) {
-  // Clean the stored game
   localStorage.removeItem(GAME_KEY);
 }
