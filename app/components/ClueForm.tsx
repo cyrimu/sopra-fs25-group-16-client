@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CheckOutlined } from "@ant-design/icons";
 import { InputNumber } from "antd";
 import styles from "./ClueForm.module.css";
 import { Clue } from "@/lib/features/game/clue.types";
