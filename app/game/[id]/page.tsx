@@ -43,16 +43,13 @@ export default function Game() {
   return (
     <div className={styles.centered}>
       <div className={styles.gameBackground}>
-        {!isHost && (
         <div className={styles.gameLogController}>
           <LogButton />
         </div>
-        )}
         {isHost && (
-          <div className={styles.gameLogController}>
-            <LogButton />
+        <div className={styles.gameSaveController}>
             <SaveButton />
-          </div>
+        </div>
         )}
         <div className={styles.gameContainer}>
           <Board />
