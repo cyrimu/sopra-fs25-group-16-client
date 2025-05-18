@@ -12,39 +12,45 @@
   background-color: white;
   color: black;
   font-size: 16px;
-  border-radius: 10px;
-  border: 0.5px solid black;
+  border-radius: 20px;
+  border: 1px solid black;
   width: 300px;
   padding: 10px;
+    align-items: center;
 }
 
 .inputField::placeholder {
-  font-family: "Special Elite", serif;
-  color: black;
-  font-size: 16px;
+    border-color: gray;
+    background-color: white;
+    color: black;
+    font-family: Gabarito, serif;
 }
 
 .numberInputField {
-  font-size: 14px;
-  width: 100px;
-  font-family: "Special Elite", serif;
+    border-color: gray;
+    background-color: white;
+    color: black;
+    font-family: Gabarito, serif;
 }
 
 .custom-placeholder input::placeholder {
   font-family: 'Courier New', monospace;
-  font-size: 14px;
+  font-size: 16px;
   color: gray;
 }
 
 
 .regularButton {
-  font-size: 30px;
-  border-radius: 20px;
-  padding: 5px;
+    font-family: "Gabarito", serif;
     background-color: white;
-  outline: white;
-    border: 0.5px solid black;
-}
+    color: black;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    transition: background 0.3s;
+  }
 
 .ant-input-number-handler {
   color: white;

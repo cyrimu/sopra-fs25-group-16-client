@@ -33,6 +33,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // @ts-ignore
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
@@ -44,7 +45,7 @@ export default function RootLayout({
               token: {
                 // general theme options are set in token, meaning all primary elements (button, menu, ...) will have this color
                 colorPrimary: "#22426b", // selected input field boarder will have this color as well
-                borderRadius: 8,
+                borderRadius: 20,
                 colorText: "black",
                 fontSize: 16,
                 fontFamily: "Gabarito",
@@ -72,20 +73,17 @@ export default function RootLayout({
                 Select: {
                   activeBorderColor: "white",
                   selectorBg: "white",
-                  colorTextPlaceholder: "black",
+                  colorTextPlaceholder: "grey",
                   optionSelectedBg: "#2f2f2f",
                   optionSelectedColor: "white",
                 },
                 InputNumber: {
-                  colorBorder: "gray",
-                  colorTextPlaceholder: "#888888",
+                  colorTextPlaceholder: "black",
                   algorithm: true,
                   filledHandleBg: "white",
                   addonBg: "white",
                   colorText: "black",
-                  colorTextDescription: "black",
-                  colorTextHeading: "black",
-                  colorTextLabel: "black",
+                  fontFamily: "Gabarito",
                 },
               },
             }}
