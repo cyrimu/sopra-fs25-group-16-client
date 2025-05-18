@@ -21,17 +21,13 @@ const getTeamColor = (log: any, players: any[] = []): string => {
             : log.props.children;
     }
 
-    console.log("logString:", logString);
 
     const firstWord = logString.split(" ")[0]?.trim()?.toLowerCase(); // Normalize first word
-    console.log("firstWord:", firstWord);
 
-    console.log("Players array:", players);
 
     const player = players.find(
         (p) => p.playerName?.trim()?.toLowerCase() === firstWord
     );
-    console.log("Matching player:", player);
 
 return player?.team === "BLUE"
         ? "rgba(5,130,201,0.5)"
