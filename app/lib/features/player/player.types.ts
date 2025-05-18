@@ -13,7 +13,4 @@ export enum PLAYER_ROLES {
   RED_OPERATIVE = "RED_OPERATIVE",
 }
 
-export function playerRoleToTeamColor(playerRole: PLAYER_ROLES): TEAM_COLOR {
-  const color = playerRole.split("_")[0];
-  return TEAM_COLOR[color as keyof typeof TEAM_COLOR];
-}
+export const USERNAME_KEY = "USERNAME_KEY";

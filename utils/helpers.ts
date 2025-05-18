@@ -2,22 +2,27 @@ import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import { RootState } from "@/lib/store";
 
 export const selectMyPlayerInLobby = (state: RootState) => {
-  const { playerName } = state.player;
+  const { username } = state.player;
   return state.lobby?.lobby?.players?.find(
-    (player) => player.playerName === playerName
+    (player) => player.playerName === username
   );
 };
 
-export const selectIsHost = (state: RootState) => {
-  const { playerName } = state.player;
-  return state.lobby.lobby?.host === playerName;
+export const selectIsHostInLobby = (state: RootState) => {
+  const { username } = state.player;
+  return state.lobby.lobby?.host === username;
 };
 
-export const selectMyPlayerInGame = (state: RootState) => {
-  const { playerName } = state.player;  
+export const selectIsHostInGame = (state: RootState) => {
+  const {username} = state.player
+  return state.game.game?.host === username
+}
 
-  return  state.game?.game?.players.find(
-    (player) => player.playerName === playerName
+export const selectMyPlayerInGame = (state: RootState) => {
+  const { username } = state.player;
+
+  return state.game?.game?.players.find(
+    (player) => player.playerName === username
   );
 };
 

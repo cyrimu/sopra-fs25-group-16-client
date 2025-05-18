@@ -7,7 +7,7 @@ import { getApiDomain } from "../../utils/domain";
 
 export const createGameSocketMiddleware = (): Middleware => {
   let client: Client | null = null;
-  let gameID: string;
+  let gameId: string;
 
   return (storeAPI) => (next) => (action) => {
     if (!isSocketAction(action)) {
@@ -20,17 +20,15 @@ export const createGameSocketMiddleware = (): Middleware => {
 
         const url = getApiDomain();
 
-        const socket = new SockJS(`${url}/live`);
-
-        gameID = action.payload.gameID;
+        gameId = action.payload;
 
         const newClient = new Client({
-          webSocketFactory: () => socket,
+          webSocketFactory: () => new SockJS(`${url}/live`),
           reconnectDelay: 5000,
           debug: (str) => console.log("[STOMP]", str),
           onConnect: () => {
             newClient.subscribe(
-              `/topic/game/${gameID}`,
+              `/topic/game/${gameId}`,
               (message: IMessage) => {
                 const data = JSON.parse(message.body);
                 console.log("Received:", data);
@@ -40,7 +38,6 @@ export const createGameSocketMiddleware = (): Middleware => {
                   storeAPI.dispatch(setSavedGame());
                   return;
                 }
-
                 storeAPI.dispatch(setGame(data));
               }
             );
@@ -49,13 +46,14 @@ export const createGameSocketMiddleware = (): Middleware => {
 
         newClient.activate();
         client = newClient;
+
         break;
 
       case "game/sendClue":
         if (client?.connected && client) {
           console.log("Clue sent", action.payload);
           client.publish({
-            destination: `/app/game/${gameID}/clue`,
+            destination: `/app/game/${gameId}/clue`,
             body: JSON.stringify(action.payload),
           });
         }
@@ -65,7 +63,7 @@ export const createGameSocketMiddleware = (): Middleware => {
         if (client?.connected && client) {
           console.log("Guess sent", action.payload);
           client.publish({
-            destination: `/app/game/${gameID}/guess`,
+            destination: `/app/game/${gameId}/guess`,
             body: JSON.stringify(action.payload),
           });
         }
@@ -75,29 +73,27 @@ export const createGameSocketMiddleware = (): Middleware => {
         if (client?.connected && client) {
           console.log("Skip guess sent", action.payload);
           client.publish({
-            destination: `/app/game/${gameID}/skipGuess`,
+            destination: `/app/game/${gameId}/skipGuess`,
             body: action.payload,
           });
         }
         break;
 
-      case "game/disconnect": {
-        client?.deactivate();
-        client = null;
-        break;
-      }
-
       case "game/saveAction":
         if (client?.connected && client) {
           console.log("Save action sent");
           client.publish({
-            destination: `/app/game/${gameID}/save`,
+            destination: `/app/game/${gameId}/save`,
           });
         }
         break;
 
-      default:
+      case "game/disconnect": {
+        console.log("Disconnect from the game websocket");
+        client?.deactivate();
+        client = null;
         break;
+      }
     }
 
     return next(action);

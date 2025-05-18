@@ -11,9 +11,7 @@ type SocketActions =
 
 interface SocketConnectAction {
   type: "game/connect";
-  payload: {
-    gameID: string;
-  };
+  payload: string;
 }
 
 interface SocketDisconnectAction {

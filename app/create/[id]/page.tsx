@@ -1,50 +1,55 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
-import {CopyOutlined, LeftOutlined, RightOutlined} from "@ant-design/icons";
-import {selectLobbyId} from "@/lib/features/lobby";
-import {useDispatch, useSelector} from "react-redux";
-import React, {useEffect} from "react";
-import {AppDispatch} from "@/lib/store";
-import {deleteLobby} from "@/lib/features/lobby/api";
-import {selectPlayerName} from "@/lib/features/player";
+import { CopyOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { selectLobbyId } from "@/lib/features/lobby";
+import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { AppDispatch } from "@/lib/store";
+import { deleteLobby } from "@/lib/features/lobby/api";
+import { selectUsername } from "@/lib/features/player";
+import { useErrorModal } from "@/context/ErrorModalContext";
+import {
+  cleanLobbyLocalStorage,
+  disconnectLobby,
+} from "@/hooks/lobby/useLobbyWsConnect";
+import { useLobbyErrorHandler } from "@/hooks/lobby/useLobbyErrorHandler";
 
 export default function Create() {
   const router = useRouter();
+  const { showError } = useErrorModal();
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const id = useSelector(selectLobbyId);
-  const playerName = useSelector(selectPlayerName);
+  const lobbyId = useSelector(selectLobbyId);
+  const username = useSelector(selectUsername);
 
-
-  const url = typeof globalThis.location !== "undefined" ? `${globalThis.location.origin}/join/${id}` : "";
-
-  function handleOpenLobby() {
-    router.push(`/lobby/${id}`);
-  }
-
-  // Connect to the ws before for the host
-  useEffect(() => {
-    if (id) {
-      dispatch({
-        type: "lobby/connect",
-        payload: { lobbyID: id },
-      });
-    }
-  }, [dispatch, id]);
+  // Handle lobby errors and display them
+  useLobbyErrorHandler();
 
   function handleDeleteLobby() {
-    if (id && playerName) {
-      dispatch(deleteLobby({username: playerName, lobbyId: id}));
-      router.replace("/");
-    } else {
-      router.replace("/");
+    if (!lobbyId) {
+      // If the lobby is null display an error message
+      showError("Something went wrong when deleting the lobby");
+      return;
     }
+
+    // Delete the lobby from the provider
+    dispatch(deleteLobby({ username: username, lobbyId: lobbyId }));
+    // Disconnect the WS from the lobby
+    disconnectLobby(dispatch);
+    // Clean the lobby from the local storage
+    cleanLobbyLocalStorage(localStorage);
+    router.replace("/");
   }
 
-  if (!id) {
+  const url =
+    typeof globalThis.location !== "undefined"
+      ? `${globalThis.location.origin}/join/${lobbyId}`
+      : "";
+
+  if (!lobbyId) {
     return (
       <div className={styles.centered}>
         <div className={styles.redOverlay}></div>
@@ -101,7 +106,9 @@ export default function Create() {
           <button
             className={styles.regularButton}
             style={{ width: "100%" }}
-            onClick={id ? () => navigator.clipboard.writeText(id) : undefined}
+            onClick={
+              lobbyId ? () => navigator.clipboard.writeText(lobbyId) : undefined
+            }
           >
             <div
               style={{
@@ -111,17 +118,20 @@ export default function Create() {
                 textAlign: "left",
               }}
             >
-              <span>{id}</span>
+              <span>{lobbyId}</span>
               <CopyOutlined />
             </div>
           </button>
         </div>
         <div className={styles.regularButtonContainer}>
           <button className={styles.regularButton} onClick={handleDeleteLobby}>
-            <LeftOutlined/> Delete Lobby
+            <LeftOutlined /> Delete Lobby
           </button>
-          <button className={styles.regularButton} onClick={handleOpenLobby}>
-            Open Lobby <RightOutlined/>
+          <button
+            className={styles.regularButton}
+            onClick={() => router.push(`/lobby/${lobbyId}`)}
+          >
+            Open Lobby <RightOutlined />
           </button>
         </div>
       </div>

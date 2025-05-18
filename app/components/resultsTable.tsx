@@ -1,147 +1,112 @@
-import React from "react";
-import styles from "@/styles/page.module.css";
-import { useRouter } from "next/navigation";
-import { Popconfirm } from "antd";
-import {
-  selectPlayers,
-  selectWinner
-} from "@/lib/features/game";
-import { selectLobbyId} from "@/lib/features/lobby";
-import { selectIsHost } from "../../utils/helpers";
+"use client";
+import { selectWinner, selectPlayers } from "@/lib/features/game";
+import { CrownOutlined, UserOutlined } from "@ant-design/icons";
+import { TEAM_COLOR } from "@/lib/features/game/team.types";
+import styles from "./resultsTable.module.css";
 import { useSelector } from "react-redux";
+import { Modal } from "antd";
 
-const ResultsTable: React.FC = () => {
-  const router = useRouter();
+interface ResultsModalProps {
+  visible: boolean;
+  onClose: () => void;
+}
 
+const ResultsTable: React.FC<ResultsModalProps> = ({ visible, onClose }) => {
   const winner = useSelector(selectWinner);
-  const winnerTeam = winner === "RED" ? "RED" : "BLUE";
-  const loserTeam = winner === "RED" ? "BLUE" : "RED";
-
-  const lobbyId = useSelector(selectLobbyId);
-
-  const isHost = useSelector(selectIsHost);
-
   const players = useSelector(selectPlayers);
 
-  const capitalize = (s: string) =>
-    s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+  const capitalize = (s: string | undefined) =>
+    !s ? "" : s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 
-  const confirmDeleteLobby = () => {
-    router.replace("/create");
-  };
+  const loser = winner === TEAM_COLOR.RED ? TEAM_COLOR.BLUE : TEAM_COLOR.RED;
 
-  const cancelDeleteLobby = () => {
-    // Do nothing
-  };
+  if (!winner)
+    return (
+      <Modal
+        title="🎉 Game Results"
+        open={visible}
+        onCancel={onClose}
+        footer={null}
+      >
+        <div className={styles.resultsContainer}>
+          <div className={styles.winnerSection}>
+            <h2>The game still has no winner</h2>
+          </div>
+        </div>
+      </Modal>
+    );
 
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          width: "100%",
-          marginBottom: "30px",
-        }}
-      >
-        <div
-          className={styles.messageField}
-          style={{
-            width: "100%",
-            padding: "30px",
-            height: "auto",
-            fontSize: "26px",
-            textAlign: "center",
-            marginRight: "30px",
-          }}
-        >
-          Winner: {capitalize(winnerTeam)}
+    <Modal
+      title="🎉 Game Results"
+      open={visible}
+      onCancel={onClose}
+      footer={null}
+    >
+      <div className={styles.resultsContainer}>
+        <div className={styles.winnerSection}>
+          <h2>
+            <CrownOutlined style={{ color: "#facc15", marginRight: 8 }} />
+            {capitalize(winner)} Team Wins!
+          </h2>
+          <p>
+            Congratulations to all players on the {capitalize(winner)} team!
+          </p>
         </div>
-        <div
-          className={styles.messageField}
-          style={{
-            width: "100%",
-            padding: "30px",
-            height: "auto",
-            fontSize: "26px",
-            textAlign: "center",
-          }}
-        >
-          Loser: {capitalize(loserTeam)}
-        </div>
-      </div>
 
-      <table className={styles.tableField} style={{ minWidth: "600px" }}>
-        <thead>
-          <tr>
-            <th>codename</th>
-            <th>team</th>
-            <th>role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {players
-            ?.slice()
-            .sort((a, b) => {
-              if (a.team === winner && b.team !== winner) return -1;
-              if (a.team !== winner && b.team === winner) return 1;
-              return 0;
-            })
-            .map(({ playerName, team, role }, i) => {
-              const roleString = role?.split("_")[1];
+        <div className={styles.teamInfo}>
+          <div className={`${styles.resultsTeam} ${styles[winner]}`}>
+            🏆 Winner: {capitalize(winner)}
+          </div>
+          <div className={`${styles.resultsTeam} ${styles[loser]}`}>
+            ❌ Loser: {capitalize(loser)}
+          </div>
+        </div>
+
+        <table className={styles.tableField}>
+          <thead>
+            <tr>
+              <th>Codename</th>
+              <th>Team</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {players?.map(({ playerName, team, role }, i) => {
+              const roleLabel = role?.split("_")[1];
+              const isWinner = team === winner;
               return (
-                <tr key={i}>
+                <tr key={i} className={isWinner ? styles.winningRow : ""}>
                   <td>{playerName}</td>
-                  <td>{capitalize(team ?? "")}</td>
-                  <td>{capitalize(roleString ?? "")}</td>
+                  <td>
+                    <span
+                      className={`${styles.badge} ${
+                        styles[team?.toLowerCase() ?? "black"]
+                      }`}
+                    >
+                      {capitalize(team)}
+                    </span>
+                  </td>
+                  <td>
+                    {roleLabel?.includes("SPYMASTER") ? (
+                      <>
+                        <CrownOutlined style={{ marginRight: 6 }} />
+                        Spymaster
+                      </>
+                    ) : (
+                      <>
+                        <UserOutlined style={{ marginRight: 6 }} />
+                        Operative
+                      </>
+                    )}
+                  </td>
                 </tr>
               );
             })}
-        </tbody>
-      </table>
-
-      <div className={styles.regularButtonContainer}>
-        {isHost ? (
-          <>
-            <button
-              className={styles.regularButton}
-              onClick={() => router.push(`/lobby/${lobbyId}`)}
-            >
-              Play Again
-            </button>
-            <button
-              className={styles.regularButton}
-              onClick={() => router.push(`/lobby/${lobbyId}`)}
-            >
-              Return to Lobby
-            </button>
-            <Popconfirm
-              title={
-                <span style={{ color: "black" }}>
-                  Are you sure if you want to delete the lobby?
-                </span>
-              }
-              onConfirm={confirmDeleteLobby}
-              onCancel={cancelDeleteLobby}
-              okText="Yes"
-              cancelText="No"
-              icon={false}
-            >
-              <button className={styles.regularButton}>Delete Lobby</button>
-            </Popconfirm>
-          </>
-        ) : (
-          <>
-            <button
-              className={styles.regularButton}
-              onClick={() => router.push(`/lobby/${lobbyId}`)}
-            >
-              Exit Lobby
-            </button>
-          </>
-        )}
+          </tbody>
+        </table>
       </div>
-    </>
+    </Modal>
   );
 };
 
