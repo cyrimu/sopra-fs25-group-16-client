@@ -52,11 +52,10 @@ function Results() {
       showError("Something went wrong. We cannot retrieve the lobby id");
       return;
     }
-    // Reinitialize the game
     dispatch(restartGame());
     // Restore the lobby id inside the preferences for the persistance
     localStorage.setItem(LOBBY_KEY, lobbyId);
-    // Clean the persisten game from the local storage
+    // Clean the persistent game from the local storage
     cleanGameLocalStorage(localStorage);
     router.replace(`/lobby/${lobbyId}`);
   }
@@ -83,7 +82,7 @@ function Results() {
 
         <div className={styles.regularButtonContainer}>
           <button className={styles.regularButton} onClick={handleHomePage}>
-            Home Page
+            Leave Lobby
           </button>
           <button className={styles.regularButton} onClick={handleBackToLobby}>
             Back to Lobby
