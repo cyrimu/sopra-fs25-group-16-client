@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CheckOutlined } from "@ant-design/icons";
 import { InputNumber } from "antd";
 import styles from "./ClueForm.module.css";
 import { Clue } from "@/lib/features/game/clue.types";
@@ -49,17 +48,24 @@ const ClueForm: React.FC = () => {
         onChange={(e) => setHint(e.target.value)}
       />
       <InputNumber
-        className={styles.numberInputField}
-        size="large"
-        value={number}
-        onChange={(value) => setNumber(value)}
-        min={1}
-        max={9}
-        style={{ backgroundColor: "white", fontFamily: "Special Elite" }}
-        placeholder="# cards"
+          style={{
+            fontSize: "16px",
+            borderRadius: "30px",
+            fontFamily: "Gabarito",
+            color: "black"
+
+          }}
+          className={styles.numberInputField}
+          size="large"
+          value={number}
+          onChange={(value) => setNumber(value)}
+          min={1}
+          max={9}
+          placeholder="# cards"
       />
-      <button className={styles.regularButton} onClick={handleSendClue}>
-        <CheckOutlined />
+      <button className={styles.regularButton}
+      onClick={handleSendClue}>
+        Submit
       </button>
     </div>
   );

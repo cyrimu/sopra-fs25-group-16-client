@@ -28,18 +28,18 @@ export const createGameSocketMiddleware = (): Middleware => {
           debug: (str) => console.log("[STOMP]", str),
           onConnect: () => {
             newClient.subscribe(
-              `/topic/game/${gameId}`,
-              (message: IMessage) => {
-                const data = JSON.parse(message.body);
-                console.log("Received:", data);
+                `/topic/game/${gameId}`,
+                (message: IMessage) => {
+                  const data = JSON.parse(message.body);
+                  console.log("Received:", data);
 
-                if (data.type === "save") {
-                  console.log("Received save", data);
-                  storeAPI.dispatch(setSavedGame());
-                  return;
+                  if (data.type === "save") {
+                    console.log("Received save", data);
+                    storeAPI.dispatch(setSavedGame());
+                    return;
+                  }
+                  storeAPI.dispatch(setGame(data));
                 }
-                storeAPI.dispatch(setGame(data));
-              }
             );
           },
         });

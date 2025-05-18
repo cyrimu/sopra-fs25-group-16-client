@@ -56,7 +56,7 @@ export const ActionElement = () => {
   // It is my turn and role matches
   if (isOperative(myPlayer.role)) {
     return (
-      <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
+      <div style={{ display: "flex", flexDirection: "row", gap: "50px", justifyContent: "center" }}>
         <MakeGuess /> <SkipGuess />
       </div>
     );

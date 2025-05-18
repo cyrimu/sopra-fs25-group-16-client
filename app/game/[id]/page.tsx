@@ -21,7 +21,7 @@ export default function Game() {
   const isHost = useSelector(selectIsHostInGame);
   const gameStatus = useSelector(selectGameStatus);
 
-  // Listen until a team wins and redirects to its corresponent screen
+  // Listen until a team wins and redirects to its correspondent screen
   useGameWinner();
 
   // Handle case when host saves the game
@@ -43,16 +43,13 @@ export default function Game() {
   return (
     <div className={styles.centered}>
       <div className={styles.gameBackground}>
-        {!isHost && (
         <div className={styles.gameLogController}>
           <LogButton />
         </div>
-        )}
         {isHost && (
-          <div className={styles.gameLogController}>
-            <LogButton />
+        <div className={styles.gameSaveController}>
             <SaveButton />
-          </div>
+        </div>
         )}
         <div className={styles.gameContainer}>
           <Board />

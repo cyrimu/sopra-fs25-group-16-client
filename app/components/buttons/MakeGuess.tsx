@@ -40,7 +40,7 @@ const MakeGuess: React.FC = () => {
       className={styles.submitSelectionButton}
       onClick={submitSelectionHandle}
     >
-      Submit Selection
+      Submit
     </button>
   );
 };
