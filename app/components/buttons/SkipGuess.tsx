@@ -16,7 +16,7 @@ const SkipGuess: React.FC = () => {
 
   return (
     <button className={styles.skipGuessButton} onClick={submitSelectionHandle}>
-      Skip
+      End Turn Early
     </button>
   );
 };
