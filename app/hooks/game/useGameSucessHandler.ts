@@ -22,6 +22,8 @@ export const useGameSucessHandler = () => {
       if (lobbyId) localStorage.setItem(WIN_KEY, lobbyId);
       // Store the new game id inside the local storage
       localStorage.setItem(GAME_KEY, gameId);
+      // Set the starting game first to true
+      setGameStarting(true);
       // Restart the lobby
       dispatch(restartLobby());
       // Disconnect the lobby
@@ -31,7 +33,6 @@ export const useGameSucessHandler = () => {
       // Navigate to the actual game screen
       router.push(`/game/${gameId}`);
 
-      setGameStarting(true);
       setTimeout(() => {
         // After 3 seconds hide the popup
         setGameStarting(false);
