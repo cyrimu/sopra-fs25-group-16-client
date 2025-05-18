@@ -122,6 +122,13 @@
   background: rgba(217, 217, 217, 0.8);
 }
 
+.regularButton:disabled {
+  background-color: white;
+  color: #ccc;
+  cursor: not-allowed;
+  border: 1px solid #d3d3d3;
+}
+
 .lobbyTitle {
   font-family: "Special Elite", serif;
   color: white;
@@ -187,7 +194,6 @@
   font-family: "Special Elite", serif;
   color: white;
   font-size: 60px;
-  text-align: center;
   text-align: center;
 }
 
