@@ -21,7 +21,7 @@ export default function Game() {
   const isHost = useSelector(selectIsHostInGame);
   const gameStatus = useSelector(selectGameStatus);
 
-  // Listen until a team wins and redirects to its corresponent screen
+  // Listen until a team wins and redirects to its correspondent screen
   useGameWinner();
 
   // Handle case when host saves the game

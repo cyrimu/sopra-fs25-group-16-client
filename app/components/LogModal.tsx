@@ -34,9 +34,9 @@ const getTeamColor = (log: any, players: any[] = []): string => {
     console.log("Matching player:", player);
 
 return player?.team === "BLUE"
-        ? "rgba(5, 130, 202, 0.2)"
+        ? "rgba(5,130,201,0.5)"
         : player?.team === "RED"
-        ? "rgba(219, 22, 47, 0.2)"
+        ? "rgba(133,72,76,0.5)"
         : "#f9f9f9";
     };
 
@@ -49,7 +49,7 @@ export const LogModal: FC<LogModalProps> = ({ visible, onClose }) => {
             const clueIndex = log.toLowerCase().indexOf("provided");
             if (clueIndex !== -1) {
                 return (
-                    <span key={index} style={{ color: "grey", fontWeight: "bold" }}>
+                    <span key={index} style={{ color: "red", fontWeight: "bold" }}>
                         {log.slice(0, clueIndex + 9)}
                         <span>an invalid clue, their turn was skipped</span>
                     </span>

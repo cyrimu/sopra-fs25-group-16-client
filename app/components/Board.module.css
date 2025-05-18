@@ -8,13 +8,12 @@
 .boardGrid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-gap: 12px;
-  border-radius: 40px;
-  background-color: #2f2f2f;
+  grid-gap: 16px;
+  background-color: #848484;
+  border-radius: 20px;
   font-family: "Special Elite", serif;
   color: white;
   font-size: 26px;
-  outline: 1px dashed white;
   outline-offset: -10px;
   padding: 25px;
 }

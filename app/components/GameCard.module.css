@@ -4,12 +4,12 @@
   justify-content: center;
   cursor: pointer;
   aspect-ratio: 2.15;
-  width: 160px;
+  width: 200px;
   background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transform-style: preserve-3d;
+  border-radius: 15px;
 }
 
 .card > img {
@@ -28,25 +28,26 @@
   justify-content: center;
   cursor: pointer;
   aspect-ratio: 2.15;
-  width: 160px;
+  width: 200px;
   background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border: 2px solid yellow;
-  box-shadow: 0 0 8px 2px yellow;
+  border: 2px solid white;
+  box-shadow: 0 0 8px 2px white;
   animation: glowPulse 1.5s infinite ease-in-out;
+  border-radius: 15px;
 }
 
 @keyframes glowPulse {
   0% {
-    box-shadow: 0 0 6px 1px yellow;
+    box-shadow: 0 0 6px 1px white;
   }
   50% {
-    box-shadow: 0 0 12px 4px yellow;
+    box-shadow: 0 0 12px 4px white;
   }
   100% {
-    box-shadow: 0 0 6px 1px yellow;
+    box-shadow: 0 0 6px 1px white;
   }
 }
 
@@ -58,7 +59,7 @@
   right: -2px;
   bottom: -2px;
   border-radius: inherit;
-  background: linear-gradient(270deg, yellow, gold, yellow);
+  background: linear-gradient(270deg, white, white, white);
   z-index: 1;
   animation: borderMove 2s linear infinite;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -83,7 +84,7 @@
 }
 
 .cardTextContainer > span {
-  font-family: "Gabarito";
+  font-family: "Gabarito", serif;
   font-weight: 700;
   color: #000;
   font-size: 16px;
