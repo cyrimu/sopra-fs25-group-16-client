@@ -134,5 +134,7 @@ const modalStyles = {
     },
     body: {
         padding: "20px",
+        maxHeight: "500px",
+        overflowY: "auto" as const,
     },
 };
