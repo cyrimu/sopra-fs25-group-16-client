@@ -183,11 +183,10 @@ export default function Lobby() {
             >
               <Tooltip
                 title={
-                  // Players inside the lobby must be 4
                   nonNullPlayers.length < 4
                     ? "You need 4 players inside the lobby"
                     : // Players ready must be minimum 4
-                    playersReady && playersReady?.length >= 4
+                    playersReady && playersReady?.length < 4
                     ? "You need all 4 players to be ready to start the game"
                     : "Start Game"
                 }
