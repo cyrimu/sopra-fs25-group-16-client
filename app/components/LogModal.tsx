@@ -45,7 +45,7 @@ export const LogModal: FC<LogModalProps> = ({ visible, onClose }) => {
             const clueIndex = log.toLowerCase().indexOf("provided");
             if (clueIndex !== -1) {
                 return (
-                    <span key={index} style={{ color: "red", fontWeight: "bold" }}>
+                    <span key={index} style={{ fontWeight: "bold" }}>
                         {log.slice(0, clueIndex + 9)}
                         <span>an invalid clue, their turn was skipped</span>
                     </span>
