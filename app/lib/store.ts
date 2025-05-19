@@ -7,12 +7,14 @@ import player from "./features/player/index";
 import lobby from "./features/lobby/index";
 import game from "./features/game/index";
 import { combineReducers } from "redux";
+import flags from "./features/flags";
 import old from "./features/old";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["player", "lobby", "game", "old"],
+  version: 1,
+  blacklist: ["flags"],
 };
 
 const rootReducer = combineReducers({
@@ -20,22 +22,23 @@ const rootReducer = combineReducers({
   lobby,
   game,
   old,
+  flags,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const makeStore = () => {
-  return configureStore({
-    reducer: persistedReducer,
-    middleware: (gDM) =>
-      gDM().concat(createGameSocketMiddleware(), createLobbySocketMiddleware()),
-  });
-};
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (gDM) =>
+    gDM({
+      serializableCheck: false,
+    }).concat(createGameSocketMiddleware(), createLobbySocketMiddleware()),
+});
 
 // Infer the type of makeStore
-export type AppStore = ReturnType<typeof makeStore>;
+export type AppStore = typeof store;
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
 
-export const persistor = persistStore(makeStore());
+export const persistor = persistStore(store);
