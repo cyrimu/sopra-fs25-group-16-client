@@ -1,4 +1,4 @@
-import { disconnectGame } from "./useGameWsConnect";
+import { cleanGameLocalStorage, disconnectGame } from "./useGameWsConnect";
 import { restartGame, selectSave } from "@/lib/features/game";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,8 @@ export const useGameSaved = () => {
   useEffect(() => {
     if (gameIsSaved) {
       dispatch(restartGame());
+      // Clean the persisten game from the local storage
+      cleanGameLocalStorage(localStorage);
       disconnectGame(dispatch);
       router.back();
     }

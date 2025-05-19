@@ -56,6 +56,7 @@ const SaveButton: React.FC = () => {
       type: gameType,
       language: language,
     };
+
     localStorage.setItem(gameId, JSON.stringify(oldGame));
   }
 
