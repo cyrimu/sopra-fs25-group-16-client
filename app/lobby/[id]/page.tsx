@@ -1,63 +1,61 @@
 "use client";
 import "@ant-design/v5-patch-for-react-19";
 import { useDispatch, useSelector } from "react-redux";
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { Modal, Popconfirm, Tooltip } from "antd";
+
 import { selectUsername } from "@/lib/features/player";
 import {
   selectLobby,
   selectLobbyId,
   selectPlayers,
 } from "@/lib/features/lobby";
-import styles from "@/styles/page.module.css";
-import { Modal, Popconfirm, Tooltip } from "antd";
-import { useState } from "react";
-import PlayerTable from "@/components/playerTable";
-import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import { AppDispatch } from "@/lib/store";
 import { deleteLobby, leaveLobby, updateLobby } from "@/lib/features/lobby/api";
 import { createGame } from "@/lib/features/game/api";
 import { isProduction } from "../../../utils/environment";
 import { selectIsHostInLobby } from "../../../utils/helpers";
+
+import PlayerTable from "@/components/playerTable";
+import ConfigurationPanel from "@/components/configuration/ConfigurationPanel";
 import HistoryButton from "@/components/buttons/HistoryButton";
+import GameLoading from "@/components/GameLoading";
+
 import {
   cleanLobbyLocalStorage,
   disconnectLobby,
 } from "@/hooks/lobby/useLobbyWsConnect";
 import { useErrorModal } from "@/context/ErrorModalContext";
 import { useGameSucessHandler } from "@/hooks/game/useGameSucessHandler";
-import { useRouter } from "next/navigation";
 import { useLobbyPersist } from "@/hooks/lobby/useLobbyPersist";
 import { useLobbyDeleteHandler } from "@/hooks/lobby/useLobbyDeleteHandler";
 import { useGameStarting } from "@/context/GameStartingContext";
-import GameLoading from "@/components/GameLoading";
+
+import styles from "@/styles/page.module.css";
 
 export default function Lobby() {
   const dispatch = useDispatch<AppDispatch>();
-  const { showError } = useErrorModal();
   const router = useRouter();
+  const { showError } = useErrorModal();
 
   const lobbyId = useSelector(selectLobbyId);
   const lobby = useSelector(selectLobby);
-
   const username = useSelector(selectUsername);
   const isHost = useSelector(selectIsHostInLobby);
-
   const players = useSelector(selectPlayers);
   const nonNullPlayers = players?.filter((e) => e) ?? [];
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-
   const { gameStarting } = useGameStarting();
+  const buttonClicked = useRef(false);
 
-  // Once fetched the gameId redirect to the game screen
+  // Hooks for additional functionality
   useGameSucessHandler();
-
-  // Fetch again the lobby when the user reloads the lobby
   useLobbyPersist();
-
-  // Navigate back when the lobby is deleted
   useLobbyDeleteHandler();
 
-  async function handleLeaveLobby() {
+  const handleLeaveLobby = () => {
     if (!lobbyId) {
       showError("Something went wrong when leaving the lobby");
       return;
@@ -65,7 +63,7 @@ export default function Lobby() {
 
     dispatch(leaveLobby({ lobbyId: lobbyId, username: username }));
     router.replace("/");
-  }
+  };
 
   const handleUpdateLobbyConfiguration = () => {
     if (!lobbyId || !lobby) {
@@ -85,20 +83,16 @@ export default function Lobby() {
       showError("Something went wrong when starting the game");
       return;
     }
-
-    // Create a new game and start it
+    buttonClicked.current = true;
     dispatch(createGame({ lobby: lobby, username: username }));
   };
 
-  function confirmDeleteLobby() {
+  const confirmDeleteLobby = () => {
     if (!lobbyId) {
       showError("Something went wrong when deleting the lobby");
       return;
     }
-
-    // Disconnect the WS from the lobby
     disconnectLobby(dispatch);
-    // Clean the lobby from the local storage
     cleanLobbyLocalStorage(localStorage);
 
     // Delete the lobby
@@ -110,119 +104,118 @@ export default function Lobby() {
     );
 
     router.replace("/");
-  }
+  };
 
-  function startButtonDisabled() {
+  const startButtonDisabled = () => {
+    const rolesAssigned = nonNullPlayers.every((player) => player.role);
     return (
-      isProduction() &&
-      // Players inside the lobby must be 4
-      !(nonNullPlayers.length >= 4)
+        isProduction() &&
+        (!(nonNullPlayers.length >= 4) || !rolesAssigned || buttonClicked.current)
     );
-  }
+  };
 
   if (gameStarting) return <GameLoading />;
 
   if (!lobby)
     return (
-      <div className={styles.centered}>
-        <div className={styles.redBlueOverlay} />
-        <div className={styles.messageContainer}>
-          <div className={styles.lobbyTitle}>Game Lobby</div>
-          <PlayerTable />
+        <div className={styles.centered}>
+          <div className={styles.redBlueOverlay} />
+          <div className={styles.messageContainer}>
+            <div className={styles.lobbyTitle}>Game Lobby</div>
+            <PlayerTable />
+          </div>
         </div>
-      </div>
     );
 
   return (
-    <div className={styles.centered}>
-      {isHost && <HistoryButton />}
-      <div className={styles.redBlueOverlay} />
-      <Modal
-        styles={modalStyles}
-        title={<span style={{ color: "white" }}>Configuration Panel</span>}
-        open={isPanelOpen}
-        onOk={handleUpdateLobbyConfiguration}
-        okButtonProps={{
-          style: { fontFamily: "Gabarito", fontSize: "20px" },
-        }}
-        okText="Save"
-        onCancel={() => setIsPanelOpen(false)}
-        cancelButtonProps={{
-          style: { fontFamily: "Gabarito", fontSize: "20px" },
-        }}
-        cancelText="Cancel"
-      >
-        <ConfigurationPanel />
-      </Modal>
-      <div className={styles.messageContainer}>
-        <div className={styles.lobbyTitle}>Game Lobby</div>
-        <PlayerTable />
-
-        {!isHost && (
-          <div className={styles.regularButtonContainer}>
-            <button className={styles.regularButton} onClick={handleLeaveLobby}>
-              Leave Lobby
-            </button>
-          </div>
-        )}
-        {isHost && (
-          <div className={styles.regularButtonContainer}>
-            <Tooltip title="Configure game mode, language, teams, and roles">
-              <button
-                className={styles.regularButton}
-                onClick={() => setIsPanelOpen(true)}
-              >
-                Change Setup
-              </button>
-            </Tooltip>
-            <button
-              className={styles.regularButton}
-              onClick={handleStartGame}
-              disabled={startButtonDisabled()}
-            >
-              <Tooltip
-                title={
-                  nonNullPlayers.length < 4
-                    ? "You need 4 players inside the lobby"
-                    : "Start Game"
-                }
-              >
-                Start Game
-              </Tooltip>
-            </button>
-            <Popconfirm
-              title={
-                <span style={{ color: "black" }}>
+      <div className={styles.centered}>
+        {isHost && <HistoryButton />}
+        <div className={styles.redBlueOverlay} />
+        <Modal
+            styles={modalStyles}
+            title={<span style={{ color: "white" }}>Configuration Panel</span>}
+            open={isPanelOpen}
+            onOk={handleUpdateLobbyConfiguration}
+            okButtonProps={{
+              style: { fontFamily: "Gabarito", fontSize: "20px" },
+            }}
+            okText="Save"
+            onCancel={() => setIsPanelOpen(false)}
+            cancelButtonProps={{
+              style: { fontFamily: "Gabarito", fontSize: "20px" },
+            }}
+            cancelText="Cancel"
+        >
+          <ConfigurationPanel />
+        </Modal>
+        <div className={styles.messageContainer}>
+          <div className={styles.lobbyTitle}>Game Lobby</div>
+          <PlayerTable />
+          {!isHost && (
+              <div className={styles.regularButtonContainer}>
+                <button className={styles.regularButton} onClick={handleLeaveLobby}>
+                  Leave Lobby
+                </button>
+              </div>
+          )}
+          {isHost && (
+              <div className={styles.regularButtonContainer}>
+                <Tooltip title="Configure game mode, language, teams, and roles">
+                  <button
+                      className={styles.regularButton}
+                      onClick={() => setIsPanelOpen(true)}
+                  >
+                    Change Setup
+                  </button>
+                </Tooltip>
+                <button
+                    className={styles.regularButton}
+                    onClick={handleStartGame}
+                    disabled={startButtonDisabled()}
+                >
+                  <Tooltip
+                      title={
+                        nonNullPlayers.length < 4
+                            ? "You need 4 configured players inside the lobby"
+                            : "Start Game"
+                      }
+                  >
+                    Start Game
+                  </Tooltip>
+                </button>
+                <Popconfirm
+                    title={
+                      <span style={{ color: "black" }}>
                   Are you sure you want to delete the lobby?
                 </span>
-              }
-              onConfirm={confirmDeleteLobby}
-              cancelText="No"
-              okText="Yes"
-              cancelButtonProps={{
-                style: {
-                  backgroundColor: "#2f2f2f",
-                  color: "white",
-                  border: "1px solid #2f2f2f",
-                },
-              }}
-              okButtonProps={{
-                style: {
-                  backgroundColor: "white",
-                  color: "black",
-                  border: "1px solid black",
-                },
-              }}
-              icon={true}
-            >
-              <Tooltip title="Delete lobby">
-                <button className={styles.regularButton}>Delete Lobby</button>
-              </Tooltip>
-            </Popconfirm>
-          </div>
-        )}
+                    }
+                    onConfirm={confirmDeleteLobby}
+                    cancelText="No"
+                    okText="Yes"
+                    cancelButtonProps={{
+                      style: {
+                        backgroundColor: "#2f2f2f",
+                        color: "white",
+                        border: "1px solid #2f2f2f",
+                      },
+                    }}
+                    okButtonProps={{
+                      style: {
+                        backgroundColor: "white",
+                        color: "black",
+                        border: "1px solid black",
+                      },
+                    }}
+                    icon={true}
+                >
+                  <Tooltip title="Delete lobby">
+                    <button className={styles.regularButton}>Delete Lobby</button>
+                  </Tooltip>
+                </Popconfirm>
+              </div>
+          )}
+        </div>
       </div>
-    </div>
   );
 }
 
@@ -250,7 +243,7 @@ const modalStyles = {
     padding: "20px",
   },
   footer: {
-    textAlign: "center" as const, // Explicitly cast to the expected type
+    textAlign: "center" as const,
     backgroundColor: "#2f2f2f",
     outline: "1px dashed white",
     outlineOffset: "-10px",
