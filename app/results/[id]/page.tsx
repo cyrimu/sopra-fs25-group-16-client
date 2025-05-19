@@ -1,6 +1,9 @@
 "use client";
-import { restartGame, selectWinner } from "@/lib/features/game";
-import { selectMyPlayerInGame } from "../../../utils/helpers";
+import { selectWinner } from "@/lib/features/game";
+import {
+  selectIsHostInLobby,
+  selectMyPlayerInGame,
+} from "../../../utils/helpers";
 import { TEAM_COLOR } from "@/lib/features/game/team.types";
 import { useDispatch, useSelector } from "react-redux";
 import ResultsTable from "@/components/resultsTable";
@@ -8,11 +11,14 @@ import styles from "@/styles/page.module.css";
 import { useRouter } from "next/navigation";
 import { AppDispatch } from "@/lib/store";
 import { useEffect, useState } from "react";
-import { WIN_KEY } from "@/lib/features/game/game.types";
 import { useErrorModal } from "@/context/ErrorModalContext";
-import { useGamePersist } from "@/hooks/game/useGamePersist";
-import { cleanGameLocalStorage } from "@/hooks/game/useGameWsConnect";
-import { LOBBY_KEY } from "@/lib/features/lobby/lobby.types";
+import { selectLobbyId } from "@/lib/features/lobby";
+import { leaveLobby } from "@/lib/features/lobby/api";
+import { selectUsername } from "@/lib/features/player";
+import { useResultReturnLobby } from "@/hooks/result/useResultReturnLobby";
+import { selectReturnLobby } from "@/lib/features/flags";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { message } from "antd";
 
 function Results() {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,38 +32,50 @@ function Results() {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const lobbyId = useSelector(selectLobbyId);
+
+  const isHost = useSelector(selectIsHostInLobby);
+
+  const username = useSelector(selectUsername);
+
+  // Listen for the return lobby flag and return to the lobby
+  useResultReturnLobby();
+
+  const returnLobby = useSelector(selectReturnLobby);
+
+  useEffect(() => {
+    if (returnLobby) {
+      message.open({
+        content: "The host returned to the lobby",
+        duration: 3,
+        icon: <InfoCircleOutlined style={{ color: "black" }} />,
+      });
+    }
+  }, [returnLobby]);
+
   const showModal = () => setIsModalVisible(true);
   const hideModal = () => setIsModalVisible(false);
 
-  const [lobbyId, setLobbyId] = useState<string | null>();
+  const handleLeaveLobby = () => {
+    if (!lobbyId) {
+      showError("Something went wrong when leaving the lobby");
+      return;
+    }
 
-  // Fetch again the game when the user refreshes
-  useGamePersist();
-
-  useEffect(() => {
-    // At first reload try to fetch the lobby id
-    setLobbyId(localStorage.getItem(WIN_KEY));
-  }, []);
-
-  function handleHomePage() {
-    // Reinitialize the game
-    dispatch(restartGame());
-    // Clean the persisten game from the local storage
-    // cleanGameLocalStorage(localStorage);
+    dispatch(leaveLobby({ lobbyId: lobbyId, username: username }));
     router.replace("/");
-  }
+  };
 
   function handleBackToLobby() {
     if (!lobbyId) {
       showError("Something went wrong. We cannot retrieve the lobby id");
       return;
     }
-    dispatch(restartGame());
-    // Restore the lobby id inside the preferences for the persistance
-    localStorage.setItem(LOBBY_KEY, lobbyId);
-    // Clean the persistent game from the local storage
-    cleanGameLocalStorage(localStorage);
-    router.replace(`/lobby/${lobbyId}`);
+
+    // Send the return lobby message
+    dispatch({
+      type: "lobby/returnLobby",
+    });
   }
 
   return (
@@ -81,12 +99,17 @@ function Results() {
         </div>
 
         <div className={styles.regularButtonContainer}>
-          <button className={styles.regularButton} onClick={handleHomePage}>
+          <button className={styles.regularButton} onClick={handleLeaveLobby}>
             Leave Lobby
           </button>
-          <button className={styles.regularButton} onClick={handleBackToLobby}>
-            Back to Lobby
-          </button>
+          {isHost && (
+            <button
+              className={styles.regularButton}
+              onClick={handleBackToLobby}
+            >
+              Back to Lobby
+            </button>
+          )}
           <button className={styles.regularButton} onClick={showModal}>
             View Results
           </button>

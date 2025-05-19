@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button as AntButton, Popconfirm, Tooltip, message } from "antd"; // ✅ import message
 import styles from "./SaveButton.module.css";
 import { InfoCircleOutlined, SaveOutlined } from "@ant-design/icons";
@@ -13,6 +13,7 @@ import {
 } from "@/lib/features/game";
 import { Old, OLD_IDS_KEY } from "@/lib/features/old/old.types";
 import { useErrorModal } from "@/context/ErrorModalContext";
+import { selectSaveGame } from "@/lib/features/flags";
 
 const SaveButton: React.FC = () => {
   const { showError } = useErrorModal();
@@ -23,14 +24,19 @@ const SaveButton: React.FC = () => {
   const gameType = useSelector(selectGameTypeFromGame);
   const language = useSelector(selectLanguageFromGame);
 
+  const saveGame = useSelector(selectSaveGame);
+
+  useEffect(() => {
+    if (saveGame)
+      message.open({
+        content: "The host has saved and quit the game",
+        duration: 3,
+        icon: <InfoCircleOutlined style={{ color: "black" }} />,
+      });
+  }, [saveGame]);
+
   function handleSaveGame() {
     saveCurrentGame();
-
-    message.open({
-      content: "The host has saved and quit the game",
-      duration: 3,
-      icon: <InfoCircleOutlined style={{ color: "black" }} />,
-    });
 
     dispatch({
       type: "game/saveAction",
