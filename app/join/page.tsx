@@ -10,7 +10,6 @@ import { joinLobby } from "@/lib/features/lobby/api";
 import { AppDispatch } from "@/lib/store";
 import { useErrorModal } from "@/context/ErrorModalContext";
 import { useLobbyErrorHandler } from "@/hooks/lobby/useLobbyErrorHandler";
-import { Lobby } from "@/lib/features/lobby/lobby.types";
 
 export default function Join() {
   const router = useRouter();
