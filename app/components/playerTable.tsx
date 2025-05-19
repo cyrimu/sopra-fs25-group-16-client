@@ -5,14 +5,12 @@ import {
   selectGameType,
   selectLobbyId,
   selectPlayers,
-  selectPlayersReady,
 } from "@/lib/features/lobby";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
 import { selectUsername } from "@/lib/features/player";
 import { PlayerReadyStatus } from "./PlayerReady";
 
 const PlayerTable: React.FC = () => {
-  const playersReady = useSelector(selectPlayersReady);
   const gameType = useSelector(selectGameType);
   const players = useSelector(selectPlayers);
   const username = useSelector(selectUsername);
@@ -57,7 +55,7 @@ const PlayerTable: React.FC = () => {
             <th>codename</th>
             <th>team</th>
             <th>role</th>
-            <th>ready</th>
+            {/* <th>ready</th> */}
           </tr>
         </thead>
         <tbody>
@@ -76,21 +74,11 @@ const PlayerTable: React.FC = () => {
                 .substring(1)
                 .toLowerCase()}`;
 
-              const isReady =
-                playersReady?.some((e) => e === playerName) ?? false;
-
               return (
                 <tr key={index}>
                   <td>{playerName}</td>
                   <td>{team ? teamString : "N/A"}</td>
                   <td>{role ? roleString : "N/A"}</td>
-                  <td>
-                    <PlayerReadyStatus
-                      isReady={isReady}
-                      isSelf={playerName === username}
-                      isAssigned={roleSplit !== undefined}
-                    />
-                  </td>
                 </tr>
               );
             })}

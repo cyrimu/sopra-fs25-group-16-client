@@ -6,7 +6,6 @@ import {
   selectLobby,
   selectLobbyId,
   selectPlayers,
-  selectPlayersReady,
 } from "@/lib/features/lobby";
 import styles from "@/styles/page.module.css";
 import { Modal, Popconfirm, Tooltip } from "antd";
@@ -28,7 +27,7 @@ import { useGameSucessHandler } from "@/hooks/game/useGameSucessHandler";
 import { useRouter } from "next/navigation";
 import { useLobbyPersist } from "@/hooks/lobby/useLobbyPersist";
 import { useLobbyDeleteHandler } from "@/hooks/lobby/useLobbyDeleteHandler";
-import GetReady from "@/components/getReady";
+import GetReady from "@/components/GetReady";
 
 export default function Lobby() {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +40,6 @@ export default function Lobby() {
   const username = useSelector(selectUsername);
   const isHost = useSelector(selectIsHostInLobby);
 
-  const playersReady = useSelector(selectPlayersReady);
   const players = useSelector(selectPlayers);
   const nonNullPlayers = players?.filter((e) => e) ?? [];
 
@@ -82,7 +80,7 @@ export default function Lobby() {
   const handleStartGame = () => {
     if (!lobby) {
       showError("Something went wrong when starting the game");
-      return <GetReady />
+      return <GetReady />;
     }
 
     // Create a new game and start it
@@ -114,13 +112,8 @@ export default function Lobby() {
   function startButtonDisabled() {
     return (
       isProduction() &&
-      !(
-        playersReady &&
-        // Players ready must be minimum 4
-        playersReady.length >= 4 &&
-        // Players inside the lobby must be 4
-        nonNullPlayers.length >= 4
-      )
+      // Players inside the lobby must be 4
+      !(nonNullPlayers.length >= 4)
     );
   }
 
@@ -186,9 +179,6 @@ export default function Lobby() {
                 title={
                   nonNullPlayers.length < 4
                     ? "You need 4 players inside the lobby"
-                    : // Players ready must be minimum 4
-                    playersReady && playersReady?.length < 4
-                    ? "You need all 4 players to be ready to start the game"
                     : "Start Game"
                 }
               >

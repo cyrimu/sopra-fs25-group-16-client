@@ -1,7 +1,7 @@
 import {
-    setDeletedLobby,
-    setLobby,
-    setPlayersReady,
+  setDeletedLobby,
+  setLobby,
+  // setPlayersReady,
 } from "@/lib/features/lobby";
 import { Client, IMessage } from "@stomp/stompjs";
 import { isSocketAction } from "./wsLobbyActions";
@@ -12,91 +12,91 @@ import { AppDispatch } from "@/lib/store";
 import SockJS from "sockjs-client";
 
 export const createLobbySocketMiddleware = (): Middleware => {
-    let client: Client | null = null;
-    let lobbyId: string;
+  let client: Client | null = null;
+  let lobbyId: string;
 
-    return (storeAPI) => (next) => (action) => {
-        if (!isSocketAction(action)) {
-            return next(action); // Skip unhandled actions
-        }
+  return (storeAPI) => (next) => (action) => {
+    if (!isSocketAction(action)) {
+      return next(action); // Skip unhandled actions
+    }
 
-        switch (action.type) {
-            case "lobby/connect":
-                if (client) return next(action);
+    switch (action.type) {
+      case "lobby/connect":
+        if (client) return next(action);
 
-                const url = getApiDomain();
+        const url = getApiDomain();
 
-                lobbyId = action.payload;
+        lobbyId = action.payload;
 
-                const newClient = new Client({
-                    webSocketFactory: () => new SockJS(`${url}/live`),
-                    reconnectDelay: 5000,
-                    debug: (str) => console.log("[STOMP]", str),
-                    onConnect: () => {
-                        newClient.subscribe(
-                            `/topic/lobby/${lobbyId}`,
-                            (message: IMessage) => {
-                                const data = JSON.parse(message.body);
+        const newClient = new Client({
+          webSocketFactory: () => new SockJS(`${url}/live`),
+          reconnectDelay: 5000,
+          debug: (str) => console.log("[STOMP]", str),
+          onConnect: () => {
+            newClient.subscribe(
+              `/topic/lobby/${lobbyId}`,
+              (message: IMessage) => {
+                const data = JSON.parse(message.body);
 
-                                if (data.type === "delete") {
-                                    console.log("Received delete", data);
-                                    storeAPI.dispatch(setDeletedLobby());
-                                    return;
-                                } else if (data.type === "ready") {
-                                    console.log("Received ready", data);
-                                    storeAPI.dispatch(setPlayersReady(data.readyPlayers));
-                                    return;
-                                } else if (data.type === "game") {
-                                    console.log("Received game", data);
-                                    const dispatch: AppDispatch = storeAPI.dispatch;
+                if (data.type === "delete") {
+                  console.log("Received delete", data);
+                  storeAPI.dispatch(setDeletedLobby());
+                  return;
+                } else if (data.type === "ready") {
+                  console.log("Received ready", data);
+                  // storeAPI.dispatch(setPlayersReady(data.readyPlayers));
+                  return;
+                } else if (data.type === "game") {
+                  console.log("Received game", data);
+                  const dispatch: AppDispatch = storeAPI.dispatch;
 
-                                    dispatch(
-                                        getGame({
-                                            username: data.username,
-                                            gameId: data.gameId,
-                                        })
-                                    );
-                                    return;
-                                }
-                                storeAPI.dispatch(setLobby(data.lobby));
-                            }
-                        );
-                    },
-                });
-
-                newClient.activate();
-                client = newClient;
-                break;
-
-            case "lobby/ready":
-                if (client?.connected && client) {
-                    console.log("Ready sent", action.payload);
-                    client.publish({
-                        destination: `/app/lobby/${lobbyId}/ready`,
-                        body: action.payload,
-                    });
+                  dispatch(
+                    getGame({
+                      username: data.username,
+                      gameId: data.gameId,
+                    })
+                  );
+                  return;
                 }
-                break;
+                storeAPI.dispatch(setLobby(data.lobby));
+              }
+            );
+          },
+        });
 
-            case "lobby/oldGame": {
-                if (client?.connected && client) {
-                    console.log("Ready sent", action.payload);
-                    client.publish({
-                        destination: `/app/lobby/${lobbyId}/oldGame`,
-                        body: JSON.stringify(action.payload),
-                    });
-                }
-                break;
-            }
+        newClient.activate();
+        client = newClient;
+        break;
 
-            case "lobby/disconnect": {
-                console.log("Disconnect from the lobby websocket");
-                client?.deactivate();
-                client = null;
-                break;
-            }
+      case "lobby/ready":
+        if (client?.connected && client) {
+          console.log("Ready sent", action.payload);
+          client.publish({
+            destination: `/app/lobby/${lobbyId}/ready`,
+            body: action.payload,
+          });
         }
+        break;
 
-        return next(action);
-    };
+      case "lobby/oldGame": {
+        if (client?.connected && client) {
+          console.log("Ready sent", action.payload);
+          client.publish({
+            destination: `/app/lobby/${lobbyId}/oldGame`,
+            body: JSON.stringify(action.payload),
+          });
+        }
+        break;
+      }
+
+      case "lobby/disconnect": {
+        console.log("Disconnect from the lobby websocket");
+        client?.deactivate();
+        client = null;
+        break;
+      }
+    }
+
+    return next(action);
+  };
 };

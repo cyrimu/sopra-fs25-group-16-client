@@ -34,7 +34,7 @@ const lobbySlice = createSlice({
 
       if (state.lobby)
         // Preserve the state of players ready
-        state.lobby = { ...lobby, playersReady: state.lobby.playersReady };
+        state.lobby = lobby;
     },
     // Insert a new player into the state
     setPlayer(state, action: PayloadAction<Player>) {
@@ -66,22 +66,6 @@ const lobbySlice = createSlice({
     // Delete lobby
     restartLobby() {
       return initialState;
-    },
-    // Set players ready
-    setPlayersReady(state, action: PayloadAction<string>) {
-      if (state.lobby) {
-        if (!Array.isArray(state.lobby.playersReady)) {
-          state.lobby.playersReady = [];
-        }
-
-        const index = state.lobby.playersReady.indexOf(action.payload);
-
-        if (index !== -1) {
-          state.lobby.playersReady.splice(index, 1);
-        } else {
-          state.lobby.playersReady.push(action.payload);
-        }
-      }
     },
     // The host deleted the lobby
     setDeletedLobby(state) {
@@ -153,7 +137,6 @@ const lobbySlice = createSlice({
     selectGameType: (state) => state.lobby?.gameType,
     selectLanguage: (state) => state.lobby?.language,
     selectLobbyDeleted: (state) => state.lobby?.deleted,
-    selectPlayersReady: (state) => state.lobby?.playersReady,
   },
 });
 
@@ -163,7 +146,6 @@ export const {
   setGameType,
   setLanguage,
   restartLobby,
-  setPlayersReady,
   setDeletedLobby,
 } = lobbySlice.actions;
 
@@ -176,7 +158,6 @@ export const {
   selectGameType,
   selectLanguage,
   selectLobbyDeleted,
-  selectPlayersReady,
 } = lobbySlice.selectors;
 
 export default lobbySlice.reducer;

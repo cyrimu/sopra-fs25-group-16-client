@@ -9,7 +9,6 @@ export interface Lobby {
   lobbyID: string;
   players: Player[];
   playerCount: number;
-  playersReady: string[];
   deleted: boolean;
 }
 
