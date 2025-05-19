@@ -41,7 +41,6 @@ export const createGameSocketMiddleware = (): Middleware => {
                 `/topic/game/${gameId}`,
                 (message: IMessage) => {
                   const data = JSON.parse(message.body);
-                  console.log("Received:", data);
 
                   if (data.type === "save") {
                     console.log("Received save", data);
