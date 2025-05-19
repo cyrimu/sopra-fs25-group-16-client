@@ -9,13 +9,13 @@ import { selectPlayers } from "@/lib/features/lobby";
 import { isProduction } from "../../utils/environment";
 import { selectUsername } from "@/lib/features/player";
 import { useErrorModal } from "@/context/ErrorModalContext";
+import { OLD_IDS_KEY } from "@/lib/features/old/old.types";
 
 interface HistoryModalProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const OLD_IDS_KEY = "OLD_IDS_KEY";
 const production = isProduction();
 
 const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {

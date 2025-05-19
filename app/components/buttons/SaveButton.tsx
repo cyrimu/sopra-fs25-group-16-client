@@ -11,10 +11,8 @@ import {
   selectLanguageFromGame,
   selectPlayers,
 } from "@/lib/features/game";
-import { Old } from "@/lib/features/old/old.types";
+import { Old, OLD_IDS_KEY } from "@/lib/features/old/old.types";
 import { useErrorModal } from "@/context/ErrorModalContext";
-
-const OLD_IDS_KEY = "OLD_IDS_KEY";
 
 const SaveButton: React.FC = () => {
   const { showError } = useErrorModal();
