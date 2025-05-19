@@ -1,22 +1,20 @@
-import { cleanGameLocalStorage, disconnectGame } from "./useGameWsConnect";
-import { restartGame, selectSave } from "@/lib/features/game";
 import { useDispatch, useSelector } from "react-redux";
+import { selectLobbyId } from "@/lib/features/lobby";
+import { selectSaveGame, setSaveGame } from "@/lib/features/flags";
 import { useRouter } from "next/navigation";
 import { AppDispatch } from "@/lib/store";
 import { useEffect } from "react";
 
 export const useGameSaved = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const gameIsSaved = useSelector(selectSave);
   const router = useRouter();
+  const lobbyId = useSelector(selectLobbyId);
+  const saveGame = useSelector(selectSaveGame);
 
   useEffect(() => {
-    if (gameIsSaved) {
-      dispatch(restartGame());
-      // Clean the persisten game from the local storage
-      cleanGameLocalStorage(localStorage);
-      disconnectGame(dispatch);
-      router.back();
+    if (saveGame) {
+      router.push(`/lobby/${lobbyId}`);
+      dispatch(setSaveGame(false));
     }
-  }, [dispatch, gameIsSaved, router]);
+  }, [dispatch, saveGame, router, lobbyId]);
 };

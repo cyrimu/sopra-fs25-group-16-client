@@ -4,10 +4,8 @@ import { ErrorModalProvider } from "./context/ErrorModalContext";
 import { WebSocketProvider } from "./context/WebsocketContext";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import RulesButton from "@/components/buttons/RulesButton";
-import { LoaderProvider } from "./context/LoaderContext";
 import StoreProvider from "./providers/StoreProvider";
 import { Geist, Geist_Mono } from "next/font/google";
-import GlobalLoader from "./components/GlobalLoader";
 import { ConfigProvider, theme } from "antd";
 import type { Metadata } from "next";
 import "@/styles/globals.css";
@@ -37,7 +35,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <StoreProvider>
-          <GlobalLoader />
           <ConfigProvider
             theme={{
               algorithm: theme.defaultAlgorithm,
@@ -90,12 +87,9 @@ export default function RootLayout({
             <AntdRegistry>
               <ErrorModalProvider>
                 <GameStartingProvider>
-                  <WebSocketProvider>
-                  <LoaderProvider>{children}</LoaderProvider>
-                  </WebSocketProvider>
+                  <WebSocketProvider>{children}</WebSocketProvider>
                 </GameStartingProvider>
               </ErrorModalProvider>
-
               <RulesButton />
             </AntdRegistry>
           </ConfigProvider>

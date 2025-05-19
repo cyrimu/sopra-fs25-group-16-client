@@ -19,10 +19,6 @@ const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    // Restart the game status
-    restartGame() {
-      return initialState;
-    },
     // Set a game
     setGame(state, action: PayloadAction<Game>) {
       const game = action.payload;
@@ -49,10 +45,6 @@ const gameSlice = createSlice({
         });
       }
     },
-    // Notify users when a game is saved
-    setSavedGame(state) {
-      if (state.game) state.game.saved = true;
-    },
   },
   selectors: {
     selectLogs: (state) => state.game?.log,
@@ -67,7 +59,6 @@ const gameSlice = createSlice({
       state.game?.cards.filter(({ isSelected }) => isSelected),
     selectLastClue: (state) =>
       state.game?.log?.findLast((e) => e.includes("provided the Clue")),
-    selectSave: (state) => state.game?.saved ?? false,
     selectGameTypeFromGame: (state) => state.game?.gameType,
     selectLanguageFromGame: (state) => state.game?.language,
   },
@@ -108,8 +99,7 @@ const gameSlice = createSlice({
   },
 });
 
-export const { restartGame, setSelectedCard, setGame, setSavedGame } =
-  gameSlice.actions;
+export const { setSelectedCard, setGame } = gameSlice.actions;
 
 export const {
   selectGameId,
@@ -121,7 +111,6 @@ export const {
   selectSelectedCards,
   selectPlayers,
   selectLastClue,
-  selectSave,
   selectGameTypeFromGame,
   selectLanguageFromGame,
 } = gameSlice.selectors;

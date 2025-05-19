@@ -14,7 +14,6 @@ export interface Game {
   remainingGuesses: number;
   winner: TEAM_COLOR | null;
   log: string[];
-  saved: boolean | undefined;
 }
 
 export enum GAME_TYPE {
@@ -26,6 +25,3 @@ export enum TURN_ORDER {
   BLUE_OPERATIVE = "BLUE_OPERATIVE",
   RED_OPERATIVE = "RED_OPERATIVE",
 }
-
-export const GAME_KEY = "GAME_KEY";
-export const WIN_KEY = "WIN_KEY";

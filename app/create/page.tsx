@@ -9,8 +9,6 @@ import { AppDispatch } from "@/lib/store";
 import { selectUsername, setUsername } from "@/lib/features/player";
 import { useErrorModal } from "@/context/ErrorModalContext";
 import { useLobbyErrorHandler } from "@/hooks/lobby/useLobbyErrorHandler";
-import { useLobbySuccessHandler } from "@/hooks/lobby/useLobbySuccessHandler";
-import { USERNAME_KEY } from "@/lib/features/player/player.types";
 
 export default function Create() {
   const router = useRouter();
@@ -26,18 +24,14 @@ export default function Create() {
       showError("Please provide a codename.");
       return;
     }
-
-    // Store the username inside the localStorage
-    localStorage.setItem(USERNAME_KEY, username);
     // Create the lobby and change the status to successfull/failed
-    dispatch(createLobby(username));
+    const resultAction = await dispatch(createLobby(username)).unwrap();
+
+    router.push(`/lobby/${resultAction.lobbyID}`);
   }
 
   // Listen for errors inside the lobby provider
   useLobbyErrorHandler();
-
-  // Listen for success status inside the lobby
-  useLobbySuccessHandler("/create");
 
   return (
     <div className={styles.centered}>

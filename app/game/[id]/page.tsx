@@ -11,7 +11,6 @@ import { useGameSaved } from "@/hooks/game/useGameSaved";
 import { useGameWinner } from "@/hooks/game/useGameWinner";
 import { ActionElement } from "@/components/ActionElement";
 import { ClueDispaly } from "@/components/ClueDisplay";
-import { useGamePersist } from "@/hooks/game/useGamePersist";
 import { selectGameStatus } from "@/lib/features/game";
 import { useGameStarting } from "@/context/GameStartingContext";
 import GameLoading from "@/components/GameLoading";
@@ -26,9 +25,6 @@ export default function Game() {
 
   // Handle case when host saves the game
   useGameSaved();
-
-  // Fetch again the game when the user refreshes
-  useGamePersist();
 
   if (gameStarting) return <GameLoading />;
 

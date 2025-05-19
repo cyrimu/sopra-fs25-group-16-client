@@ -10,9 +10,6 @@ import { joinLobby } from "@/lib/features/lobby/api";
 import { AppDispatch } from "@/lib/store";
 import { useErrorModal } from "@/context/ErrorModalContext";
 import { useLobbyErrorHandler } from "@/hooks/lobby/useLobbyErrorHandler";
-import { useLobbySuccessHandler } from "@/hooks/lobby/useLobbySuccessHandler";
-import { USERNAME_KEY } from "@/lib/features/player/player.types";
-import { LOBBY_KEY } from "@/lib/features/lobby/lobby.types";
 
 export default function Join() {
   const router = useRouter();
@@ -25,8 +22,6 @@ export default function Join() {
 
   // Display the error detected in the lobby
   useLobbyErrorHandler();
-  // Listen for new lobbies and redirect to them
-  useLobbySuccessHandler("/lobby");
 
   async function handleJoinButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -40,13 +35,12 @@ export default function Join() {
       showError("Please provide a valid lobby ID.");
       return;
     }
-
-    // Store the username inside the localStorage
-    localStorage.setItem(USERNAME_KEY, username);
-    // Store the gameId inside the localStorage
-    localStorage.setItem(LOBBY_KEY, lobbyId);
     // Try to join the lobby otherwise the error is already handled
-    dispatch(joinLobby({ lobbyId: lobbyId, username: username }));
+    const resultAction = await dispatch(
+      joinLobby({ lobbyId: lobbyId, username: username })
+    ).unwrap();
+
+    router.push(`/lobby/${resultAction.lobbyID}`);
   }
 
   return (

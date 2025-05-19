@@ -6,16 +6,11 @@ type SocketActions =
   | SocketSendClueAction
   | SocketGuessAction
   | SocketSkipGuessAction
-  | SocketSaveAction
-  | SocketDisconnectAction;
+  | SocketSaveAction;
 
 interface SocketConnectAction {
   type: "game/connect";
   payload: string;
-}
-
-interface SocketDisconnectAction {
-  type: "game/disconnect";
 }
 
 interface SocketSendClueAction {
@@ -48,7 +43,6 @@ export const isSocketAction = (action: unknown): action is SocketActions => {
 
   const socketActionTypes = [
     "game/connect",
-    "game/disconnect",
     "game/sendClue",
     "game/guess",
     "game/skipGuess",

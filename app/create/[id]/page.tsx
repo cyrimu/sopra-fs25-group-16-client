@@ -10,12 +10,7 @@ import { AppDispatch } from "@/lib/store";
 import { deleteLobby } from "@/lib/features/lobby/api";
 import { selectUsername } from "@/lib/features/player";
 import { useErrorModal } from "@/context/ErrorModalContext";
-import {
-  cleanLobbyLocalStorage,
-  disconnectLobby,
-} from "@/hooks/lobby/useLobbyWsConnect";
 import { useLobbyErrorHandler } from "@/hooks/lobby/useLobbyErrorHandler";
-import { LOBBY_KEY } from "@/lib/features/lobby/lobby.types";
 
 export default function Create() {
   const router = useRouter();
@@ -34,8 +29,6 @@ export default function Create() {
       showError("The lobbyId is undefined");
       return;
     }
-    // Store the gameId inside the localStorage
-    localStorage.setItem(LOBBY_KEY, lobbyId);
     // Push to the actual lobby screen
     router.push(`/lobby/${lobbyId}`);
   }
@@ -49,10 +42,6 @@ export default function Create() {
 
     // Delete the lobby from the provider
     dispatch(deleteLobby({ username: username, lobbyId: lobbyId }));
-    // Disconnect the WS from the lobby
-    disconnectLobby(dispatch);
-    // Clean the lobby from the local storage
-    cleanLobbyLocalStorage(localStorage);
     router.replace("/");
   }
 

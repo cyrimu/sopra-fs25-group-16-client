@@ -1,13 +1,20 @@
 import SockJS from "sockjs-client";
 import { Client, IMessage } from "@stomp/stompjs";
 import { Middleware } from "@reduxjs/toolkit";
-import { setGame, setSavedGame } from "@/lib/features/game";
+import { setGame } from "@/lib/features/game";
 import { isSocketAction } from "./wsGameActions";
 import { getApiDomain } from "../../utils/domain";
+import { setSaveGame } from "@/lib/features/flags";
 
 export const createGameSocketMiddleware = (): Middleware => {
   let client: Client | null = null;
   let gameId: string;
+
+  function _disconnect() {
+    console.log("Disconnect from the game websocket");
+    client?.deactivate();
+    client = null;
+  }
 
   return (storeAPI) => (next) => (action) => {
     if (!isSocketAction(action)) {
@@ -16,18 +23,21 @@ export const createGameSocketMiddleware = (): Middleware => {
 
     switch (action.type) {
       case "game/connect":
-        if (client) return next(action);
+        // Subscribe to an initial game or to a new game
+        if (!client || gameId !== action.payload) {
+          // Disconnect from the old one
+          if (client) _disconnect();
 
-        const url = getApiDomain();
+          const url = getApiDomain();
 
-        gameId = action.payload;
+          gameId = action.payload;
 
-        const newClient = new Client({
-          webSocketFactory: () => new SockJS(`${url}/live`),
-          reconnectDelay: 5000,
-          debug: (str) => console.log("[STOMP]", str),
-          onConnect: () => {
-            newClient.subscribe(
+          const newClient = new Client({
+            webSocketFactory: () => new SockJS(`${url}/live`),
+            reconnectDelay: 5000,
+            debug: (str) => console.log("[STOMP]", str),
+            onConnect: () => {
+              newClient.subscribe(
                 `/topic/game/${gameId}`,
                 (message: IMessage) => {
                   const data = JSON.parse(message.body);
@@ -35,18 +45,18 @@ export const createGameSocketMiddleware = (): Middleware => {
 
                   if (data.type === "save") {
                     console.log("Received save", data);
-                    storeAPI.dispatch(setSavedGame());
+                    storeAPI.dispatch(setSaveGame(true));
                     return;
                   }
                   storeAPI.dispatch(setGame(data));
                 }
-            );
-          },
-        });
+              );
+            },
+          });
 
-        newClient.activate();
-        client = newClient;
-
+          newClient.activate();
+          client = newClient;
+        }
         break;
 
       case "game/sendClue":
@@ -87,13 +97,6 @@ export const createGameSocketMiddleware = (): Middleware => {
           });
         }
         break;
-
-      case "game/disconnect": {
-        console.log("Disconnect from the game websocket");
-        client?.deactivate();
-        client = null;
-        break;
-      }
     }
 
     return next(action);
