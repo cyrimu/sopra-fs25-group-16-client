@@ -7,13 +7,10 @@ import {
   selectPlayers,
 } from "@/lib/features/lobby";
 import { GAME_TYPE } from "@/lib/features/game/game.types";
-import { selectUsername } from "@/lib/features/player";
-import { PlayerReadyStatus } from "./PlayerReady";
 
 const PlayerTable: React.FC = () => {
   const gameType = useSelector(selectGameType);
   const players = useSelector(selectPlayers);
-  const username = useSelector(selectUsername);
   const lobbyId = useSelector(selectLobbyId);
 
   return (
@@ -55,7 +52,6 @@ const PlayerTable: React.FC = () => {
             <th>codename</th>
             <th>team</th>
             <th>role</th>
-            {/* <th>ready</th> */}
           </tr>
         </thead>
         <tbody>
