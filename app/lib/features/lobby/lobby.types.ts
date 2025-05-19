@@ -9,7 +9,4 @@ export interface Lobby {
   lobbyID: string;
   players: Player[];
   playerCount: number;
-  deleted: boolean;
 }
-
-export const LOBBY_KEY = "LOBBY_KEY";
