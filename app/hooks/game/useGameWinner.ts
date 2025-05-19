@@ -1,9 +1,8 @@
 import { selectGameId, selectWinner } from "@/lib/features/game";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { disconnectGame } from "./useGameWsConnect";
 import { AppDispatch } from "@/lib/store";
+import { useEffect } from "react";
 
 export const useGameWinner = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,8 +12,6 @@ export const useGameWinner = () => {
 
   useEffect(() => {
     if (winner) {
-      // Disconnect the game from the WS
-      disconnectGame(dispatch);
       // Redirect to the results page
       router.push(`/results/${gameId}`);
     }
