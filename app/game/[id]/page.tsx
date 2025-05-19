@@ -7,8 +7,6 @@ import Board from "@/components/Board";
 import { useSelector } from "react-redux";
 import { selectIsHostInGame } from "../../../utils/helpers";
 import SaveButton from "@/components/buttons/SaveButton";
-import { useGameStarting } from "@/context/GameStartingContext";
-import GetReady from "@/components/getReady";
 import { useGameSaved } from "@/hooks/game/useGameSaved";
 import { useGameWinner } from "@/hooks/game/useGameWinner";
 import { ActionElement } from "@/components/ActionElement";
@@ -17,7 +15,6 @@ import { useGamePersist } from "@/hooks/game/useGamePersist";
 import { selectGameStatus } from "@/lib/features/game";
 
 export default function Game() {
-  const { gameStarting } = useGameStarting();
   const isHost = useSelector(selectIsHostInGame);
   const gameStatus = useSelector(selectGameStatus);
 
@@ -31,8 +28,6 @@ export default function Game() {
 
   // Fetch again the game when the user refreshes
   useGamePersist();
-
-  if (gameStarting) return <GetReady />;
 
   if (gameStatus === "idle")
     // Handle the state when the user refreshes the game screen

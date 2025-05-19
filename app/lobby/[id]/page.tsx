@@ -28,6 +28,7 @@ import { useGameSucessHandler } from "@/hooks/game/useGameSucessHandler";
 import { useRouter } from "next/navigation";
 import { useLobbyPersist } from "@/hooks/lobby/useLobbyPersist";
 import { useLobbyDeleteHandler } from "@/hooks/lobby/useLobbyDeleteHandler";
+import GetReady from "@/components/getReady";
 
 export default function Lobby() {
   const dispatch = useDispatch<AppDispatch>();
@@ -81,7 +82,7 @@ export default function Lobby() {
   const handleStartGame = () => {
     if (!lobby) {
       showError("Something went wrong when starting the game");
-      return;
+      return <GetReady />
     }
 
     // Create a new game and start it
