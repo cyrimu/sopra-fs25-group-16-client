@@ -39,7 +39,7 @@ const Board: React.FC = () => {
             {isTurnEndPopupVisible && (
                 <div className={styles.overlay}>
                     <div className={styles.popUpContent}>
-                        <h2 style={{color: "white", fontFamily: "Special Elite", fontSize: "50px"}}>You are out of guesses</h2>
+                        <h2 style={{color: "white", fontFamily: "Special Elite", fontSize: "50px"}}>Turn over</h2>
                     </div>
                 </div>
             )}
