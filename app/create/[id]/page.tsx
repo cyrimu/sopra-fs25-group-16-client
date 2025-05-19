@@ -15,6 +15,7 @@ import {
   disconnectLobby,
 } from "@/hooks/lobby/useLobbyWsConnect";
 import { useLobbyErrorHandler } from "@/hooks/lobby/useLobbyErrorHandler";
+import { LOBBY_KEY } from "@/lib/features/lobby/lobby.types";
 
 export default function Create() {
   const router = useRouter();
@@ -27,6 +28,17 @@ export default function Create() {
 
   // Handle lobby errors and display them
   useLobbyErrorHandler();
+
+  function handleOpenLobby() {
+    if (!lobbyId) {
+      showError("The lobbyId is undefined");
+      return;
+    }
+    // Store the gameId inside the localStorage
+    localStorage.setItem(LOBBY_KEY, lobbyId);
+    // Push to the actual lobby screen
+    router.push(`/lobby/${lobbyId}`);
+  }
 
   function handleDeleteLobby() {
     if (!lobbyId) {
@@ -105,10 +117,7 @@ export default function Create() {
           <button className={styles.regularButton} onClick={handleDeleteLobby}>
             <LeftOutlined /> Delete Lobby
           </button>
-          <button
-            className={styles.regularButton}
-            onClick={() => router.push(`/lobby/${lobbyId}`)}
-          >
+          <button className={styles.regularButton} onClick={handleOpenLobby}>
             Open Lobby <RightOutlined />
           </button>
         </div>
