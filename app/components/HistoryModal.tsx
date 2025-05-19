@@ -25,7 +25,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
   const oldGames = useSelector(selectOldGames);
   const username = useSelector(selectUsername);
   // Select the players from the lobby
-  const players = useSelector(selectPlayers);
+  const players = useSelector(selectPlayers)?.filter((e) => e);
 
   // Deduplicate old games by ID
   const deduplicatedGames = useMemo(
