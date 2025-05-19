@@ -63,14 +63,6 @@ const lobbySlice = createSlice({
     setLanguage(state, action: PayloadAction<LANGUAGES>) {
       if (state.lobby) state.lobby.language = action.payload;
     },
-    // Delete lobby
-    restartLobby() {
-      return initialState;
-    },
-    // The host deleted the lobby
-    setDeletedLobby(state) {
-      if (state.lobby) state.lobby.deleted = true;
-    },
   },
   extraReducers(builder) {
     builder
@@ -136,18 +128,11 @@ const lobbySlice = createSlice({
     selectPlayers: (state) => state.lobby?.players,
     selectGameType: (state) => state.lobby?.gameType,
     selectLanguage: (state) => state.lobby?.language,
-    selectLobbyDeleted: (state) => state.lobby?.deleted,
   },
 });
 
-export const {
-  setLobby,
-  setPlayer,
-  setGameType,
-  setLanguage,
-  restartLobby,
-  setDeletedLobby,
-} = lobbySlice.actions;
+export const { setLobby, setPlayer, setGameType, setLanguage } =
+  lobbySlice.actions;
 
 export const {
   selectLobby,
@@ -157,7 +142,6 @@ export const {
   selectPlayers,
   selectGameType,
   selectLanguage,
-  selectLobbyDeleted,
 } = lobbySlice.selectors;
 
 export default lobbySlice.reducer;
