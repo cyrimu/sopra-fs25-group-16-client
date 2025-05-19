@@ -70,7 +70,9 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   }
 
   function toggleFlag() {
-    if (isMyTurn) {
+    if (isMyTurn &&
+        (myPlayerInGame?.role === PLAYER_ROLES.RED_OPERATIVE ||
+            myPlayerInGame?.role === PLAYER_ROLES.BLUE_OPERATIVE)) {
       setIsFlagged((prev) => !prev);
     }
   }
@@ -85,21 +87,23 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
           transition={{ duration: 0.6, ease: "easeInOut" }}
           onClick={handleSelectCard}
       >
-        {!isRevealed && (
-            <div
-                className={styles.flagContainer}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleFlag();
-                }}
-            >
-              {isFlagged ? (
-                  <FlagFilled style={{ fontSize: 20, color: "white" }} />
-              ) : (
-                  <FlagOutlined style={{ fontSize: 20, color: "white" }} />
-              )}
-            </div>
-        )}
+        {!isRevealed &&
+            (myPlayerInGame?.role === PLAYER_ROLES.RED_OPERATIVE ||
+                myPlayerInGame?.role === PLAYER_ROLES.BLUE_OPERATIVE) && (
+                <div
+                    className={styles.flagContainer}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFlag();
+                    }}
+                >
+                  {isFlagged ? (
+                      <FlagFilled style={{ fontSize: 20, color: "white" }} />
+                  ) : (
+                      <FlagOutlined style={{ fontSize: 20, color: "white" }} />
+                  )}
+                </div>
+            )}
 
         {!isRevealed && (
             <div className={styles.cardTextContainer}>
