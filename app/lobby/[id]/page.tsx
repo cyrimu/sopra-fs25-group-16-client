@@ -27,6 +27,8 @@ import { useGameSucessHandler } from "@/hooks/game/useGameSucessHandler";
 import { useRouter } from "next/navigation";
 import { useLobbyPersist } from "@/hooks/lobby/useLobbyPersist";
 import { useLobbyDeleteHandler } from "@/hooks/lobby/useLobbyDeleteHandler";
+import { useGameStarting } from "@/context/GameStartingContext";
+import GameLoading from "@/components/GameLoading";
 
 export default function Lobby() {
   const dispatch = useDispatch<AppDispatch>();
@@ -43,6 +45,8 @@ export default function Lobby() {
   const nonNullPlayers = players?.filter((e) => e) ?? [];
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  const { gameStarting } = useGameStarting();
 
   // Once fetched the gameId redirect to the game screen
   useGameSucessHandler();
@@ -115,6 +119,8 @@ export default function Lobby() {
       !(nonNullPlayers.length >= 4)
     );
   }
+
+  if (gameStarting) return <GameLoading />;
 
   if (!lobby)
     return (

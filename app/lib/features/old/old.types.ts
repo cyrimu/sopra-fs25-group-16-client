@@ -8,3 +8,5 @@ export interface Old {
   type: GAME_TYPE;
   language: LANGUAGES;
 }
+
+export const OLD_IDS_KEY = "OLD_IDS_KEY";

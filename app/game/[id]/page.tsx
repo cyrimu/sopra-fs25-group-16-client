@@ -13,10 +13,13 @@ import { ActionElement } from "@/components/ActionElement";
 import { ClueDispaly } from "@/components/ClueDisplay";
 import { useGamePersist } from "@/hooks/game/useGamePersist";
 import { selectGameStatus } from "@/lib/features/game";
+import { useGameStarting } from "@/context/GameStartingContext";
+import GameLoading from "@/components/GameLoading";
 
 export default function Game() {
   const isHost = useSelector(selectIsHostInGame);
   const gameStatus = useSelector(selectGameStatus);
+  const { gameStarting } = useGameStarting();
 
   // Listen until a team wins and redirects to its correspondent screen
   useGameWinner();
@@ -26,6 +29,8 @@ export default function Game() {
 
   // Fetch again the game when the user refreshes
   useGamePersist();
+
+  if (gameStarting) return <GameLoading />;
 
   if (gameStatus === "idle")
     // Handle the state when the user refreshes the game screen
@@ -42,9 +47,9 @@ export default function Game() {
           <LogButton />
         </div>
         {isHost && (
-        <div className={styles.gameSaveController}>
+          <div className={styles.gameSaveController}>
             <SaveButton />
-        </div>
+          </div>
         )}
         <div className={styles.gameContainer}>
           <Board />
