@@ -44,11 +44,6 @@ export default function Create() {
     router.replace("/");
   }
 
-  const url =
-    typeof globalThis.location !== "undefined"
-      ? `${globalThis.location.origin}/join/${lobbyId}`
-      : "";
-
   if (!lobbyId) {
     return (
       <div className={styles.centered}>
@@ -86,23 +81,6 @@ export default function Create() {
           <br />
           - CN
           <br />
-          <button
-            className={styles.regularButton}
-            style={{ width: "100%", marginBottom: "10px" }}
-            onClick={() => navigator.clipboard.writeText(url)}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-                textAlign: "left",
-              }}
-            >
-              <span>{url}</span>
-              <CopyOutlined />
-            </div>
-          </button>
           <button
             className={styles.regularButton}
             style={{ width: "100%" }}
