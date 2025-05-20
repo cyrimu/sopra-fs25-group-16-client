@@ -48,39 +48,28 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   const shouldShowContent = !isRevealed;
   const shouldRenderImage = shouldShowContent && isImage;
   const shouldRenderText = shouldShowContent && !isImage;
-  //const shouldRenderText = shouldShowContent && !isImage;
 
-  useEffect(() => {
-    console.log(`[MOUNT] Card ID: ${card.id}`);
-  
-    return () => {
-      console.log(`[UNMOUNT] Card ID: ${card.id}`);
-    };
-  }, []);
 
   useEffect(() => {
     if (isImage && shouldRenderImage && content) {
       const cached = getCachedImage(content);
       if (cached) {
-        console.log(`[Cache] Hit: ${content}`);
         setBase64Image(cached);
         return;
       }
-    
+  
       if (!markIfNotInFlight(content)) {
-        console.log(`[Skip] Already fetching: ${content}`);
         return;
       }
-    
-      console.log(`[Cache] Miss: ${content} — fetching...`);
+  
       enqueue(async () => {
         const apiService = new ApiService();
         try {
           const dataUrl = await apiService.getBase64Image(content);
           setCachedImage(content, dataUrl);
           setBase64Image(dataUrl);
-        } catch (err) {
-          console.error("Failed to fetch base64 image", err);
+        } catch {
+          // silently ignore base64 fetch errors
         }
       });
     }

@@ -108,51 +108,22 @@ export class ApiService {
       headers: this.defaultHeaders,
       body: JSON.stringify(data),
     });
-  }/**
- * GET base64 image from internal Next.js API or return placeholder.
- * Always returns a full data:image/png;base64,... string.
- */
-public async getBase64Image(imageId: string): Promise<string> {
-  if (process.env.NODE_ENV !== "production") {
-    console.log(`[Image API] TEMP fetch: returning placeholder for image ID: ${imageId}`);
   }
 
-  // ✅ Full base64 string with data prefix (your working version)
-  const base64WithPrefix =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII";
 
-  return base64WithPrefix;
-
-  // ❌ Uncomment to re-enable real API fetch
-  /*
-  const remoteBaseUrl = "https://sopra-fs25-group-16-server.oa.r.appspot.com";
-  const url = `${remoteBaseUrl}/image/${imageId}`;
-
-  if (process.env.NODE_ENV !== "production") {
-    console.log(`[Image API] Fetching image ID: ${imageId}`);
-    console.log(`[Image API] URL: ${url}`);
+  public async getBase64Image(imageId: string): Promise<string> {
+    const remoteBaseUrl = "https://sopra-fs25-group-16-server.oa.r.appspot.com";
+    const url = `${remoteBaseUrl}/image/${imageId}`;
+  
+    const res = await fetch(url);
+  
+    if (!res.ok) {
+      throw new Error(`Failed to fetch base64 image (${res.status})`);
+    }
+  
+    const text = await res.text();
+    return text.startsWith("data:image/")
+      ? text
+      : `data:image/png;base64,${text}`;
   }
-
-  const start = performance.now();
-  const res = await fetch(url);
-  const duration = (performance.now() - start).toFixed(2);
-
-  if (process.env.NODE_ENV !== "production") {
-    console.log(`[Image API] Fetch took ${duration}ms`);
-  }
-
-  if (!res.ok) {
-    console.error(`[Image API] Failed to fetch image ${imageId} – Status: ${res.status}`);
-    throw new Error(`Failed to fetch base64 image (${res.status})`);
-  }
-
-  const text = await res.text();
-  const result = text.startsWith("data:image/")
-    ? text
-    : `data:image/png;base64,${text}`;
-
-  console.log(`[Image API] Image ${imageId} fetched successfully`);
-  return result;
-  */
-}
 }

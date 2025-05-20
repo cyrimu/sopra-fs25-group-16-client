@@ -7,7 +7,7 @@ export function getCachedImage(id: string): string | undefined {
 
 export function setCachedImage(id: string, data: string) {
   cache.set(id, data);
-  inFlight.delete(id); // done fetching
+  inFlight.delete(id);
 }
 
 export function markIfNotInFlight(id: string): boolean {

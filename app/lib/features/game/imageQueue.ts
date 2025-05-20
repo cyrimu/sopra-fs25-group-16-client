@@ -16,12 +16,11 @@ async function runQueue() {
     if (job) {
       try {
         await job();
-      } catch (err) {
-        console.error("Image job failed:", err);
+      } catch {
+        // Silent fail
       }
     }
 
-    // ⏱ Add jitter to reduce cross-client sync
     await new Promise((res) => {
       const baseDelay = 20;
       const jitter = Math.floor(Math.random() * 150); // 0–149ms
