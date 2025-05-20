@@ -59,13 +59,13 @@ export const createLobbySocketMiddleware = (): Middleware => {
                   } else if (data.type === "game") {
                     console.log("Received game", data);
                     const dispatch: AppDispatch = storeAPI.dispatch;
+                    dispatch(setStartGame(true));
                     dispatch(
                       getGame({
                         username: data.username,
                         gameId: data.gameId,
                       })
                     );
-                    dispatch(setStartGame(true));
                     return;
                   }
 
