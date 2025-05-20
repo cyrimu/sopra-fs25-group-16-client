@@ -5,7 +5,7 @@ import { PLAYER_ROLES } from "@/lib/features/player/player.types";
 import styles from "./GameCard.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import React, {useEffect, useMemo, useState, useRef} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { setSelectedCard } from "@/lib/features/game";
 import { selectMyPlayerInGame } from "../../utils/helpers";
 import { useErrorModal } from "@/context/ErrorModalContext";
@@ -42,7 +42,6 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
 
 //start image mode
   const [base64Image, setBase64Image] = useState<string | null>(null);
-  const lastFetchedImageId = useRef<string | null>(null);
 
   const isImage = type === GAME_TYPE.PICTURE;
   const shouldShowContent = !isRevealed;

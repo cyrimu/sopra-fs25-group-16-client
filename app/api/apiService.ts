@@ -66,11 +66,11 @@ export class ApiService {
   /**
    * POST form request.
    */
-  public async postForm<T>(endpoint: string, data: Record<string, any>): Promise<T> {
+  public async postForm<T>(endpoint: string, data: Record<string, unknown>): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const formBody = new URLSearchParams();
     for (const key in data) {
-      formBody.append(key, data[key]);
+      formBody.append(key, String(data[key]));
     }
 
     const res = await fetch(url, {

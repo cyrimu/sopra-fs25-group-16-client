@@ -17,6 +17,5 @@ export const useResultReturnLobby = () => {
       // Clear flag after redirect
       dispatch(setReturnLobby(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, router, returnLobby, lobbyId]);
 };
