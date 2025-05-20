@@ -166,7 +166,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ visible, onClose }) => {
               <tr>
                 <th>ID</th>
                 <th>Players</th>
-                <th>Role</th>
+                <th>Type</th>
                 <th>Language</th>
                 <th>Delete</th>
                 <th>Play</th>
