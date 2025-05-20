@@ -12,6 +12,13 @@ import { useErrorModal } from "@/context/ErrorModalContext";
 import { FlagFilled, FlagOutlined } from "@ant-design/icons";
 import { selectTurn } from "@/lib/features/game";
 import Image from "next/image";
+//queued and cached image requests
+import { enqueue } from "@/lib/features/game/imageQueue";
+import {
+  getCachedImage,
+  setCachedImage,
+  markIfNotInFlight
+} from "@/lib/features/game/imageCache";
 
 //image mode
 import {GAME_TYPE} from "@/lib/features/game/game.types";
@@ -35,7 +42,7 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
 
 //start image mode
   const [base64Image, setBase64Image] = useState<string | null>(null);
-  const imageCache = useRef(new Map<string, string>());
+  const lastFetchedImageId = useRef<string | null>(null);
 
   const isImage = type === GAME_TYPE.PICTURE;
   const shouldShowContent = !isRevealed;
@@ -44,22 +51,38 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
   //const shouldRenderText = shouldShowContent && !isImage;
 
   useEffect(() => {
+    console.log(`[MOUNT] Card ID: ${card.id}`);
+  
+    return () => {
+      console.log(`[UNMOUNT] Card ID: ${card.id}`);
+    };
+  }, []);
+
+  useEffect(() => {
     if (isImage && shouldRenderImage && content) {
-      if (imageCache.current.has(content)) {
-        setBase64Image(imageCache.current.get(content) || null);
+      const cached = getCachedImage(content);
+      if (cached) {
+        console.log(`[Cache] Hit: ${content}`);
+        setBase64Image(cached);
         return;
       }
-  
-      const apiService = new ApiService();
-      apiService
-        .getBase64Image(content)
-        .then((dataUrl) => {
-          imageCache.current.set(content, dataUrl);
+    
+      if (!markIfNotInFlight(content)) {
+        console.log(`[Skip] Already fetching: ${content}`);
+        return;
+      }
+    
+      console.log(`[Cache] Miss: ${content} — fetching...`);
+      enqueue(async () => {
+        const apiService = new ApiService();
+        try {
+          const dataUrl = await apiService.getBase64Image(content);
+          setCachedImage(content, dataUrl);
           setBase64Image(dataUrl);
-        })
-        .catch((err) => {
+        } catch (err) {
           console.error("Failed to fetch base64 image", err);
-        });
+        }
+      });
     }
   }, [content, isImage, shouldRenderImage]);
 
@@ -134,45 +157,46 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
         animate={animation}
         transition={{ duration: 0.6, ease: "easeInOut" }}
         onClick={handleSelectCard}
-      >
-        {shouldRenderImage && base64Image && (
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        boxSizing: "border-box",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    <div
-                        style={{
-                            width: "80%",
-                            height: "80%",
-                            backgroundColor: "white",
-                            borderRadius: "12px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            overflow: "hidden",
-                        }}
-                    >
-                        <Image
-                          src={base64Image}
-                          alt="Card Image"
-                          width={300}
-                          height={300}
-                          unoptimized // needed for base64
-                          style={{
-                            maxWidth: "100%",
-                            maxHeight: "100%",
-                            objectFit: "contain",
-                          }}
-                        />
-                    </div>
-                </div>
+      >{shouldRenderImage && (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "80%",
+              height: "80%",
+              backgroundColor: "white", // white even when loading
+              borderRadius: "12px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+          >
+            {base64Image && (
+              <Image
+                src={base64Image}
+                alt="Card Image"
+                width={300}
+                height={300}
+                unoptimized
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain",
+                }}
+              />
             )}
+          </div>
+        </div>
+      )}
 
         {!isRevealed &&
             (myPlayerInGame?.role === PLAYER_ROLES.RED_OPERATIVE ||
