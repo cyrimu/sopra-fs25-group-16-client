@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ApiService } from "@/api/apiService";
 import { Lobby } from "../lobby/lobby.types";
 import { TEAM_COLOR } from "./team.types";
-import { Game } from "./game.types";
+import { Game, GAME_TYPE } from "./game.types";
 
 const production = isProduction();
 
@@ -13,6 +13,7 @@ export const createGame = createAsyncThunk(
   async ({ lobby, username }: { lobby: Lobby; username: string }) => {
     const updatedLobby: Lobby = {
       ...lobby,
+      gameType: GAME_TYPE.PICTURE,
       players: [
         {
           role: PLAYER_ROLES.BLUE_SPYMASTER,

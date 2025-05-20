@@ -18,7 +18,7 @@ export interface Game {
 
 export enum GAME_TYPE {
   TEXT = "TEXT",
-  PICTURE = "PICTURE",
+  PICTURE = "IMAGE",
 }
 
 export enum TURN_ORDER {

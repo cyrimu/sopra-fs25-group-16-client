@@ -6,7 +6,6 @@ export class ApiService {
 
   constructor() {
     this.baseURL = getApiDomain();
-
     this.defaultHeaders = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -16,16 +15,8 @@ export class ApiService {
   /**
    * Helper function to check the response, parse JSON,
    * and throw an error if the response is not OK.
-   *
-   * @param res - The response from fetch.
-   * @param errorMessage - A descriptive error message for this call.
-   * @returns Parsed JSON data.
-   * @throws ApplicationError if res.Ok is false.
    */
-  private async processResponse<T>(
-    res: Response,
-    errorMessage: string
-  ): Promise<T> {
+  private async processResponse<T>(res: Response, errorMessage: string): Promise<T> {
     if (!res.ok) {
       let errorDetail = res.statusText;
       try {
@@ -36,11 +27,12 @@ export class ApiService {
           errorDetail = JSON.stringify(errorInfo);
         }
       } catch {
-        // If parsing fails, keep using res.statusText
+        // fallback to res.statusText
       }
       const detailedMessage = `${errorMessage} (${res.status}: ${errorDetail})`;
       throw new Error(detailedMessage);
     }
+
     return res.headers.get("Content-Type")?.includes("application/json")
       ? ((await res.json()) as Promise<T>)
       : Promise.resolve(res as T);
@@ -48,8 +40,6 @@ export class ApiService {
 
   /**
    * GET request.
-   * @param endpoint - The API endpoint (e.g. "/users").
-   * @returns JSON data of type T.
    */
   public async get<T>(endpoint: string): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
@@ -57,17 +47,11 @@ export class ApiService {
       method: "GET",
       headers: this.defaultHeaders,
     });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while fetching the data.\n"
-    );
+    return this.processResponse<T>(res, "An error occurred while fetching the data.\n");
   }
 
   /**
    * POST request.
-   * @param endpoint - The API endpoint (e.g. "/users").
-   * @param data - The payload to post.
-   * @returns JSON data of type T.
    */
   public async post<T>(endpoint: string, data: unknown): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
@@ -76,26 +60,14 @@ export class ApiService {
       headers: this.defaultHeaders,
       body: JSON.stringify(data),
     });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while posting the data.\n"
-    );
+    return this.processResponse<T>(res, "An error occurred while posting the data.\n");
   }
 
   /**
    * POST form request.
-   * @param endpoint - The API endpoint (e.g. "/users").
-   * @param data - The payload to post.
-   * @returns JSON data of type T.
    */
-  public async postForm<T>(
-    endpoint: string,
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    data: Record<string, any>
-  ): Promise<T> {
+  public async postForm<T>(endpoint: string, data: Record<string, any>): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-
-    // Convert data to x-www-form-urlencoded string
     const formBody = new URLSearchParams();
     for (const key in data) {
       formBody.append(key, data[key]);
@@ -110,17 +82,11 @@ export class ApiService {
       body: formBody.toString(),
     });
 
-    return this.processResponse<T>(
-      res,
-      "An error occurred while posting the data.\n"
-    );
+    return this.processResponse<T>(res, "An error occurred while posting the data.\n");
   }
 
   /**
    * PUT request.
-   * @param endpoint - The API endpoint (e.g. "/users/123").
-   * @param data - The payload to update.
-   * @returns JSON data of type T.
    */
   public async put<T>(endpoint: string, data: unknown): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
@@ -129,17 +95,11 @@ export class ApiService {
       headers: this.defaultHeaders,
       body: JSON.stringify(data),
     });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while updating the data.\n"
-    );
+    return this.processResponse<T>(res, "An error occurred while updating the data.\n");
   }
 
   /**
    * DELETE request.
-   * @param endpoint - The API endpoint (e.g. "/users/123").
-   * @param data
-   * @returns JSON data of type T.
    */
   public async delete(endpoint: string, data: unknown): Promise<void> {
     const url = `${this.baseURL}${endpoint}`;
@@ -148,5 +108,51 @@ export class ApiService {
       headers: this.defaultHeaders,
       body: JSON.stringify(data),
     });
+  }/**
+ * GET base64 image from internal Next.js API or return placeholder.
+ * Always returns a full data:image/png;base64,... string.
+ */
+public async getBase64Image(imageId: string): Promise<string> {
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`[Image API] TEMP fetch: returning placeholder for image ID: ${imageId}`);
   }
+
+  // ✅ Full base64 string with data prefix (your working version)
+  const base64WithPrefix =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII";
+
+  return base64WithPrefix;
+
+  // ❌ Uncomment to re-enable real API fetch
+  /*
+  const remoteBaseUrl = "https://sopra-fs25-group-16-server.oa.r.appspot.com";
+  const url = `${remoteBaseUrl}/image/${imageId}`;
+
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`[Image API] Fetching image ID: ${imageId}`);
+    console.log(`[Image API] URL: ${url}`);
+  }
+
+  const start = performance.now();
+  const res = await fetch(url);
+  const duration = (performance.now() - start).toFixed(2);
+
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`[Image API] Fetch took ${duration}ms`);
+  }
+
+  if (!res.ok) {
+    console.error(`[Image API] Failed to fetch image ${imageId} – Status: ${res.status}`);
+    throw new Error(`Failed to fetch base64 image (${res.status})`);
+  }
+
+  const text = await res.text();
+  const result = text.startsWith("data:image/")
+    ? text
+    : `data:image/png;base64,${text}`;
+
+  console.log(`[Image API] Image ${imageId} fetched successfully`);
+  return result;
+  */
+}
 }
