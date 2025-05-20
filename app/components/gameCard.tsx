@@ -112,6 +112,7 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
     }
 
     if (
+        !isMyTurn ||
         role === PLAYER_ROLES.RED_SPYMASTER ||
         role === PLAYER_ROLES.BLUE_SPYMASTER
     )
@@ -197,9 +198,9 @@ const GameCard: React.FC<GameCardProps> = ({ card, selected }) => {
                     }}
                 >
                   {isFlagged ? (
-                      <FlagFilled style={{ fontSize: 20, color: "white" }} />
+                      <FlagFilled style={{ fontSize: 20, color: "#444" }} />
                   ) : (
-                      <FlagOutlined style={{ fontSize: 20, color: "white" }} />
+                      <FlagOutlined style={{ fontSize: 20, color: "#444" }} />
                   )}
                 </div>
             )}
