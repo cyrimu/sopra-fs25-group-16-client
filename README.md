@@ -1,10 +1,12 @@
-# Codenames Web Application
-
-A web-based implementation of the popular board game *Codenames*, designed to provide an engaging and interactive multiplayer experience. This project leverages modern web technologies to deliver real-time gameplay with state persistence and a user-friendly interface.
+# Codenames-Client
 
 ## Introduction
 
-The goal of this project is to create a web version of *Codenames* that allows players to join lobbies, interact with game cards, and play collaboratively or competitively. The motivation behind this project is to explore real-time state management, responsive UI design, and persistence mechanisms in a React-based application.
+Codenames is a game where opposing teams (red/blue) compete to describe their team’s words. There is a 5x5 grid of tiles with a word on each. Each team has one spymaster who gives a clue to help their teammates guess the right words. They can only use one word as a descriptor, and the number of tiles it refers to. For example, “Water, 3” might describe “pool”, “fish”, “bucket”. The aim of the game is to be the first team to guess all of your tiles.
+
+The aim of this project is to digitalize the analog game and make it available to be played on the web. The possibilities of a online version are infinite, but it creates as well some inconveniences. As players would not be playing on the same room, it is required an input text to provide the clue and the times that the Spymaster thinks that a word is repeated. Moreover, it is possible that the players in the same room do not speak the same language. Therefore, we have designed a translation system.
+
+Additionally, one complain that regular players complain about is that at a certain point the words start to become familiar. To enhance the players experience, we have added as well another version which instead of words, images are generated each time and displayed.
 
 ## Technologies Used
 
@@ -68,13 +70,16 @@ npm test
 ```
 
 ### Deployment
+#### External Dependencies
+ - This server will deploy to Vercel to run, therefore the Vercel Services need to be running.
+ - The GitHub actions need the connected Secrets to be present in order for deployment to succeed.
+ - For Source code control Sonarcloud needs to be running and working
+   
+#### Steps to deploy
+This project uses CI/CD using github actions and will automatically deploy to the Google Cloud and all other external dependencies on each commit. Therefore no additional actions need to be performed.
 
-To build the project for production:
-```bash
-npm run build
-```
-
-Ensure any external dependencies (e.g., a database or API) are running before deployment.
+#### Modify Deployment
+ - To add additional processes modify the [github actions file](https://github.com/cyrimu/sopra-fs25-group-16-server/tree/main/.github/workflows)
 
 ## Illustrations
 
@@ -104,11 +109,11 @@ Ensure any external dependencies (e.g., a database or API) are running before de
 
 ## Authors and Acknowledgment
 
-- **Rashmi Dindgur**
-- **Sergi Garcia Montmany**
-- **Calvin Koch**
-- **Cyril Müller**
-- **Piotr Wojtaszewski**
+-  **Rashmi Dingdur** - _Frontend_ - [Profile](https://github.com/rashmidindgur)
+-  **Calvin Klein** - Frontend - [Profile](https://github.com/calvinkoch00)
+-    **Sergi Garcia Montmany** - _Fullstack_ - [Profile](https://github.com/sgm17)
+-   **Cyril Müller** - _Backend_ - [Profile](https://github.com/cyrimu)
+-   **Piotr Wojtaszewski** - _Backend_ - [Profile](https://github.com/winnerpio)
 
 **Special thanks to our Tutor Silvan for his support and guidance throughout the project.**
 
