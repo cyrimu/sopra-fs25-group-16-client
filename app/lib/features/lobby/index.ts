@@ -7,7 +7,6 @@ import { LANGUAGES } from "./languages.types";
 import {
   createLobby,
   deleteLobby,
-  getLobby,
   joinLobby,
   leaveLobby,
 } from "./api";
@@ -74,18 +73,6 @@ const lobbySlice = createSlice({
         state.lobby = action.payload;
       })
       .addCase(createLobby.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message ?? "Unknown Error";
-      });
-    builder
-      .addCase(getLobby.pending, (state) => {
-        state.status = "pending";
-      })
-      .addCase(getLobby.fulfilled, (state, action: PayloadAction<Lobby>) => {
-        state.status = "succeeded";
-        state.lobby = action.payload;
-      })
-      .addCase(getLobby.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Unknown Error";
       });

@@ -2,17 +2,6 @@ import { ApiService } from "@/api/apiService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Lobby } from "./lobby.types";
 
-export const getLobby = createAsyncThunk(
-  "lobby/getLobby",
-  async ({ lobbyId, username }: { lobbyId: string; username: string }) => {
-    const apiService = new ApiService();
-
-    return await apiService.get<Lobby>(
-      `/lobby/${lobbyId}?username=${username}`
-    );
-  }
-);
-
 export const createLobby = createAsyncThunk(
   "lobby/createLobby",
   async (username: string) => {
