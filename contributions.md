@@ -159,5 +159,4 @@ reason).
 |                    | [18.05.2025]   | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-client/commit/3e1fc5924dae7c43d7c4d6639dee0e75ea0a0feb) | [Write readme] | [A readme is crucial for information about our project's purpose, functionality, and how to use it.] |
 | **[@winnerpio]** | [19.05.2025]   | [Link to Commit 1](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/d5bd4bcdbaf8bf219457eec5e50345b952e64f71) | [Added tests to our websocket GameController] | [Testing this critical part of the application helps us be confident in the code and reach the sonarcloud goal of 75% test coverage] |
 |                    | [20.05.2025]   | [Link to Commit 2](https://github.com/cyrimu/sopra-fs25-group-16-server/commit/ccff9e0171d9dc3ef3b6754bee2cc4ac03d2ecf9) | [Added compressing image functionality to the ImageService] | [Fixed a critical error where base64 strings were too large to transfer back and forth all the time causing crashes of the server on google cloud] |
-| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@cyrimu]** | [21.05.2025]   | [Joker] | [Joker] | [Joker] |
