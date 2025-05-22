@@ -24,7 +24,7 @@ import { useGameSucessHandler } from "@/hooks/game/useGameSucessHandler";
 import { useLobbyDeleteHandler } from "@/hooks/lobby/useLobbyDeleteHandler";
 import { useGameStarting } from "@/context/GameStartingContext";
 import styles from "@/styles/page.module.css";
-import { selectDeleteLobby, setStartGame } from "@/lib/features/flags";
+import { selectDeleteLobby } from "@/lib/features/flags";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
 export default function Lobby() {
@@ -40,7 +40,7 @@ export default function Lobby() {
   const nonNullPlayers = players?.filter((e) => e) ?? [];
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const { gameStarting } = useGameStarting();
+  const { gameStarting, setGameStarting } = useGameStarting();
   const buttonClicked = useRef(false);
 
   const deleteLobbyFlag = useSelector(selectDeleteLobby);
@@ -87,7 +87,7 @@ export default function Lobby() {
       showError("Something went wrong when starting the game");
       return;
     }
-    dispatch(setStartGame(true))
+    setGameStarting(true)
     buttonClicked.current = true;
     dispatch(createGame({ lobby: lobby, username: username }));
   };
