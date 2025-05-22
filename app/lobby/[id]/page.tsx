@@ -24,7 +24,7 @@ import { useGameSucessHandler } from "@/hooks/game/useGameSucessHandler";
 import { useLobbyDeleteHandler } from "@/hooks/lobby/useLobbyDeleteHandler";
 import { useGameStarting } from "@/context/GameStartingContext";
 import styles from "@/styles/page.module.css";
-import { selectDeleteLobby } from "@/lib/features/flags";
+import { selectDeleteLobby, setStartGame } from "@/lib/features/flags";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
 export default function Lobby() {
@@ -87,6 +87,7 @@ export default function Lobby() {
       showError("Something went wrong when starting the game");
       return;
     }
+    dispatch(setStartGame(true))
     buttonClicked.current = true;
     dispatch(createGame({ lobby: lobby, username: username }));
   };
